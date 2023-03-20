@@ -1,0 +1,6 @@
+Guidelines,,Node tables (Entities),Link tables (relationships)
+"Each entity (person, publication, institution, event) should correspond to only one row in one table",,People,Person-Institution
+A pair of entity can have several distinct relationships (e.g. one person working at the same institution at different times or at different posititons),,Publications,Person-Publication
+"The name of a entity (person, publication, etc.) shoud be spelled consistently across the tables (be careful with whitespaces, comma, special signs, etc.)
+Copy-Pasting the names can help be consistent.",,Institutions,Publication-Institution
+"If there are several values in the same cell, use the same sign as a separator of values across all the tables (semicolon are typically used, like this: ""artist; diplomat; writer""",,Events,Person-Event
