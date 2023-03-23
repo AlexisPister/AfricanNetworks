@@ -92,18 +92,18 @@ importData().then((datas) => {
             let g = enter.append("g")
                 .classed("event", true)
 
-            g.append("line")
-                .attr("x1", d => x(d.Date))
-                .attr("x2", d => x(d.Date))
-                .attr("y1", d => 0)
-                .attr("y2", d => height)
-                .attr("stroke", "red")
-
-            g.append("text")
-                .attr("x", d => x(d.Date) + 2)
-                .attr("y", (d, i) => height - i * 100)
-                .text(d => d.Name)
-                .style("fill", "red")
+            // g.append("line")
+            //     .attr("x1", d => x(d.Date))
+            //     .attr("x2", d => x(d.Date))
+            //     .attr("y1", d => 0)
+            //     .attr("y2", d => height)
+            //     .attr("stroke", "red")
+            //
+            // g.append("text")
+            //     .attr("x", d => x(d.Date) + 2)
+            //     .attr("y", (d, i) => height - i * 100)
+            //     .text(d => d.Name)
+            //     .style("fill", "red")
 
             return g
         })
