@@ -68,29 +68,6 @@
 </main>
 
 <style>
-    #main {
-        display: grid;
-        /*grid-template-columns: 1fr 1fr 1fr;*/
-        grid-template-columns: 1fr 3fr;
-        /*grid-template-rows: 1fr 1fr;*/
-    }
 
-    #map-div {
-        grid-column: 1 / 3;
-    }
-
-    #netpan-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        /*grid-template-rows: 3fr;*/
-    }
-
-    .netpan-vis {
-        /*display: flex;*/
-        width: 1000px;
-        height: 1100px;
-        border: 1px solid black;
-        background-color: rgba(194, 191, 191, 0.2);
-    }
 
 </style>

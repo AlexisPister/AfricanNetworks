@@ -1,0 +1,151 @@
+{
+  "data": [
+    {
+      "name": "people",
+      "localStorage": "People.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "Institutions",
+      "localStorage": "Institutions.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "Publications",
+      "localStorage": "Publications.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "PI",
+      "localStorage": "Person-Institution.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "PP",
+      "localStorage": "Person-Publication.csv",
+      "format": {"type": "csv"}
+    }
+  ]
+
+  "networks": [
+    {
+      "name": "PI-net",
+      "parts": [
+        {
+          "data": "people",
+          "yieldsNodes": [
+            {
+              "type": "person",
+              "data": [
+                "*"
+              ]
+            }
+          ]
+        },
+        {
+          "data": "Institutions",
+          "yieldsNodes": [
+            {
+              "type": "institution",
+            //   "id_field": "url",
+              "data": [
+                "*"
+              ]
+            }
+          ]
+        },
+        {
+          "data": "Publications",
+          "yieldsNodes": [
+            {
+              "type": "publication",
+            //   "id_field": "url",
+              "data": [
+                "*"
+              ]
+            }
+          ]
+        },
+        {
+          "data": "PI",
+          "yieldsLinks": [
+            {
+              "source_id": {
+                "field": "Person"
+              },
+              "source_node_type": "person",
+              "target_id": {
+                "field": "Institution"
+              },
+              "target_node_type": "institution"
+            }
+          ]
+        },
+        // {
+        //   "data": "PP",
+        //   "yieldsLinks": [
+        //     {
+        //       "source_id": {
+        //         "field": "Person"
+        //       },
+        //       "source_node_type": "person",
+        //       "target_id": {
+        //         "field": "Publication"
+        //       },
+        //       "target_node_type": "publication"
+        //     }
+        //   ]
+        // }
+        ],
+        "transform": [
+            {"type": "filterNodes", "expression": "datum.id !== '' "},
+            {"type": "filterNodes", "expression": "datum.id !== ' ' "},
+            {"type": "removeIsolated"},
+            {"type": "metric", "metric": "degree"},
+            {"type": "project",
+             "remainingNodeType": "person",
+             "removedNodeType": "institution",
+             "directed": false,
+             "linkDataReducer": ""}
+        ]
+    }],
+
+    "layouts": [
+        {
+        "name": "PI-layout",
+        "network": "PI-net",
+        "type": "d3-force"
+        }
+     ],
+
+    "scales": [
+        {
+        "name": "color",
+        "type": "ordinal",
+        "range": ["#1f77b4", "#2ca02c", "#8c564b"],
+        "domain": ["person", "institution", "publication"]
+        }
+    ],
+
+    "vis": [
+    {
+        "entries": "PI-net.links",
+        "layout": "PI-layout",
+        "mark": {
+        "type": "linkpath",
+        "start": "source",
+        "end": "target"
+        }
+    },
+    {
+        "entries": "PI-net.nodes",
+        "layout": "PI-layout",
+        "mark": {
+        "type": "circle",
+        "fill": {"field": "_type", "scale": "color"},
+        "area": 150,
+        "tooltip": {"field": "id"}
+        }
+    }
+    ]
+}

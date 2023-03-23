@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo of template embedding</title>
+
+  <script src="../dist/bundle.js"></script>
+
+
+ <script type="text/javascript">
+    function renderTemplates() {
+      NetPanoramaTemplateViewer.render("./template.json", {
+        fileUrl: "\"./example.pajek\"",
+        nodeColor: "\"red\""
+      }, "vis1");
+      NetPanoramaTemplateViewer.render("./template.json", {
+        fileUrl: "\"./example.pajek\"",
+        nodeColor: "\"green\""
+      }, "vis2");
+      NetPanoramaTemplateViewer.render("./template.json", {
+        fileUrl: "\"./example.pajek\"",
+        nodeColor: "\"blue\""
+      }, "vis3");
+    }
+  </script>
+</head>
+
+
+<body onload="renderTemplates()">
+
+<h1>Example of rendering with a template</h1>
+
+<div>
+
+  <!-- N.B. The closing tags are necessary - making these divs self-closing will cause errors -->
+  <div id="vis1" style="width: 100%; position: relative; top: 0px;"></div>
+
+  <div id="vis2" style="width: 100%; position: relative; top: 1000px;"></div>
+
+  <div id="vis3" style="width: 100%; position: relative; top: 2000px;"></div>
+</div>
+
+</body>
+</html>

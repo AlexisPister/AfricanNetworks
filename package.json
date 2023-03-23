@@ -20,6 +20,9 @@
     "vite": "^4.2.0"
   },
   "dependencies": {
-    "d3": "^7.8.2"
+    "d3": "^7.8.2",
+    "netpanorama": "^0.1.2",
+    "netpanorama-template-viewer": "^0.1.2",
+    "topojson-client": "^3.1.0"
   }
 }

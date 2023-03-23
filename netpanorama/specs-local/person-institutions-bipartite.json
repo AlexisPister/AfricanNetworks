@@ -11,25 +11,15 @@
       "format": {"type": "csv"}
     },
     {
-      "name": "Publications",
-      "localStorage": "Publications.csv",
-      "format": {"type": "csv"}
-    },
-    {
       "name": "PI",
       "localStorage": "Person-Institution.csv",
       "format": {"type": "csv"}
-    },
-    {
-      "name": "PP",
-      "localStorage": "Person-Publication.csv",
-      "format": {"type": "csv"}
     }
-  ]
+  ],
 
   "networks": [
     {
-      "name": "PI-net",
+      "name": "PI-net-import",
       "parts": [
         {
           "data": "people",
@@ -47,19 +37,6 @@
           "yieldsNodes": [
             {
               "type": "institution",
-            //   "id_field": "url",
-              "data": [
-                "*"
-              ]
-            }
-          ]
-        },
-        {
-          "data": "Publications",
-          "yieldsNodes": [
-            {
-              "type": "publication",
-            //   "id_field": "url",
               "data": [
                 "*"
               ]
@@ -80,31 +57,47 @@
               "target_node_type": "institution"
             }
           ]
-        },
-        {
-          "data": "PP",
-          "yieldsLinks": [
+        }]
+    },
+    {
+        "name": "PI-net",
+        "nodes": "PI-net-import.nodes",
+        "links": "PI",
+        "source_node": ["id", "Person"],
+        "target_node": ["id", "Institution"],
+        "metrics": [
             {
-              "source_id": {
-                "field": "Person"
-              },
-              "source_node_type": "person",
-              "target_id": {
-                "field": "Publication"
-              },
-              "target_node_type": "publication"
+                "metric": "degree"
+            },
+            {
+                "metric": "closeness"
             }
-          ]
-        }
         ]
-    }],
+    }
+    ],
+
+    "orderings": [
+    {
+      "name": "alphabetical",
+      "orderBy": { "field": "id" },
+      "data": "PI-net.nodes"
+    },
+    {
+      "name": "degree",
+      "orderBy": { "field": "degree", "direction": "descending" },
+      "data": "PI-net.nodes"
+    }
+  ],
 
     "layouts": [
         {
-        "name": "PI-layout",
-        "network": "PI-net",
-        "type": "d3-force"
-        }
+      "name": "PI-bipartite",
+      "network": "PI-net",
+      "type": "bipartite",
+      "inFirstLayer": "datum._type !== 'institution'",
+      "y": {"order": "degree"},
+      "fixedLayer": 2
+    }
      ],
 
     "scales": [
@@ -112,14 +105,14 @@
         "name": "color",
         "type": "ordinal",
         "range": ["#1f77b4", "#2ca02c", "#8c564b"],
-        "domain": ["person", "institution", "publication"]
+        "domain": ["person", "institution"]
         }
     ],
 
     "vis": [
     {
         "entries": "PI-net.links",
-        "layout": "PI-layout",
+        "layout": "PI-bipartite",
         "mark": {
         "type": "linkpath",
         "start": "source",
@@ -128,11 +121,10 @@
     },
     {
         "entries": "PI-net.nodes",
-        "layout": "PI-layout",
+        "layout": "PI-bipartite",
         "mark": {
         "type": "circle",
         "fill": {"field": "_type", "scale": "color"},
-        "area": 150,
         "tooltip": {"field": "id"}
         }
     }
