@@ -45,19 +45,19 @@ h1 {
 
 #main {
         display: grid;
-        /*grid-template-columns: 1fr 1fr 1fr;*/
+        /*grid-templates-columns: 1fr 1fr 1fr;*/
         grid-template-columns: 1fr 3fr;
-        /*grid-template-rows: 1fr 1fr;*/
+        /*grid-templates-rows: 1fr 1fr;*/
     }
 
     #map-div {
         grid-column: 1 / 3;
     }
 
-    #netpan-grid {
+    .netpan-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        /*grid-template-rows: 3fr;*/
+        /*grid-templates-rows: 3fr;*/
     }
 
     .netpan-vis {

@@ -1,0 +1,226 @@
+{
+  "data": [
+    {
+      "name": "people",
+      "url": "./data/march-19/People.csv",
+      "format": {
+        "type": "csv"
+      }
+    },
+    {
+      "name": "Institutions",
+      "url": "./data/march-19/Institutions.csv",
+      "format": {
+        "type": "csv"
+      }
+    },
+    {
+      "name": "PI",
+      "url": "./data/march-19/Person-Institution.csv",
+      "format": {
+        "type": "csv"
+      }
+    }
+  ],
+
+  "networks": [
+    {
+      "name": "PI-net-import",
+      "parts": [
+        {
+          "data": "people",
+          "yieldsNodes": [
+            {
+              "type": "person",
+              "data": [
+                "*"
+              ]
+            }
+          ]
+        },
+        {
+          "data": "Institutions",
+          "yieldsNodes": [
+            {
+              "type": "institution",
+              "data": [
+                "*"
+              ]
+            }
+          ]
+        },
+        {
+          "data": "PI",
+          "yieldsLinks": [
+            {
+              "source_id": {
+                "field": "Person"
+              },
+              "source_node_type": "person",
+              "target_id": {
+                "field": "Institution"
+              },
+              "target_node_type": "institution"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PI-net",
+      "nodes": "PI-net-import.nodes",
+      "links": "PI",
+      "source_node": [
+        "id",
+        "Person"
+      ],
+      "target_node": [
+        "id",
+        "Institution"
+      ],
+      "metrics": [
+        {
+          "metric": "degree"
+        },
+        {
+          "metric": "closeness"
+        }
+      ]
+    }
+  ],
+  "orderings": [
+    {
+      "name": "alphabetical",
+      "orderBy": {
+        "field": "id"
+      },
+      "data": "PI-net.nodes"
+    },
+    {
+      "name": "degree",
+      "orderBy": {
+        "field": "degree",
+        "direction": "descending"
+      },
+      "data": "PI-net.nodes"
+    }
+  ],
+  "layouts": [
+    {
+      "name": "PI-jigsaw",
+      "pattern": "cartesian",
+      "x": [
+        {
+          "scale": "axis",
+          "field": "_type"
+        }
+      ],
+      "y": [
+        {
+          "order": "degree"
+        }
+      ],
+      "data": "PI-net.nodes",
+      "positioning": "start"
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "range": [
+        "#1f77b4",
+        "#2ca02c",
+        "#8c564b"
+      ],
+      "domain": [
+        "person",
+        "institution"
+      ]
+    },
+{
+      "name": "color-link",
+      "type": "ordinal",
+      "scheme": "category20",
+      "domain": [
+        "Lecturer in History Department",
+        "Head of History Department",
+        "High commissioner",
+        "Founder",
+        "Student",
+        "Speaker",
+        "Director",
+        "President",
+        "Lecturer",
+        "Published by EAPH",
+        "Academic",
+        "Officer",
+        "Deputy Director"
+      ]
+    },
+
+    {
+      "name": "axis",
+      "type": "ordinal",
+      "domain": [
+        "person",
+        "institution"
+      ],
+      "range": [
+        0,
+        1
+      ]
+    }
+  ],
+  "vis": [
+    {
+      "entries": "PI-net.links",
+      "layout": "PI-jigsaw",
+      "mark": {
+        "type": "linkpath",
+        "start": "source",
+        "end": "target",
+        "strokeWidth": 4,
+        "stroke": {
+            "field": "Type of relationship (professor, director, etc)",
+            "scale": "color-link"
+        },
+        "tooltip": {
+          "expression": "'szszsz'"
+        }
+      }
+    },
+    {
+      "entries": "PI-net.nodes",
+      "layout": "PI-jigsaw",
+      "if": "datum._type == 'person'",
+      "mark": {
+        "type": "circle",
+        "area": 200,
+        "fill": {
+          "field": "_type",
+          "scale": "color"
+        },
+        "tooltip": {
+          "expression": "datum.id + ' (degree ' + datum.degree + ')' "
+        }
+      }
+    },
+    {
+      "entries": "PI-net.nodes",
+      "layout": "PI-jigsaw",
+      "if": "datum._type == 'institution'",
+      "mark": {
+        "type": "square",
+        "area": 200,
+        "fill": {
+          "field": "_type",
+          "scale": "color"
+        },
+        "tooltip": {
+          "expression": "datum.id + ' (degree ' + datum.degree + ')' "
+        }
+      }
+    }
+  ]
+}

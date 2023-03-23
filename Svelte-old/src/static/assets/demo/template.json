@@ -1,0 +1,37 @@
+{
+  "networks": [
+    {
+      "name": "net",
+      "format": "pajek",
+      "url": "[fileUrl]"
+    }
+  ],
+  "layouts": [
+    {
+      "name": "net-layout",
+      "network": "net",
+      "type": "d3-force"
+    }
+  ],
+  "vis": [
+    {
+      "entries": "net.links",
+      "layout": "net-layout",
+      "mark": {
+        "type": "linkpath",
+        "start": "source",
+        "end": "target"
+      }
+    },
+    {
+      "entries": "net.nodes",
+      "layout": "net-layout",
+      "mark": {
+        "type": "circle",
+        "area": 70,
+        "fill": "[nodeColor]",
+        "tooltip": {  "field": "label" }
+      }
+    }
+  ]
+}

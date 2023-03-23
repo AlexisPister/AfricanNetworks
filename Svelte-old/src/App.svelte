@@ -70,9 +70,9 @@
 <style>
     #main {
         display: grid;
-        /*grid-template-columns: 1fr 1fr 1fr;*/
+        /*grid-templates-columns: 1fr 1fr 1fr;*/
         grid-template-columns: 1fr 3fr;
-        /*grid-template-rows: 1fr 1fr;*/
+        /*grid-templates-rows: 1fr 1fr;*/
     }
 
     #map-div {
@@ -82,7 +82,7 @@
     #netpan-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        /*grid-template-rows: 3fr;*/
+        /*grid-templates-rows: 3fr;*/
     }
 
     .netpan-vis {

@@ -1,0 +1,29 @@
+{
+  "name": "netpanorama-template-viewer",
+  "version": "0.1.2",
+  "description": "Embed a NetPanorama template in a webpage.",
+  "keywords": [
+    "visualization",
+    "networks"
+  ],
+  "license": "ISC",
+  "author": "James Scott-Brown",
+  "main": "index.js",
+  "repository": "jamesscottbrown/grammar-of-networks/",
+  "scripts": {
+    "build": "tsc && webpack",
+    "prettify": "prettier --write src/"
+  },
+  "dependencies": {
+    "fast-json-patch": "^3.1.1",
+    "ivy-language": "^0.0.1",
+    "netpanorama": "^0.1.2"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^4.10.0"
+  }
+}

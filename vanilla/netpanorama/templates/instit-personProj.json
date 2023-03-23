@@ -1,0 +1,164 @@
+{
+  "data": [
+    {
+      "name": "people",
+      "url": "./data/march-19/People.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "Institutions",
+      "url": "./data/march-19/Institutions.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "Publications",
+      "url": "./data/march-19/Publications.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "PP-Instproj",
+      "url": "./data/links_instProjInst.json",
+      "format": {"type": "json"}
+    }
+  ],
+
+  "networks": [
+    {
+      "name": "Person-net",
+      "parts": [
+        {
+          "data": "people",
+          "yieldsNodes": [
+            {
+              "type": "person",
+              "data": [
+                "*"
+              ]
+            }
+          ]
+        },
+        {
+          "data": "PP-Instproj",
+          "yieldsLinks": [
+            {
+              "source_id": {
+                "field": "source"
+              },
+              "source_node_type": "institution",
+              "target_id": {
+                "field": "target"
+              },
+              "target_node_type": "institution"
+            }
+          ]
+        }
+        ],
+        "transform": [
+            {"type": "filterNodes", "expression": "datum.id !== '' "},
+            {"type": "filterNodes", "expression": "datum.id !== ' ' "},
+            {"type": "removeIsolated"},
+            {"type": "metric", "metric": "degree"}
+        ]
+    }
+  ],
+
+  "orderings": [
+    {
+      "name": "alphabetical",
+      "orderBy": {
+        "field": "id"
+      },
+      "data": "Person-net.nodes"
+    },
+    {
+      "name": "degree",
+      "orderBy": {
+        "field": "degree",
+        "direction": "descending"
+      },
+      "data": "Person-net.nodes"
+    }
+  ],
+  "layouts": [
+    {
+        "name": "layout",
+        "network": "Person-net",
+        "type": "d3-force"
+        }
+  ],
+  "scales": [
+    {
+        "name": "color",
+        "type": "ordinal",
+        "range": ["#1f77b4", "#2ca02c", "#8c564b"],
+        "domain": ["person", "institution", "publication"]
+    },
+    {
+      "name": "radius",
+      "type": "linear",
+      "range": [1, 500],
+      "domain": { "data": "Person-net.nodes", "field": "degree" }
+    },
+    {
+      "name": "color-link",
+      "type": "ordinal",
+      "scheme": "category20",
+      "domain": [
+        "Lecturer in History Department",
+        "Head of History Department",
+        "High commissioner",
+        "Founder",
+        "Student",
+        "Speaker",
+        "Director",
+        "President",
+        "Lecturer",
+        "Published by EAPH",
+        "Academic",
+        "Officer",
+        "Deputy Director"
+      ]
+    },
+
+    {
+      "name": "axis",
+      "type": "ordinal",
+      "domain": [
+          "publication",
+        "person",
+        "institution"
+      ],
+      "range": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "vis": [
+    {
+      "entries": "Person-net.links",
+      "layout": "layout",
+      "mark": {
+        "type": "linkpath",
+        "start": "source",
+        "end": "target"
+      }
+    },
+    {
+      "entries": "Person-net.nodes",
+      "layout": "layout",
+      "mark": {
+        "type": "circle",
+        "area": { "field": "degree", "scale": "radius" },
+        "tooltip": {
+          "expression": "datum.id + ' (degree ' + datum.degree + ')' "
+        },
+        "fill": {
+          "field": "_type",
+          "scale": "color"
+        }
+      }
+    }
+  ]
+}

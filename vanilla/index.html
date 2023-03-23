@@ -21,31 +21,40 @@
     </div>
       </div>
 
-    <h3> Node-Link Layouts</h3>
-    <div id="netpan-grid">
+    <h2>Node-Link Layouts</h2>
+    <div class="netpan-grid">
         <div class="netpan-vis" id="force"></div>
         <div class="netpan-vis" id="bipartite"></div>
         <div class="netpan-vis" id="tripartite"></div>
     </div>
 
-<!--<div id="vis1"></div>-->
-
-<!--<div id="SVG"></div>-->
+  <h2>Projections of persons (through institutions) and institutions (through persons)</h2>
+    <div class="netpan-grid">
+        <div class="netpan-vis" id="person-force-proj"></div>
+        <div class="netpan-vis" id="inst-force-proj"></div>
+    </div>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script type="module" src="timeline.js"></script>
-<!--<script src="../node_modules/netpanorama-template-viewer/dist/bundle.js"></script>-->
-<!--  <script type="text/javascript">-->
-<!--    function renderTemplates() {-->
-<!--      NetPanoramaTemplateViewer.render("./src/assets/demo/template.json", {-->
-<!--        fileUrl: "\"./src/assets/demo/example.pajek\"",-->
-<!--        nodeColor: "\"red\""-->
-<!--      }, "vis1");-->
-<!--    }-->
+<script src="./modules/netpanorama-template-viewer/dist/bundle.js"></script>
+  <script type="text/javascript">
+    function renderTemplates() {
+        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {}, "force");
+        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
+        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {}, "tripartite");
 
-<!--    renderTemplates()-->
-<!--  </script>-->
-<!--<script type="module" src="/src/netpan-visualizations.js"></script>-->
+        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");
+        NetPanoramaTemplateViewer.render("./netpanorama/templates/instit-personProj.json", {}, "inst-force-proj");
+
+        //   NetPanoramaTemplateViewer.render("./demo/template.json", {
+        //     fileUrl: "\"./demo/example.pajek\"",
+        //     nodeColor: "\"red\""
+        //   }, "tripartite");
+        // }
+    }
+    renderTemplates()
+  </script>
+<script type="module" src="/Svelte-old/src/netpan-visualizations.js"></script>
 
 </body>
 </html>
