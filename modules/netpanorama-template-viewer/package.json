@@ -12,7 +12,7 @@
   "repository": "jamesscottbrown/grammar-of-networks/",
   "scripts": {
     "build": "tsc && webpack",
-    "prettify": "prettier --write src/"
+    "prettify": "prettier --write src"
   },
   "dependencies": {
     "fast-json-patch": "^3.1.1",

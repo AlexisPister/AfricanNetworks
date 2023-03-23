@@ -12,4 +12,4 @@ Running `npm run build` will create the file `dist/bundle.js`.
 
 You will need to load the `dist/bundle.js` file to use the library.
 
-The files in [`demo/`](./demo) provide usage examples. 
+The files in [`demo/`](demo) provide usage examples. 
