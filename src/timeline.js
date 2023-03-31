@@ -1,6 +1,14 @@
 // TODO: compute this auto?
-let width = 1000;
-let height = 1000;
+// let width = 1000;
+// let height = 1000;
+
+// let width = d3.select("#timeline").attr("width")
+// let height = d3.select("#timeline").attr("height")
+
+let [width, height] = computeSvgDims("timeline")
+console.log("WWWWWW", width, height)
+
+
 const margin = {
     top: 20,
     left: 20,

@@ -3,30 +3,57 @@
     {
       "name": "people",
       "url": "./data/march-19/People.csv",
-      "format": {"type": "csv"}
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "Institutions",
       "url": "./data/march-19/Institutions.csv",
-      "format": {"type": "csv"}
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "Publications",
       "url": "./data/march-19/Publications.csv",
-      "format": {"type": "csv"}
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "PI",
       "url": "./data/march-19/Person-Institution.csv",
-      "format": {"type": "csv"}
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "PP",
       "url": "./data/march-19/Person-Publication.csv",
-      "format": {"type": "csv"}
+      "format": {
+        "type": "csv"
+      }
     }
   ],
-
+  "parameters": [
+    {
+      "name": "nodeSelection",
+      "action": "replace",
+      "network": "PI-net",
+      "type": "selection"
+    },
+    {
+      "name": "outlinks",
+      "source": "nodeSelection",
+      "network": "PI-net",
+      "transform": [
+        {
+          "type": "connectedEdges"
+        }
+      ]
+    }
+  ],
   "networks": [
     {
       "name": "PI-net",
@@ -94,16 +121,26 @@
             }
           ]
         }
-        ],
-        "transform": [
-            {"type": "filterNodes", "expression": "datum.id !== '' "},
-            {"type": "filterNodes", "expression": "datum.id !== ' ' "},
-            {"type": "removeIsolated"},
-            {"type": "metric", "metric": "degree"}
-        ]
+      ],
+      "transform": [
+        {
+          "type": "filterNodes",
+          "expression": "datum.id !== '' "
+        },
+        {
+          "type": "filterNodes",
+          "expression": "datum.id !== ' ' "
+        },
+        {
+          "type": "removeIsolated"
+        },
+        {
+          "type": "metric",
+          "metric": "degree"
+        }
+      ]
     }
   ],
-
   "orderings": [
     {
       "name": "alphabetical",
@@ -123,23 +160,37 @@
   ],
   "layouts": [
     {
-        "name": "PI-layout",
-        "network": "PI-net",
-        "type": "d3-force"
-        }
+      "name": "PI-layout",
+      "network": "PI-net",
+      "type": "d3-force"
+    }
   ],
   "scales": [
     {
-        "name": "color",
-        "type": "ordinal",
-        "range": ["#1f77b4", "#2ca02c", "#8c564b"],
-        "domain": ["person", "institution", "publication"]
+      "name": "color",
+      "type": "ordinal",
+      "range": [
+        "#1f77b4",
+        "#2ca02c",
+        "#8c564b"
+      ],
+      "domain": [
+        "person",
+        "institution",
+        "publication"
+      ]
     },
     {
       "name": "radius",
       "type": "linear",
-      "range": [1, 500],
-      "domain": { "data": "PI-net.nodes", "field": "degree" }
+      "range": [
+        40,
+        240
+      ],
+      "domain": {
+        "data": "PI-net.nodes",
+        "field": "degree"
+      }
     },
     {
       "name": "color-link",
@@ -165,7 +216,7 @@
       "name": "axis",
       "type": "ordinal",
       "domain": [
-          "publication",
+        "publication",
         "person",
         "institution"
       ],
@@ -187,11 +238,49 @@
       }
     },
     {
+      "entries": "PI-net.links",
+      "layout": "PI-layout",
+      "ifInSelection": "outlinks.links",
+      "mark": {
+        "type": "linkpath",
+        "start": "source",
+        "end": "target",
+        "stroke": "red",
+        "endMarker": {
+          "shape": "triangle",
+          "stepBack": 10
+        }
+      }
+    },
+
+    {
+      "entries": "PI-net.nodes",
+      "layout": "PI-layout",
+      "mark": {
+        "type": "text",
+        "text": {
+          "field": "id"
+        },
+        "align": "",
+        "fill": {
+          "condition": {
+            "test": "datum.degree > 5",
+            "value": "black"
+          },
+          "value": "none"
+        }
+      }
+    },
+
+    {
       "entries": "PI-net.nodes",
       "layout": "PI-layout",
       "mark": {
         "type": "circle",
-        "area": { "field": "degree", "scale": "radius" },
+        "area": {
+          "field": "degree",
+          "scale": "radius"
+        },
         "fill": {
           "field": "_type",
           "scale": "color"
@@ -199,7 +288,16 @@
         "tooltip": {
           "expression": "datum.id + ' (degree ' + datum.degree + ')' "
         }
-      }
+      },
+      "actions": [
+        {
+          "interaction": "select",
+          "using": "cursor",
+          "event": "click",
+          "action": "replace",
+          "selection": "nodeSelection"
+        }
+      ]
     }
   ]
 }

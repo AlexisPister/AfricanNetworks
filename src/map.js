@@ -30,6 +30,20 @@ importData().then((data) => {
     console.log("frf", map.objects.continent_Africa_subunits, map)
     // console.log("frf", map.objects.continent_Africa_subunits, map, countriesFiltered)
 
+    // let svg = d3.select("#map");
+
+    // var containerWidth = svg.node().parentNode.getBoundingClientRect().width;
+    // var containerHeight = svg.node().parentNode.getBoundingClientRect().height;
+    // console.log(22222222222, containerHeight)
+    //
+    // // update the viewBox attribute to match the new size
+    // var viewBoxWidth = svg.attr("viewBox") ? +svg.attr("viewBox").split(" ")[2] : containerWidth;
+    // var viewBoxHeight = svg.attr("viewBox") ? +svg.attr("viewBox").split(" ")[3] : containerHeight;
+    // svg.attr("viewBox", "0 0 " + viewBoxWidth + " " + viewBoxHeight);
+    //
+    // svg.attr("width", containerWidth)
+    // svg.attr("height", containerHeight)
+
     let g = d3.select("#map")
         .append("g")
 
@@ -50,7 +64,8 @@ importData().then((data) => {
         .join("path")
         // .on("click", clicked)
         .attr("d", path)
-        .attr("transform", "scale(7)")
+        .attr("transform", "scale(6)")
+        // .attr("transform", "scale(20)")
         .attr("stroke", "black")
         .attr("fill", "grey")
         .attr("stroke-width", 0.1);

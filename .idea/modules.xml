@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/East-Africa-Network.iml" filepath="$PROJECT_DIR$/.idea/East-Africa-Network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../netpanorama-examples-main/.idea/netpanorama-examples-main.iml" filepath="$PROJECT_DIR$/../netpanorama-examples-main/.idea/netpanorama-examples-main.iml" />
     </modules>
   </component>
 </project>

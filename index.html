@@ -7,59 +7,123 @@
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
-  <div id="main">
-    <div>
-        <h1>East African Networks</h1>
-        <h2>Social dynamics in East Africa<br> 19xx-19xx</h2>
-    </div>
-    <div>
-        <svg id="timeline" width="1000" height="1000"></svg>
-    </div>
-    <div id="map-div">
-        <Map></Map>
-    </div>
-      </div>
+<!--<div id="main">-->
+<!--    <div>-->
+<!--        <h1>East African Networks</h1>-->
+<!--        <h2>Social dynamics in East Africa<br> 19xx-19xx</h2>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <svg id="timeline" width="1000" height="1000"></svg>-->
+<!--    </div>-->
+<!--    <div id="map-div">-->
+<!--        <Map></Map>-->
+<!--    </div>-->
+<!--</div>-->
 
-    <h2>Node-Link Layouts</h2>
-    <h4>Persons are blue, institutions green, and publications brown.</h4>
-    <h4>The color of the links in the 2nd drawing represent the type of relation (academic, director, etc.)</h4>
-    <div class="netpan-grid">
+<!--<h2>Node-Link Layouts</h2>-->
+<!--<h4>Persons are blue, institutions green, and publications brown.</h4>-->
+<!--<h4>The color of the links in the 2nd drawing represent the type of relation (academic, director, etc.)</h4>-->
+<!--<div class="netpan-grid">-->
+<!--    <div class="netpan-vis" id="force"></div>-->
+<!--    <div class="netpan-vis" id="bipartite"></div>-->
+<!--    <div class="netpan-vis" id="tripartite"></div>-->
+<!--</div>-->
+
+<!--<h2>Projections of persons (through institutions) and institutions (through persons)</h2>-->
+<!--<div class="netpan-grid">-->
+<!--    <div class="netpan-vis" id="person-force-proj"></div>-->
+<!--    <div class="netpan-vis" id="inst-force-proj"></div>-->
+<!--</div>-->
+
+<!--<h2>Maps</h2>-->
+<!--<svg id="map" width="1000" height="1000"></svg>-->
+
+
+<!--NEW PAGE LAYOUT-->
+
+<div id="main-axis">
+    <div id="head">
+        <div class="header-item-flex">
+            <h1>East African Networks</h1>
+            <h2>Social dynamics in East Africa<br> 19xx-19xx</h2>
+        </div>
+        <div class="header-item-flex">
+            <h2>Number of People</h2>
+            efzefze
+        </div>
+        <div class="header-item-flex">
+            <h2>Number of Places</h2>
+            efzefze
+        </div>
+        <div class="header-item-flex">
+            <h2>Number of Publications</h2>
+            efzefze
+        </div>
+    </div>
+
+    <div id="main-vis">
         <div class="netpan-vis" id="force"></div>
-        <div class="netpan-vis" id="bipartite"></div>
-        <div class="netpan-vis" id="tripartite"></div>
+        <div id="select-info">
+            <h2>
+                <span id="name"> Select a Node </span>
+            </h2>
+            <span id="dob">xxxx</span> - <span id="dod">xxxx</span><br>
+            <span id="activity">xxxx</span>
+            <div id="bio">xxxxxxxxxxxxxxxxxxxxxxxxx</div>
+
+        </div>
+<!--        <div class="netpan-vis" id="bipartite"></div>-->
+<!--        <div class="netpan-vis" id="tripartite"></div>-->
+        <div class="netpan-vis" id="temporal-container">
+            <svg id="timeline"></svg>
+<!--            <svg id="timeline" width="1000" height="1000"></svg>-->
+        </div>
+        <div class="netpan-vis" id="map-container">
+            <svg id="map"></svg>
+        </div>
+
     </div>
 
-  <h2>Projections of persons (through institutions) and institutions (through persons)</h2>
-    <div class="netpan-grid">
-        <div class="netpan-vis" id="person-force-proj"></div>
-        <div class="netpan-vis" id="inst-force-proj"></div>
-    </div>
+</div>
 
-  <h2>Maps</h2>
-    <svg id="map" width="1000" height="1000"></svg>
 
+<!-- TODO: use local scripts -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://unpkg.com/topojson-client@3"></script>
-<script type="module" src="timeline.js"></script>
-<script type="module" src="map.js"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script src="node_modules/papaparse/papaparse.min.js"></script>
+
+<script type="text/javascript" src="src/utils.js"></script>
+<script type="module" src="src/timeline.js"></script>
+<script type="module" src="src/map.js"></script>
 <script src="modules/netpanorama-template-viewer/dist/bundle.js"></script>
-  <script type="text/javascript">
-    function renderTemplates() {
-        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {}, "force");
-        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
-        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {}, "tripartite");
-
-        NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");
-        NetPanoramaTemplateViewer.render("./netpanorama/templates/instit-personProj.json", {}, "inst-force-proj");
-
-        //   NetPanoramaTemplateViewer.render("./demo/template.json", {
-        //     fileUrl: "\"./demo/example.pajek\"",
-        //     nodeColor: "\"red\""
-        //   }, "tripartite");
-        // }
-    }
-    renderTemplates()
-  </script>
+<script type="module" src="src/main.js"></script>
+<script type="text/javascript">
+    //  function renderTemplates() {
+    //      const selectNodeCb = (e) => {
+    //          console.log(111, e)
+    //      }
+    //
+    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {}, "force",
+    //          {paramCallbacks: {nodeSelection: selectNodeCb}});
+    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
+    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {}, "tripartite");
+    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");
+    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/instit-personProj.json", {}, "inst-force-proj");
+    //
+    //      //   NetPanoramaTemplateViewer.render("./demo/template.json", {
+    //      //     fileUrl: "\"./demo/example.pajek\"",
+    //      //     nodeColor: "\"red\""
+    //      //   }, "tripartite");
+    //      // }
+    //  }
+    //
+    //  const response = fetch('state_wise_data.csv')
+    // .then(response => response.text())
+    // .then(v => Papa.parse(v))
+    // .catch(err => console.log(err))
+    //
+    //  renderTemplates()
+</script>
 <!--<script type="module" src="/Svelte-old/src/netpan-visualizations.js"></script>-->
 
 </body>
