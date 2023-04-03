@@ -2,28 +2,38 @@
   "data": [
     {
       "name": "people",
-      "url": "./data/march-19/People.csv",
-      "format": {"type": "csv"}
+      "url": "./data/[dataFolder]/People.csv",
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "Institutions",
-      "url": "./data/march-19/Institutions.csv",
-      "format": {"type": "csv"}
+      "url": "./data/[dataFolder]/Institutions.csv",
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "Publications",
-      "url": "./data/march-19/Publications.csv",
-      "format": {"type": "csv"}
+      "url": "./data/[dataFolder]/Publications.csv",
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "PI",
-      "url": "./data/march-19/Person-Institution.csv",
-      "format": {"type": "csv"}
+      "url": "./data/[dataFolder]/Person-Institution.csv",
+      "format": {
+        "type": "csv"
+      }
     },
     {
       "name": "PP",
-      "url": "./data/march-19/Person-Publication.csv",
-      "format": {"type": "csv"}
+      "url": "./data/[dataFolder]/Person-Publication.csv",
+      "format": {
+        "type": "csv"
+      }
     }
   ],
 
@@ -150,7 +160,7 @@
     {
       "name": "radius",
       "type": "linear",
-      "range": [1, 500],
+      "range": [20, 500],
       "domain": { "data": "PI-net.nodes", "field": "degree" }
     },
     {
@@ -212,6 +222,26 @@
         "tooltip": {
           "expression": "datum.id + ' (degree ' + datum.degree + ')' "
         }
+      }
+    },
+    {
+      "entries": "PI-net.nodes",
+      "layout": "PI-jigsaw",
+      "mark": {
+        "type": "text",
+        "text": {
+          "field": "id"
+        },
+        "align": "",
+        "fill": {
+          "condition": {
+            "test": "datum.degree > 2",
+            "value": "black"
+          },
+          "value": "none"
+        },
+        "dx": 10,
+        "dy": 4
       }
     }
   ]

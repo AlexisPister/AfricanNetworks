@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>African Networks</title>
     <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="node_modules/nouislider/dist/nouislider.min.css">
 </head>
 <body>
 <!--<div id="main">-->
@@ -49,81 +50,64 @@
         </div>
         <div class="header-item-flex">
             <h2>Number of People</h2>
-            efzefze
+            <span id="n-people" class="key-measure">efzefze</span>
         </div>
         <div class="header-item-flex">
-            <h2>Number of Places</h2>
-            efzefze
+            <h2>Number of Institutions</h2>
+            <span id="n-institutions" class="key-measure">efzefze</span>
         </div>
         <div class="header-item-flex">
             <h2>Number of Publications</h2>
-            efzefze
+            <span id="n-publications" class="key-measure">efzefze</span>
         </div>
     </div>
 
     <div id="main-vis">
-        <div class="netpan-vis" id="force"></div>
-        <div id="select-info">
-            <h2>
-                <span id="name"> Select a Node </span>
-            </h2>
-            <span id="dob">xxxx</span> - <span id="dod">xxxx</span><br>
-            <span id="activity">xxxx</span>
-            <div id="bio">xxxxxxxxxxxxxxxxxxxxxxxxx</div>
-
+        <div class="netpan-vis" id="force">
         </div>
-<!--        <div class="netpan-vis" id="bipartite"></div>-->
-<!--        <div class="netpan-vis" id="tripartite"></div>-->
+
+        <div id="infos">
+            <div id="select-info">
+                <h2>
+                    <span id="name"> Select a Node </span>
+                </h2>
+                <span id="dob">xxxx</span> - <span id="dod">xxxx</span><br>
+                <span id="activity">xxxx</span>
+                <div id="bio"></div>
+            </div>
+            <div class="radio-button">
+                <input type="radio" id="force-radio" name="options" value="option1" checked>
+                <label for="force-radio">Force</label>
+                <input type="radio" id="tripartite-radio" name="options" value="option2">
+                <label for="tripartite-radio">Tripartite</label>
+            </div>
+            <div id="time-slider"></div>
+        </div>
+
+        <!--        <div class="netpan-vis" id="bipartite"></div>-->
+        <!--        <div class="netpan-vis" id="tripartite"></div>-->
         <div class="netpan-vis" id="temporal-container">
             <svg id="timeline"></svg>
-<!--            <svg id="timeline" width="1000" height="1000"></svg>-->
+            <!--            <svg id="timeline" width="1000" height="1000"></svg>-->
         </div>
         <div class="netpan-vis" id="map-container">
             <svg id="map"></svg>
         </div>
 
     </div>
-
 </div>
-
 
 <!-- TODO: use local scripts -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://unpkg.com/topojson-client@3"></script>
 <script src="node_modules/papaparse/papaparse.min.js"></script>
+<script src="node_modules/nouislider/dist/nouislider.min.js"></script>
 
 <script type="text/javascript" src="src/utils.js"></script>
 <script type="module" src="src/timeline.js"></script>
 <script type="module" src="src/map.js"></script>
 <script src="modules/netpanorama-template-viewer/dist/bundle.js"></script>
 <script type="module" src="src/main.js"></script>
-<script type="text/javascript">
-    //  function renderTemplates() {
-    //      const selectNodeCb = (e) => {
-    //          console.log(111, e)
-    //      }
-    //
-    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {}, "force",
-    //          {paramCallbacks: {nodeSelection: selectNodeCb}});
-    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
-    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {}, "tripartite");
-    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");
-    //      NetPanoramaTemplateViewer.render("./netpanorama/templates/instit-personProj.json", {}, "inst-force-proj");
-    //
-    //      //   NetPanoramaTemplateViewer.render("./demo/template.json", {
-    //      //     fileUrl: "\"./demo/example.pajek\"",
-    //      //     nodeColor: "\"red\""
-    //      //   }, "tripartite");
-    //      // }
-    //  }
-    //
-    //  const response = fetch('state_wise_data.csv')
-    // .then(response => response.text())
-    // .then(v => Papa.parse(v))
-    // .catch(err => console.log(err))
-    //
-    //  renderTemplates()
-</script>
 <!--<script type="module" src="/Svelte-old/src/netpan-visualizations.js"></script>-->
 
 </body>

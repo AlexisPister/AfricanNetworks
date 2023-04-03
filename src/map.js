@@ -21,9 +21,8 @@ async function importData() {
 importData().then((data) => {
     let map = data
 
-    console.log("frf", map.objects.continent_Africa_subunits.geometries)
-
-    let countries = ["Uganda", "Tanzania"]
+    console.log("frf", map.objects.continent_Africa_subunits.geometries);
+    let countries = ["Uganda", "Tanzania", "Kenya", "Ghana"];
 
     // let countriesFiltered = map.objects.continent_Africa_subunits.filter(c => ["Angola"].includes(c.subunnit))
     map.objects.continent_Africa_subunits.geometries = map.objects.continent_Africa_subunits.geometries.filter(g => countries.includes(g.properties.geounit))
@@ -47,6 +46,9 @@ importData().then((data) => {
     let g = d3.select("#map")
         .append("g")
 
+    // TODO: center auto
+    g.attr("transform", "translate(-450, -160)")
+
     const path = d3.geoPath()
     const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 
@@ -64,7 +66,8 @@ importData().then((data) => {
         .join("path")
         // .on("click", clicked)
         .attr("d", path)
-        .attr("transform", "scale(6)")
+        // .attr("transform", "scale(6)")
+        .attr("transform", "scale(9)")
         // .attr("transform", "scale(20)")
         .attr("stroke", "black")
         .attr("fill", "grey")

@@ -2,35 +2,35 @@
   "data": [
     {
       "name": "people",
-      "url": "./data/march-19/People.csv",
+      "url": "./data/[dataFolder]/People.csv",
       "format": {
         "type": "csv"
       }
     },
     {
       "name": "Institutions",
-      "url": "./data/march-19/Institutions.csv",
+      "url": "./data/[dataFolder]/Institutions.csv",
       "format": {
         "type": "csv"
       }
     },
     {
       "name": "Publications",
-      "url": "./data/march-19/Publications.csv",
+      "url": "./data/[dataFolder]/Publications.csv",
       "format": {
         "type": "csv"
       }
     },
     {
       "name": "PI",
-      "url": "./data/march-19/Person-Institution.csv",
+      "url": "./data/[dataFolder]/Person-Institution.csv",
       "format": {
         "type": "csv"
       }
     },
     {
       "name": "PP",
-      "url": "./data/march-19/Person-Publication.csv",
+      "url": "./data/[dataFolder]/Person-Publication.csv",
       "format": {
         "type": "csv"
       }
@@ -59,6 +59,7 @@
       "name": "PI-net",
       "parts": [
         {
+          "id_field": "Name",
           "data": "people",
           "yieldsNodes": [
             {
@@ -73,6 +74,7 @@
           "data": "Institutions",
           "yieldsNodes": [
             {
+              "id_field": "Name",
               "type": "institution",
               "data": [
                 "*"
@@ -84,6 +86,7 @@
           "data": "Publications",
           "yieldsNodes": [
             {
+              "id_field": "Name",
               "type": "publication",
               "data": [
                 "*"
@@ -102,7 +105,10 @@
               "target_id": {
                 "field": "Institution"
               },
-              "target_node_type": "institution"
+              "target_node_type": "institution",
+              "data": [
+                "*"
+              ]
             }
           ]
         },
@@ -117,7 +123,10 @@
               "target_id": {
                 "field": "Publication"
               },
-              "target_node_type": "publication"
+              "target_node_type": "publication",
+              "data": [
+                "*"
+              ]
             }
           ]
         }
@@ -162,7 +171,28 @@
     {
       "name": "PI-layout",
       "network": "PI-net",
-      "type": "d3-force"
+      "type": "d3-force",
+      "forces": [
+        {
+          "force": "link",
+          "iterations": 2,
+          "distance": 30
+        },
+        {
+          "force": "nbody",
+          "strength": -9
+        },
+        {
+          "force": "center",
+          "x": 50,
+          "y": 50,
+          "strength": 2
+        },
+        {
+          "force": "collide",
+          "radius": 15
+        }
+      ]
     }
   ],
   "scales": [
@@ -184,8 +214,8 @@
       "name": "radius",
       "type": "linear",
       "range": [
-        40,
-        240
+        50,
+        500
       ],
       "domain": {
         "data": "PI-net.nodes",
@@ -231,31 +261,35 @@
     {
       "entries": "PI-net.links",
       "layout": "PI-layout",
-      "mark": {
-        "type": "linkpath",
-        "start": "source",
-        "end": "target"
-      }
-    },
-    {
-      "entries": "PI-net.links",
-      "layout": "PI-layout",
       "ifInSelection": "outlinks.links",
       "mark": {
         "type": "linkpath",
         "start": "source",
         "end": "target",
-        "stroke": "red",
-        "endMarker": {
-          "shape": "triangle",
-          "stepBack": 10
+        "stroke": "red"
+      }
+    },
+    {
+      "entries": "PI-net.links",
+      "layout": "PI-layout",
+      "if": "datum.source.y < 320",
+      "mark": {
+        "type": "linkpath",
+        "start": "source",
+        "end": "target",
+        "stroke": {
+          "condition": {
+            "test": "datum.data.Year > [yearMin] && datum.data.Year < [yearMax]",
+            "value": "red"
+          },
+          "value": "black"
         }
       }
     },
-
     {
       "entries": "PI-net.nodes",
       "layout": "PI-layout",
+      "if": "datum.y < 320",
       "mark": {
         "type": "text",
         "text": {
@@ -264,17 +298,39 @@
         "align": "",
         "fill": {
           "condition": {
-            "test": "datum.degree > 5",
+            "test": "datum.degree > 4",
             "value": "black"
           },
           "value": "none"
-        }
+        },
+        "dx": 4,
+        "dy": -4
       }
     },
+    {
+      "entries": "PI-net.nodes",
+      "ifInSelection": "nodeSelection.nodes",
+      "layout": "PI-layout",
 
+      "mark": {
+        "type": "circle",
+        "area": 700,
+        "fill": "gold"
+      },
+      "actions": [
+          {
+            "interaction": "select",
+            "using": "cursor",
+            "event": "click",
+            "action": "toggle",
+	        "selection": "my_selection"
+          }
+      ]
+    },
     {
       "entries": "PI-net.nodes",
       "layout": "PI-layout",
+      "if": "datum.y < 320",
       "mark": {
         "type": "circle",
         "area": {
