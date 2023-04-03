@@ -85,7 +85,8 @@
               "target_id": {
                 "field": "Institution"
               },
-              "target_node_type": "institution"
+              "target_node_type": "institution",
+              "data": ["*"]
             }
           ]
         },
@@ -100,7 +101,8 @@
               "target_id": {
                 "field": "Publication"
               },
-              "target_node_type": "publication"
+              "target_node_type": "publication",
+              "data": ["*"]
             }
           ]
         }
@@ -206,7 +208,14 @@
       "mark": {
         "type": "linkpath",
         "start": "source",
-        "end": "target"
+        "end": "target",
+        "stroke": {
+          "condition": {
+            "test": "datum.data.Year > [yearMin] && datum.data.Year < [yearMax]",
+            "value": "black"
+          },
+          "value": "lightgray"
+        }
       }
     },
     {

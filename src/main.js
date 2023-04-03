@@ -111,7 +111,12 @@ function getTimeInterval(personInst, personPub) {
 //     if (datum.)
 // }
 
-async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
+let yearMinSel = 1000
+let yearMaxSel = 3000
+let isTripartite = false;
+
+async function renderTemplates(tripartite=false) {
+// async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
     const selectNodeCb = (e) => {
         let node = e.nodes[0];
         let type = node._type
@@ -122,16 +127,16 @@ async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
 
     if (tripartite) {
         let tripView = NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
-                yearMin: yearMin,
-                yearMax: yearMax,
+                yearMin: yearMinSel,
+                yearMax: yearMaxSel,
                 dataFolder: `\"${FOLDER}\"`
             }, "force");
     } else {
         let forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {
                 // layoutAlg: "\"webcola\"",
                 layoutAlg: "\"d3-force\"",
-                yearMin: yearMin,
-                yearMax: yearMax,
+                yearMin: yearMinSel,
+                yearMax: yearMaxSel,
                 dataFolder: `\"${FOLDER}\"`
             }, "force",
             {paramCallbacks: {nodeSelection: selectNodeCb}});
@@ -179,19 +184,24 @@ let timeSlider = noUiSlider.create(slider, {
     tooltips: true,
 });
 slider.noUiSlider.on("update", (e) => {
-    let [yearMin, yearMax] = [e[0], e[1]];
+    // let [yearMin, yearMax] = [e[0], e[1]];
+    [yearMinSel, yearMaxSel] = [e[0], e[1]];
 
-    yearSelectionCb(yearMin, yearMax);
-    updateTimeLine(yearMin, yearMax);
+    renderTemplates(isTripartite)
+    // yearSelectionCb(yearMin, yearMax);
+    // updateTimeLine(yearMin, yearMax);
 })
+
 
 d3.select("#force-radio")
     .on("click", (e) => {
-        renderTemplates()
+        isTripartite = false;
+        renderTemplates(isTripartite)
     })
 
 d3.select("#tripartite-radio")
     .on("click", (e) => {
-        renderTemplates(true)
+        isTripartite = true;
+        renderTemplates(isTripartite)
     })
 

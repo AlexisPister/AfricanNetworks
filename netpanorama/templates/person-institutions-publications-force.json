@@ -280,9 +280,9 @@
         "stroke": {
           "condition": {
             "test": "datum.data.Year > [yearMin] && datum.data.Year < [yearMax]",
-            "value": "red"
+            "value": "black"
           },
-          "value": "black"
+          "value": "lightgray"
         }
       }
     },

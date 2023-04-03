@@ -129,6 +129,10 @@ input[type="radio"]:checked + label {
   background-color: #ccc;
 }
 
+#time-slider {
+    margin-right: 60px;
+    margin-left: 60px;
+}
 
 
 #map {
