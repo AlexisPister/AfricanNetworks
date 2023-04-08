@@ -7,6 +7,22 @@ const margin = {
     right: 20,
     bottom: 20
 }
+const countries = ["Uganda", "Tanzania", "Kenya", "Ghana"];
+const g = d3.select("#map")
+    .append("g")
+const path = d3.geoPath()
+const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
+let mapData;
+
+// TODO: center auto
+g.attr("transform", "translate(-450, -160)")
+
+importData().then((data) => {
+    mapData = data
+    mapData.objects.continent_Africa_subunits.geometries = mapData.objects.continent_Africa_subunits.geometries.filter(g => countries.includes(g.properties.geounit))
+    render()
+})
+
 
 function parseEventDate(date) {
     return +date.slice(-4)
@@ -18,50 +34,12 @@ async function importData() {
 }
 
 
-importData().then((data) => {
-    let map = data
-
-    console.log("frf", map.objects.continent_Africa_subunits.geometries);
-    let countries = ["Uganda", "Tanzania", "Kenya", "Ghana"];
-
-    // let countriesFiltered = map.objects.continent_Africa_subunits.filter(c => ["Angola"].includes(c.subunnit))
-    map.objects.continent_Africa_subunits.geometries = map.objects.continent_Africa_subunits.geometries.filter(g => countries.includes(g.properties.geounit))
-    console.log("frf", map.objects.continent_Africa_subunits, map)
-    // console.log("frf", map.objects.continent_Africa_subunits, map, countriesFiltered)
-
-    // let svg = d3.select("#map");
-
-    // var containerWidth = svg.node().parentNode.getBoundingClientRect().width;
-    // var containerHeight = svg.node().parentNode.getBoundingClientRect().height;
-    // console.log(22222222222, containerHeight)
-    //
-    // // update the viewBox attribute to match the new size
-    // var viewBoxWidth = svg.attr("viewBox") ? +svg.attr("viewBox").split(" ")[2] : containerWidth;
-    // var viewBoxHeight = svg.attr("viewBox") ? +svg.attr("viewBox").split(" ")[3] : containerHeight;
-    // svg.attr("viewBox", "0 0 " + viewBoxWidth + " " + viewBoxHeight);
-    //
-    // svg.attr("width", containerWidth)
-    // svg.attr("height", containerHeight)
-
-    let g = d3.select("#map")
-        .append("g")
-
-    // TODO: center auto
-    g.attr("transform", "translate(-450, -160)")
-
-    const path = d3.geoPath()
-    const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
-
-    function zoomed(event) {
-        const {transform} = event;
-        g.attr("stroke-width", 1 / transform.k);
-    }
-
+function render() {
     const nations = g
         .append("g")
         .attr("cursor", "pointer")
         .selectAll("path")
-        .data(topojson.feature(map, map.objects.continent_Africa_subunits).features)
+        .data(topojson.feature(mapData, mapData.objects.continent_Africa_subunits).features)
         // .data(topojson.feature(map, countriesFiltered).features)
         .join("path")
         // .on("click", clicked)
@@ -73,38 +51,15 @@ importData().then((data) => {
         .attr("fill", "grey")
         .attr("stroke-width", 0.1);
 
-    // g.append("text")
-    //     .attr("transform", "translate(10,30)")
-    //     .attr("font-size", "20")
-    //     //.attr("font-family", "Verdana")
-    //     .attr("font-weight", "bold")
-    //     .text("Endangered and Active Languages in Africa");
-
-    // if (active) {
-    //     svg.append("g")
-    //         .attr("transform", "translate(400,60), scale(0.5)")
-    //         .append(() => Legend(d3.scaleSequentialSqrt([0, 290], colorsAct), {title: "Active Languages"}));
-    //     nations.attr("fill", (d) => actColor(d.properties.Active_num))
-    //     g.append("text")
-    //         .attr("transform", "translate(20,50)")
-    //         .attr("font-size", "12")
-    //         //   .attr("font-family", "Verdana")
-    //         .attr("font-weight", "bold")
-    //         .text("Currently showing: Active");
-    // } else {
-    //     svg.append("g")
-    //         .attr("transform", "translate(400,60), scale(0.5)")
-    //         .append(() => Legend(d3.scaleSequentialSqrt([0, 170], colorsEnd), {title: "Endangered Languages"}));
-    //     nations.attr("fill", (d) => endColor(d.properties.Endangered_num))
-    //     g.append("text")
-    //         .attr("transform", "translate(20,50)")
-    //         .attr("font-size", "12")
-    //         // .attr("font-family", "Verdana")
-    //         .attr("font-weight", "bold")
-    //         .text("Currently showing: Endangered");
-    // }
-
     nations.append("title").text((d) => d.properties.geounit);
     g.call(zoom);
-})
+}
+
+function zoomed(event) {
+    const {transform} = event;
+    g.attr("stroke-width", 1 / transform.k);
+}
+
+
+
 

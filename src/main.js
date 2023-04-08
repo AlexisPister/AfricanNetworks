@@ -1,8 +1,8 @@
 import {updateTimeLine} from "./timeline.js";
-// import "../node_modules/papaparse/papaparse.js"
 
 // const FOLDER = "march-19";
 const FOLDER = "april-02";
+
 
 const nodeTypes = {
     person: 1,
@@ -103,7 +103,6 @@ function getTimeInterval(personInst, personPub) {
     let years1 = personInst.map(d => parseInt(d.Year)).filter(d => d)
     let years2 = personPub.map(d => parseInt(d.Year)).filter(d => d)
     let allYears = years1.concat(years2)
-    console.log(allYears)
     return [Math.min(...allYears), Math.max(...allYears)]
 }
 
@@ -115,29 +114,33 @@ let yearMinSel = 1000
 let yearMaxSel = 3000
 let isTripartite = false;
 
-async function renderTemplates(tripartite=false) {
+
+let forceViewer, tripartiteViewer;
+
+async function renderTemplates(tripartite = false) {
 // async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
     const selectNodeCb = (e) => {
         let node = e.nodes[0];
         let type = node._type
-        console.log(111, e.nodes[0])
         let nodeData = getPersonInfo(e.nodes[0].id);
         displayNodeSelection(nodeData, type)
     }
 
     if (tripartite) {
-        let tripView = NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
-                yearMin: yearMinSel,
-                yearMax: yearMaxSel,
-                dataFolder: `\"${FOLDER}\"`
-            }, "force");
+        tripartiteViewer = NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
+            yearMin: yearMinSel,
+            yearMax: yearMaxSel,
+            dataFolder: `\"${FOLDER}\"`,
+            selColor: `\"${SELECTION_COLOR}\"`
+        }, "force");
     } else {
-        let forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {
+        forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {
                 // layoutAlg: "\"webcola\"",
                 layoutAlg: "\"d3-force\"",
                 yearMin: yearMinSel,
                 yearMax: yearMaxSel,
-                dataFolder: `\"${FOLDER}\"`
+                dataFolder: `\"${FOLDER}\"`,
+                selColor: `\"${SELECTION_COLOR}\"`
             }, "force",
             {paramCallbacks: {nodeSelection: selectNodeCb}});
     }
@@ -148,7 +151,13 @@ async function renderTemplates(tripartite=false) {
     // let links = forceViewer.state["PI-net"].links
     // console.log("LL ", links)
 
-    return forceViewer
+    // return forceViewer
+}
+
+function update() {
+    if (forceViewer) {
+        forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
+    }
 }
 
 function yearSelectionCb(yearMin, yearMax) {
@@ -160,7 +169,7 @@ const [entitiesData, peopleData, institutionsData, publicationsData, personInst,
 const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
 // console.log("DATA", entitiesData);
 renderGeneralInfo(peopleData, institutionsData, publicationsData);
-let forceViewer = renderTemplates();
+renderTemplates();
 
 
 let slider = document.getElementById('time-slider');
@@ -184,24 +193,20 @@ let timeSlider = noUiSlider.create(slider, {
     tooltips: true,
 });
 slider.noUiSlider.on("update", (e) => {
-    // let [yearMin, yearMax] = [e[0], e[1]];
     [yearMinSel, yearMaxSel] = [e[0], e[1]];
-
-    renderTemplates(isTripartite)
-    // yearSelectionCb(yearMin, yearMax);
-    // updateTimeLine(yearMin, yearMax);
+    update();
 })
 
 
 d3.select("#force-radio")
     .on("click", (e) => {
         isTripartite = false;
-        renderTemplates(isTripartite)
+        update()
     })
 
 d3.select("#tripartite-radio")
     .on("click", (e) => {
         isTripartite = true;
-        renderTemplates(isTripartite)
+        update()
     })
 

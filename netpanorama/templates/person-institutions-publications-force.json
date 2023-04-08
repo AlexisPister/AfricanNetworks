@@ -52,6 +52,21 @@
           "type": "connectedEdges"
         }
       ]
+    },
+    {
+      "name": "outnodes",
+      "source": "nodeSelection",
+      "network": "PI-net",
+      "transform": [
+        {
+          "type": "connectedNodes",
+          "direction": "both"
+        }
+      ]
+    },
+    {
+      "name": "selectedYears",
+      "value": [1000, 2000]
     }
   ],
   "networks": [
@@ -211,6 +226,20 @@
       ]
     },
     {
+      "name": "shapeScale",
+      "type": "ordinal",
+      "range": [
+        "circle",
+        "square",
+        "diamond"
+      ],
+      "domain": [
+        "person",
+        "institution",
+        "publication"
+      ]
+    },
+    {
       "name": "radius",
       "type": "linear",
       "range": [
@@ -261,27 +290,22 @@
     {
       "entries": "PI-net.links",
       "layout": "PI-layout",
-      "ifInSelection": "outlinks.links",
-      "mark": {
-        "type": "linkpath",
-        "start": "source",
-        "end": "target",
-        "stroke": "red"
-      }
-    },
-    {
-      "entries": "PI-net.links",
-      "layout": "PI-layout",
       "if": "datum.source.y < 320",
       "mark": {
         "type": "linkpath",
         "start": "source",
         "end": "target",
         "stroke": {
-          "condition": {
-            "test": "datum.data.Year > [yearMin] && datum.data.Year < [yearMax]",
-            "value": "black"
-          },
+          "conditions": [
+            {
+              "inSelection": "outlinks.links",
+              "value": "[selColor]"
+            },
+            {
+              "test": "datum.data.Year > params.selectedYears[0] && datum.data.Year < params.selectedYears[1]",
+              "value": "black"
+            }
+          ],
           "value": "lightgray"
         }
       }
@@ -311,20 +335,19 @@
       "entries": "PI-net.nodes",
       "ifInSelection": "nodeSelection.nodes",
       "layout": "PI-layout",
-
       "mark": {
         "type": "circle",
         "area": 700,
         "fill": "gold"
       },
       "actions": [
-          {
-            "interaction": "select",
-            "using": "cursor",
-            "event": "click",
-            "action": "toggle",
-	        "selection": "my_selection"
-          }
+        {
+          "interaction": "select",
+          "using": "cursor",
+          "event": "click",
+          "action": "toggle",
+          "selection": "nodeSelection"
+        }
       ]
     },
     {
@@ -332,8 +355,13 @@
       "layout": "PI-layout",
       "if": "datum.y < 320",
       "mark": {
-        "type": "circle",
-        "area": {
+        "//type": "circle",
+        "type": "symbol",
+        "shape": {
+          "field": "_type",
+          "scale": "shapeScale"
+        },
+        "size": {
           "field": "degree",
           "scale": "radius"
         },
@@ -343,6 +371,20 @@
         },
         "tooltip": {
           "expression": "datum.id + ' (degree ' + datum.degree + ')' "
+        },
+        "stroke": {
+          "conditions": [
+            {
+              "inSelection": "nodeSelection.nodes",
+              "value": "[selColor]"
+            },
+            {
+              "inSelection": "outnodes.nodes",
+              "//value": "[selColor]",
+              "value": "blue"
+            }
+          ],
+          "value": "black"
         }
       },
       "actions": [
