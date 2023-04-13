@@ -59,7 +59,8 @@
       "network": "PI-net",
       "transform": [
         {
-          "type": "connectedNodes",
+          "//type": "connectedNodes",
+          "type": "neighbours",
           "direction": "both"
         }
       ]
@@ -380,8 +381,7 @@
             },
             {
               "inSelection": "outnodes.nodes",
-              "//value": "[selColor]",
-              "value": "blue"
+              "value": "[selColor]"
             }
           ],
           "value": "black"

@@ -1,14 +1,17 @@
 import {updateTimeLine} from "./timeline.js";
 
-// const FOLDER = "march-19";
-const FOLDER = "april-02";
+let yearMinSel = 1000
+let yearMaxSel = 3000
+let isTripartite = false;
 
+let completeNetwork;
+export let forceViewer, tripartiteViewer;
 
-const nodeTypes = {
-    person: 1,
-    institution: 2,
-    publication: 3
-}
+const [entitiesData, peopleData, institutionsData, publicationsData, personInst, personPub] = await fetchData();
+const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
+// console.log("DATA", entitiesData);
+renderGeneralInfo(peopleData, institutionsData, publicationsData);
+renderTemplates();
 
 async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
@@ -53,52 +56,6 @@ async function fetchData() {
     return [entities, persons, institutions, publications, personInst, personPubs];
 }
 
-function getPersonInfo(personName) {
-    // let personData = peopleData.filter(p => p.Name == personName)[0]
-    let personData = entitiesData.filter(p => p.Name == personName)[0]
-    return personData
-}
-
-function displayNodeSelection(nodeData, type) {
-    let generalInfo, dob, dod
-    if (type == "person") {
-        dob = nodeData["Date of birth"];
-        dod = nodeData["Date of death"];
-        generalInfo = nodeData["General Info/biography"];
-    } else if (type == "institution") {
-        generalInfo = nodeData["General Info (biography, description, etc)"]
-        dob = nodeData["Date of Creation"]
-        dod = nodeData["Date of closing"]
-    } else if (type == "publication") {
-        generalInfo = nodeData["General Info (biography, description, etc)"]
-        dob = nodeData["Date of Creation"]
-        dod = nodeData["Date of closing"]
-    }
-
-    let activity = nodeData["Main Activity"];
-    let origin = nodeData["General Info/biography"];
-
-    d3.select("#name")
-        .html(nodeData["Name"])
-    d3.select("#bio")
-        .html(generalInfo)
-    d3.select("#dob")
-        .html(dob)
-    d3.select("#dof")
-        .html(dod)
-    d3.select("#activity")
-        .html(activity)
-}
-
-function renderGeneralInfo(peopleData, institutionData, pubData) {
-    d3.select("#n-people")
-        .html(peopleData.length)
-    d3.select("#n-institutions")
-        .html(institutionData.length)
-    d3.select("#n-publications")
-        .html(pubData.length)
-}
-
 function getTimeInterval(personInst, personPub) {
     let years1 = personInst.map(d => parseInt(d.Year)).filter(d => d)
     let years2 = personPub.map(d => parseInt(d.Year)).filter(d => d)
@@ -106,26 +63,9 @@ function getTimeInterval(personInst, personPub) {
     return [Math.min(...allYears), Math.max(...allYears)]
 }
 
-// function whatIsNodetype(datum) {
-//     if (datum.)
-// }
-
-let yearMinSel = 1000
-let yearMaxSel = 3000
-let isTripartite = false;
-
-
-let forceViewer, tripartiteViewer;
 
 async function renderTemplates(tripartite = false) {
 // async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
-    const selectNodeCb = (e) => {
-        let node = e.nodes[0];
-        let type = node._type
-        let nodeData = getPersonInfo(e.nodes[0].id);
-        displayNodeSelection(nodeData, type)
-    }
-
     if (tripartite) {
         tripartiteViewer = NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
             yearMin: yearMinSel,
@@ -143,15 +83,133 @@ async function renderTemplates(tripartite = false) {
                 selColor: `\"${SELECTION_COLOR}\"`
             }, "force",
             {paramCallbacks: {nodeSelection: selectNodeCb}});
+
+        completeNetwork = forceViewer.state["PI-net"];
+        console.log("state ", forceViewer)
+        console.log("NET ", completeNetwork)
     }
     // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
     // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");
     // let t = NetPanoramaTemplateViewer.render("./netpanorama/templates/instit-personProj.json", {}, "inst-force-proj");
 
     // let links = forceViewer.state["PI-net"].links
-    // console.log("LL ", links)
-
     // return forceViewer
+}
+
+async function selectNodeCb(e) {
+    let node = e.nodes[0];
+    let type = node._type
+    let nodeData = getPersonInfo(e.nodes[0].id);
+    console.log("node: ", e, node, nodeData)
+    displayNodeSelection(node, nodeData, type)
+}
+
+function getPersonInfo(personName) {
+    // let personData = peopleData.filter(p => p.Name == personName)[0]
+    let personData = entitiesData.filter(p => p.Name == personName)[0]
+    return personData
+}
+
+async function displayNodeSelection(node, nodeData, type) {
+    let generalInfo, dob, dod;
+
+    // Wait so that the selection is the current one and not the previous one
+    await new Promise(resolve => setTimeout(resolve, 1));
+    let neighbors = forceViewer.state.outnodes.nodes;
+    // let neighborsWithData = neighbors.map(neighbor => {
+    //     let data = getPersonInfo(neighbor.id)
+    //     if (data) {
+    //         return data
+    //     } else {
+    //         return neighbor
+    //     }
+    // })
+    // console.log("nn ", neighborsWithData);
+    console.log("DATA ", nodeData, type, neighbors);
+
+    if (type == "person") {
+        dob = nodeData ? nodeData["Date of birth"]: "";
+        dod = nodeData ? nodeData["Date of death"]: "";
+        generalInfo = nodeData ? nodeData["General Info/biography"]: "";
+
+        setOneNeighborPanel(1, neighbors, nodeTypes.institution, "Worked with:")
+        setOneNeighborPanel(2, neighbors, nodeTypes.publication, "Published at:")
+    } else if (type == "institution") {
+        generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"]: ""
+        dob = nodeData ? nodeData["Date of Creation"] : ""
+        dod = nodeData ? nodeData["Date of closing"] : ""
+
+        setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
+        setOneNeighborPanel(2, null)
+    } else if (type == "publication") {
+        generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"]: ""
+        dob = nodeData ? nodeData["Date of Creation"] : ""
+        dod = nodeData ? nodeData["Date of closing"] : ""
+
+        setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
+        setOneNeighborPanel(2, null)
+    }
+
+    let name = nodeData ? nodeData["Name"] : node.id;
+
+    let activity = nodeData ? nodeData["Main Activity"] : ""
+    let origin = nodeData ? nodeData["General Info/biography"] : ""
+
+    d3.select("#name")
+        .html(name)
+    d3.select("#bio")
+        .html(generalInfo)
+    d3.select("#dob")
+        .html(dob)
+    d3.select("#dof")
+        .html(dod)
+    d3.select("#activity")
+        .html(activity)
+}
+
+function setOneNeighborPanel(number, neighbor, selectedNodeType, title) {
+    let titleSel = d3.select(`#connected-to-${number}-title`)
+    let listSel = d3.select(`#connected-to-${number}-list`)
+
+    titleSel.html("")
+    listSel.html("")
+
+    if (!neighbor) {
+        return;
+    }
+
+    titleSel
+        .html(title)
+
+    let entities = neighbor.filter(n => n._type == selectedNodeType)
+    entities.forEach(e => {
+        renderOneNeighborEntity(listSel, e, selectedNodeType);
+    })
+}
+
+function renderOneNeighborEntity(div, entity, nodeType) {
+    if (nodeType == nodeTypes.person) {
+        div
+            .append("div")
+            .html(entity.id)
+    } else if (nodeType == nodeTypes.institution) {
+        div
+            .append("div")
+            .html(entity.id)
+    } else if (nodeType == nodeTypes.publication) {
+        div
+            .append("div")
+            .html(entity.id)
+    }
+}
+
+function renderGeneralInfo(peopleData, institutionData, pubData) {
+    d3.select("#n-people")
+        .html(peopleData.length)
+    d3.select("#n-institutions")
+        .html(institutionData.length)
+    d3.select("#n-publications")
+        .html(pubData.length)
 }
 
 function update() {
@@ -160,20 +218,9 @@ function update() {
     }
 }
 
-function yearSelectionCb(yearMin, yearMax) {
-    // TODO: update the selection without rerendering
-    renderTemplates(false, yearMin, yearMax);
-}
-
-const [entitiesData, peopleData, institutionsData, publicationsData, personInst, personPub] = await fetchData();
-const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
-// console.log("DATA", entitiesData);
-renderGeneralInfo(peopleData, institutionsData, publicationsData);
-renderTemplates();
-
 
 let slider = document.getElementById('time-slider');
-let timeSlider = noUiSlider.create(slider, {
+noUiSlider.create(slider, {
     start: [yearMin, yearMax],
     connect: true,
     range: {

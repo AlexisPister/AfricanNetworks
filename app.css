@@ -105,6 +105,21 @@ h2 {
     padding-right: 20px;
 }
 
+#connected-to {
+    display: flex;
+    flex-direction: row;
+}
+
+#connected-to-1 {
+    width: 50%;
+
+}
+
+#connected-to-1 {
+    width: 50%;
+}
+
+
 .radio-button {
   display: flex;
   flex-direction: row;
