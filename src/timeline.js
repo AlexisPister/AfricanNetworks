@@ -22,13 +22,13 @@ function parseEventDate(date) {
 }
 
 async function importData() {
-    let data = await d3.csv("./data/march-19/People.csv", d => {
+    let data = await d3.csv(`./data/${FOLDER}/People.csv`, d => {
         d["Date of birth"] = +d["Date of birth"];
         d["Date of death"] = +d["Date of death"];
         return d
     })
 
-    let events = await d3.csv("./data/march-19/Events.csv", d => {
+    let events = await d3.csv(`./data/${FOLDER}/Events.csv`, d => {
         d["Date"] = parseEventDate(d["Date"])
         return d
     })

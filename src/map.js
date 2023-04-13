@@ -9,10 +9,9 @@ const margin = {
 }
 
 
-setTimeout(() => {
-    console.log(111, forceViewer)
-}, 1000)
-console.log("FFFFF ", forceViewer);
+// setTimeout(() => {
+//     console.log(111, forceViewer)
+// }, 1000)
 
 // const countries = ["Uganda", "Tanzania", "Kenya", "Ghana"];
 const countries = ["Uganda", "Tanzania", "Kenya"];
@@ -39,15 +38,11 @@ let projection = d3.geoNaturalEarth1()
     .scale(1600) // This is like the zoom
     .translate([width / 2, height / 2])
 
-let mapData;
+let mapData, institutions, publications, events, places;
+
 
 importData().then((data) => {
-    mapData = data
-    // mapData.objects.continent_Africa_subunits.geometries = mapData.objects.continent_Africa_subunits.geometries.filter(g => countries.includes(g.properties.geounit))
-    // console.log(mapData.features.map(d => d.properties.NAME))
-    mapData.features = mapData.features.filter(d => countries.includes(d.properties.NAME))
-    // console.log(mapData.features)
-    render()
+    render();
 })
 
 
@@ -56,17 +51,35 @@ function parseEventDate(date) {
 }
 
 async function importData() {
-    // const path = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"
-    const path = "../data/ne_10m_admin_0_countries_lakes.json"
-    // const path = "data/africa2@10.json"
+    const mapPath = "../data/ne_10m_admin_0_countries_lakes.json";
 
-    let map = await d3.json(path)
-    console.log(map)
-    return map;
+    mapData = await d3.json(mapPath);
+    mapData.features = mapData.features.filter(d => countries.includes(d.properties.NAME))
+
+    events = await d3.csv(`./data/${FOLDER}/Events.csv`, d => {
+        // d["Date"] = parseEventDate(d["Date"])
+        return d
+    })
+
+    publications = await d3.csv(`./data/${FOLDER}/Publications.csv`, d => {
+        // d["Date"] = parseEventDate(d["Date"])
+        return d
+    })
+
+    institutions = await d3.csv(`./data/${FOLDER}/Institutions.csv`, d => {
+        // d["Date"] = parseEventDate(d["Date"])
+        return d
+    })
+
+    places = await d3.csv(`./data/${FOLDER}/Places.csv`, d => {
+        return d
+    })
 }
 
 
-function render() {
+async function render() {
+    console.log("FFFFF ", forceViewer);
+
     const nations = g
         .append("g")
         .attr("cursor", "pointer")
@@ -84,6 +97,28 @@ function render() {
         .attr("fill", "grey")
         .attr("stroke-width", 1);
 
+    const pubs = g
+        .append("g")
+        .selectAll(".institution")
+        .data(institutions.filter(i => i["Place"] && PLACES_TO_KEEP.includes(i["Place"])))
+        .join("rect")
+        .attr("x", d => {
+            let [lat, long] = getCoordinates(d.Place);
+            let coords = projection([long, lat]);
+            return coords[0]
+        })
+        .attr("y", d => {
+            let [lat, long] = getCoordinates(d.Place);
+            let coords = projection([long, lat]);
+            return coords[1]
+        })
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("stroke", "black")
+        .attr("fill", "blue")
+        .attr("stroke-width", 2)
+
+
     nations.append("title").text((d) => d.properties.geounit);
     g.call(zoom);
 }
@@ -93,6 +128,20 @@ function zoomed(event) {
     g.attr("stroke-width", 1 / transform.k);
 }
 
+function getCoordinates(placeName) {
+    let place = places.filter(p => p.Place == placeName)[0];
+    let lat, long;
+    if (place.Type == "Country") {
+        let city = COUNTRY_TO_CITY[placeName];
+        let placeCity = places.filter(p => p.Place == city)[0];
+        lat = placeCity.Latitude;
+        long = placeCity.Longitude;
+    } else if (place.Type == "City") {
+        lat = place.Latitude;
+        long = place.Longitude;
+    }
+    return [lat, long];
+}
 
 
 

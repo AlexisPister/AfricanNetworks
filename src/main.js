@@ -124,7 +124,7 @@ async function displayNodeSelection(node, nodeData, type) {
     //         return neighbor
     //     }
     // })
-    // console.log("nn ", neighborsWithData);
+
     console.log("DATA ", nodeData, type, neighbors);
 
     if (type == "person") {
