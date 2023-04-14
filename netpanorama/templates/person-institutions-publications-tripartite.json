@@ -22,6 +22,13 @@
       }
     },
     {
+      "name": "Events",
+      "url": "./data/[dataFolder]/Events.csv",
+      "format": {
+        "type": "csv"
+      }
+    },
+    {
       "name": "PI",
       "url": "./data/[dataFolder]/Person-Institution.csv",
       "format": {
@@ -34,6 +41,48 @@
       "format": {
         "type": "csv"
       }
+    },
+    {
+      "name": "PE",
+      "url": "./data/[dataFolder]/Person-Event.csv",
+      "format": {
+        "type": "csv"
+      }
+    }
+  ],
+
+  "parameters": [
+    {
+      "name": "nodeSelection",
+      "action": "replace",
+      "network": "PI-net",
+      "type": "selection"
+    },
+    {
+      "name": "outlinks",
+      "source": "nodeSelection",
+      "network": "PI-net",
+      "transform": [
+        {
+          "type": "connectedEdges"
+        }
+      ]
+    },
+    {
+      "name": "outnodes",
+      "source": "nodeSelection",
+      "network": "PI-net",
+      "transform": [
+        {
+          "//type": "connectedNodes",
+          "type": "neighbours",
+          "direction": "both"
+        }
+      ]
+    },
+    {
+      "name": "selectedYears",
+      "value": [1000, 2020]
     }
   ],
 
@@ -45,6 +94,7 @@
           "data": "people",
           "yieldsNodes": [
             {
+              "id_field": "Name",
               "type": "person",
               "data": [
                 "*"
@@ -56,6 +106,7 @@
           "data": "Institutions",
           "yieldsNodes": [
             {
+            "id_field": "Name",
               "type": "institution",
               "data": [
                 "*"
@@ -67,7 +118,20 @@
           "data": "Publications",
           "yieldsNodes": [
             {
+              "id_field": "Name",
               "type": "publication",
+              "data": [
+                "*"
+              ]
+            }
+          ]
+        },
+        {
+          "data": "Events",
+          "yieldsNodes": [
+            {
+              "id_field": "Name",
+              "type": "event",
               "data": [
                 "*"
               ]
@@ -105,6 +169,22 @@
               "data": ["*"]
             }
           ]
+        },
+        {
+          "data": "PE",
+          "yieldsLinks": [
+            {
+              "source_id": {
+                "field": "Person"
+              },
+              "source_node_type": "person",
+              "target_id": {
+                "field": "Event"
+              },
+              "target_node_type": "event",
+              "data": ["*"]
+            }
+          ]
         }
         ],
         "transform": [
@@ -127,7 +207,9 @@
     {
       "name": "degree",
       "orderBy": {
-        "field": "degree",
+        "fieldsss": ["_type", "degree"],
+        "expression2": "datum.degree",
+        "expression": "datum.degree + ((datum._type) ? ((datum._type == 'event') ? 100 : 0) : 0)",
         "direction": "descending"
       },
       "data": "PI-net.nodes"
@@ -149,20 +231,47 @@
         }
       ],
       "data": "PI-net.nodes",
-      "positioning": "start"
+      "positioning2": "start",
+      "positioning": "distribute"
     }
   ],
   "scales": [
     {
         "name": "color",
         "type": "ordinal",
-        "range": ["#1f77b4", "#2ca02c", "#8c564b"],
-        "domain": ["person", "institution", "publication"]
+        "range": [
+        "[personColor]",
+        "[institutionColor]",
+        "[publicationColor]",
+        "[eventColor]"
+      ],
+      "domain": [
+        "person",
+        "institution",
+        "publication",
+        "event"
+      ]
+    },
+    {
+      "name": "shapeScale",
+      "type": "ordinal",
+      "range": [
+        "circle",
+        "square",
+        "diamond",
+        "triangle"
+      ],
+      "domain": [
+        "person",
+        "institution",
+        "publication",
+        "event"
+      ]
     },
     {
       "name": "radius",
       "type": "linear",
-      "range": [20, 500],
+      "range": [50, 100],
       "domain": { "data": "PI-net.nodes", "field": "degree" }
     },
     {
@@ -185,19 +294,20 @@
         "Deputy Director"
       ]
     },
-
     {
       "name": "axis",
       "type": "ordinal",
       "domain": [
-          "publication",
+        "publication",
         "person",
-        "institution"
+        "institution",
+        "event"
       ],
       "range": [
-        0,
         1,
-        2
+        2,
+        3,
+        3
       ]
     }
   ],
@@ -210,29 +320,85 @@
         "start": "source",
         "end": "target",
         "stroke": {
-          "condition": {
-            "test": "datum.data.Year > [yearMin] && datum.data.Year < [yearMax]",
-            "value": "black"
-          },
+          "conditions": [
+            {
+              "inSelection": "outlinks.links",
+              "value": "[selColor]"
+            },
+            {
+              "test": "datum.data.Year > params.selectedYears[0] && datum.data.Year < params.selectedYears[1]",
+              "value": "rgb(20, 20, 20, 0.3)"
+            }
+          ],
           "value": "lightgray"
         }
       }
     },
+
+    {
+      "entries": "PI-net.nodes",
+      "ifInSelection": "nodeSelection.nodes",
+      "layout": "PI-jigsaw",
+      "mark": {
+        "type": "circle",
+        "area": 700,
+        "fill": "[selColor]"
+      },
+      "actions": [
+        {
+          "interaction": "select",
+          "using": "cursor",
+          "event": "click",
+          "action": "toggle",
+          "selection": "nodeSelection"
+        }
+      ]
+    },
+
     {
       "entries": "PI-net.nodes",
       "layout": "PI-jigsaw",
       "mark": {
-        "type": "circle",
-        "area": { "field": "degree", "scale": "radius" },
+        "type": "symbol",
+        "shape": {
+          "field": "_type",
+          "scale": "shapeScale"
+        },
+        "size": {
+          "field": "degree",
+          "scale": "radius"
+        },
         "fill": {
           "field": "_type",
           "scale": "color"
         },
         "tooltip": {
           "expression": "datum.id + ' (degree ' + datum.degree + ')' "
+        },
+        "stroke": {
+          "conditions": [
+            {
+              "inSelection": "nodeSelection.nodes",
+              "value": "[selColor]"
+            },
+            {
+              "inSelection": "outnodes.nodes",
+              "value": "[selColor]"
+            }
+          ],
+          "value": "black"
         }
-      }
-    },
+      },
+      "actions": [
+        {
+          "interaction": "select",
+          "using": "cursor",
+          "event": "click",
+          "action": "replace",
+          "selection": "nodeSelection"
+        }
+      ]
+      },
     {
       "entries": "PI-net.nodes",
       "layout": "PI-jigsaw",

@@ -64,15 +64,19 @@ function getTimeInterval(personInst, personPub) {
 }
 
 
-async function renderTemplates(tripartite = false) {
+async function renderTemplates() {
 // async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
-    if (tripartite) {
-        tripartiteViewer = NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
+    if (isTripartite) {
+        tripartiteViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
             yearMin: yearMinSel,
             yearMax: yearMaxSel,
             dataFolder: `\"${FOLDER}\"`,
-            selColor: `\"${SELECTION_COLOR}\"`
-        }, "force");
+            selColor: `\"${SELECTION_COLOR}\"`,
+            personColor: `\"${PERSON_COLOR}\"`,
+            institutionColor: `\"${INSTITUTION_COLOR}\"`,
+            publicationColor: `\"${PUBLICATION_COLOR}\"`,
+            eventColor: `\"${EVENT_COLOR}\"`
+        }, "force", {paramCallbacks: {nodeSelection: selectNodeCb}});
     } else {
         forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {
                 // layoutAlg: "\"webcola\"",
@@ -80,13 +84,17 @@ async function renderTemplates(tripartite = false) {
                 yearMin: yearMinSel,
                 yearMax: yearMaxSel,
                 dataFolder: `\"${FOLDER}\"`,
-                selColor: `\"${SELECTION_COLOR}\"`
+                selColor: `\"${SELECTION_COLOR}\"`,
+                personColor: `\"${PERSON_COLOR}\"`,
+                institutionColor: `\"${INSTITUTION_COLOR}\"`,
+                publicationColor: `\"${PUBLICATION_COLOR}\"`,
+                eventColor: `\"${EVENT_COLOR}\"`
             }, "force",
             {paramCallbacks: {nodeSelection: selectNodeCb}});
 
         completeNetwork = forceViewer.state["PI-net"];
-        console.log("state ", forceViewer)
-        console.log("NET ", completeNetwork)
+        // console.log("state ", forceViewer)
+        // console.log("NET ", completeNetwork)
     }
     // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
     // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");
@@ -124,25 +132,24 @@ async function displayNodeSelection(node, nodeData, type) {
     //         return neighbor
     //     }
     // })
-
-    console.log("DATA ", nodeData, type, neighbors);
+    // console.log("DATA ", nodeData, type, neighbors);
 
     if (type == "person") {
-        dob = nodeData ? nodeData["Date of birth"]: "";
-        dod = nodeData ? nodeData["Date of death"]: "";
-        generalInfo = nodeData ? nodeData["General Info/biography"]: "";
+        dob = nodeData ? nodeData["Date of birth"] : "";
+        dod = nodeData ? nodeData["Date of death"] : "";
+        generalInfo = nodeData ? nodeData["General Info/biography"] : "";
 
         setOneNeighborPanel(1, neighbors, nodeTypes.institution, "Worked with:")
         setOneNeighborPanel(2, neighbors, nodeTypes.publication, "Published at:")
     } else if (type == "institution") {
-        generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"]: ""
+        generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
         dob = nodeData ? nodeData["Date of Creation"] : ""
         dod = nodeData ? nodeData["Date of closing"] : ""
 
         setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
         setOneNeighborPanel(2, null)
     } else if (type == "publication") {
-        generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"]: ""
+        generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
         dob = nodeData ? nodeData["Date of Creation"] : ""
         dod = nodeData ? nodeData["Date of closing"] : ""
 
@@ -216,6 +223,10 @@ function update() {
     if (forceViewer) {
         forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
     }
+    if (tripartiteViewer) {
+        console.log(tripartiteViewer)
+        tripartiteViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
+    }
 }
 
 
@@ -248,12 +259,22 @@ slider.noUiSlider.on("update", (e) => {
 d3.select("#force-radio")
     .on("click", (e) => {
         isTripartite = false;
-        update()
+        // update()
+
+        d3.select("#force")
+            .style("height", "900px")
+
+        renderTemplates()
     })
 
 d3.select("#tripartite-radio")
     .on("click", (e) => {
         isTripartite = true;
-        update()
+
+        d3.select("#force")
+            .style("height", "1100px")
+
+        // update()
+        renderTemplates()
     })
 

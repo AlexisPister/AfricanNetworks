@@ -67,6 +67,9 @@
         </div>
 
         <div id="infos">
+            <svg id="legend">
+                LEGEND
+            </svg>
             <div id="select-info">
                 <h2>
                     <span id="name"> Select a Node </span>
@@ -118,11 +121,13 @@
 <!--Modify node_modules to module folder, otherwise gh-page does not work-->
 <script src="modules/papaparse/papaparse.min.js"></script>
 <script src="modules/nouislider/dist/nouislider.min.js"></script>
+<script src="modules/netpanorama-template-viewer/dist/bundle.js"></script>
+
 
 <script type="text/javascript" src="src/utils.js"></script>
 <script type="text/javascript" src="src/globals.js"></script>
 <script type="module" src="src/timeline.js"></script>
-<script src="modules/netpanorama-template-viewer/dist/bundle.js"></script>
+<script type="module" src="src/legend.js"></script>
 <script type="module" src="src/main.js"></script>
 <script type="module" src="src/map.js"></script>
 <!--<script type="module" src="/Svelte-old/src/netpan-visualizations.js"></script>-->

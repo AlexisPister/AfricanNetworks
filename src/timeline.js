@@ -8,9 +8,11 @@ const margin = {
 
 // file global variables
 let svg;
-let data;
 let persons;
 let events;
+let entities;
+let publications;
+let institutions;
 let personsSel;
 let x;
 let y;
@@ -21,37 +23,78 @@ function parseEventDate(date) {
     return +date.slice(-4)
 }
 
+function parseYear(timeValue) {
+    let year
+    timeValue = timeValue.toString();
+    if (timeValue[timeValue.length - 1] == "s") {
+        year = timeValue.slice(-5, -1)
+    }
+    else {
+        year = timeValue.slice(-4)
+    }
+
+    if (year == "" || isNaN(year) || year.length != 4) {
+        return null
+    }
+
+    year = +year;
+    // console.log(timeValue, year)
+    return year;
+}
+
 async function importData() {
-    let data = await d3.csv(`./data/${FOLDER}/People.csv`, d => {
+    persons = await d3.csv(`./data/${FOLDER}/People.csv`, d => {
         d["Date of birth"] = +d["Date of birth"];
         d["Date of death"] = +d["Date of death"];
         return d
     })
 
-    let events = await d3.csv(`./data/${FOLDER}/Events.csv`, d => {
+    events = await d3.csv(`./data/${FOLDER}/Events.csv`, d => {
         d["Date"] = parseEventDate(d["Date"])
         return d
     })
 
-    return [data, events];
+    publications = await d3.csv(`./data/${FOLDER}/Publications.csv`, d => {
+        d["Date of closing"] = parseYear(d["Date of closing"])
+        d["Date of Creation"] = parseYear(d["Date of Creation"])
+        return d
+    })
+
+    institutions = await d3.csv(`./data/${FOLDER}/Institutions.csv`, d => {
+        d["Date of closing"] = parseYear(d["Date of closing"])
+        d["Date of Creation"] = parseYear(d["Date of Creation"])
+        return d
+    })
+
+    return [persons];
 }
 
-importData().then((datas) => {
-    // let [persons, events] = [datas[0], datas[1]];
-    persons = datas[0]
-    events = datas[1]
+importData().then(() => {
+    entities = persons.concat(institutions).concat(publications);
 
-    data = persons.filter(d => d["Date of birth"] && d["Date of death"])
-    data.sort((a, b) => a["Date of birth"] - b["Date of birth"])
+    // persons = persons.filter(d => d["Date of birth"] && d["Date of death"])
+    // persons.sort((a, b) => a["Date of birth"] - b["Date of birth"])
+
+    // Filter and sort
+    // entities = entities.filter(d => getBeginYear(d) && getEndYear(d))
+    entities = entities.filter(d => getBeginYear(d))
+    entities.sort((a, b) => getBeginYear(a) - getBeginYear(b))
 
     x = d3.scaleLinear()
-        .domain([d3.min(data, d => d["Date of birth"]), d3.max(data, d => d["Date of death"])])
-        .range([0, width - margin.left - margin.right])
-
+        .domain([d3.min(entities, d => getBeginYear(d)), d3.max(entities, d => getEndYear(d))])
+        .range([margin.left, width - margin.left - margin.right])
     y = d3.scaleBand()
-        .domain(d3.range(data.length))
-        .range([0, height - margin.bottom - margin.top])
+        .domain(d3.range(entities.length))
+        .range([margin.top, height - margin.bottom - margin.top])
         .padding(0.2)
+
+    // x = d3.scaleLinear()
+    //     .domain([d3.min(persons, d => d["Date of birth"]), d3.max(persons, d => d["Date of death"])])
+    //     .range([0, width - margin.left - margin.right])
+    // y = d3.scaleBand()
+    //     .domain(d3.range(persons.length))
+    //     .range([0, height - margin.bottom - margin.top])
+    //     .padding(0.2)
 
     // TODO: check date format
     let axisBottom = d3.axisBottom(x)
@@ -68,7 +111,7 @@ importData().then((datas) => {
 
     // personsSel = g
     //     .selectAll('.person')
-    //     .data(data)
+    //     .persons(persons)
     //     .join((enter) => {
     //         let g = enter.append("g")
     //             .classed("person", true)
@@ -90,7 +133,7 @@ importData().then((datas) => {
     //
     // g
     //     .selectAll('.event')
-    //     .data(events)
+    //     .persons(events)
     //     .join(enter => {
     //         let g = enter.append("g")
     //             .classed("event", true)
@@ -114,28 +157,89 @@ importData().then((datas) => {
     render()
 })
 
+function getBeginYear(d) {
+    if (d["Date of birth"]) {
+        return d["Date of birth"]
+    } else if (d["Date of Creation"]) {
+        return d["Date of Creation"]
+    } else {
+        return null
+    }
+}
+
+function getEndYear(d) {
+    if (d["Date of death"]) {
+        return d["Date of death"]
+    } else if (d["Date of closing"]) {
+        return d["Date of closing"]
+    } else {
+        return null
+    }
+}
+
 function render() {
-    personsSel = svg
-        .selectAll('.person')
-        .data(data)
+    let entitiesSel = svg
+        .selectAll('.entity')
+        .data(entities)
         .join((enter) => {
             let g = enter.append("g")
-                .classed("person", true)
+                .classed("entity", true)
 
             g.append("rect")
-                .attr("x", d => x(d["Date of birth"]))
+                .attr("x", d => {
+                    return x(getBeginYear(d))
+                })
                 .attr("y", (d, i) => y(i))
-                .attr("width", d => x(d["Date of death"]) - x(d["Date of birth"]))
+                .attr("width", d => {
+                    if (getEndYear(d)) return x(getEndYear(d)) - x(getBeginYear(d))
+                    return width - margin.left - margin.right - x(getBeginYear(d))
+                })
                 .attr("height", d => y.bandwidth())
-                .attr("fill", "rgb(150,150,150,0.2)")
+                // .attr("fill", "rgb(150,150,150,0.2)")
+                .attr("fill", d => {
+                    let type = getEntityType(d)
+                    if (type == nodeTypes.person) {
+                        return PERSON_COLOR
+                    } else if (type == nodeTypes.institution) {
+                        return INSTITUTION_COLOR
+                    } else if (type == nodeTypes.publication) {
+                        return PUBLICATION_COLOR
+                    }
+                })
+                .style("opacity", d => {
+                    return 0.8
+                })
 
             g.append("text")
-                .attr("x", d => x(d["Date of birth"]) + 5)
-                .attr("y", (d, i) => y(i) + y.bandwidth() / 1.2)
+                .attr("x", d => x(getBeginYear(d)) + 5)
+                .attr("y", (d, i) => y(i) + y.bandwidth() / 1.1)
                 .text(d => d.Name)
+                .attr("font-size", "12pt")
 
             return g
         })
+
+    // personsSel = svg
+    //     .selectAll('.person')
+    //     .data(persons)
+    //     .join((enter) => {
+    //         let g = enter.append("g")
+    //             .classed("person", true)
+    //
+    //         g.append("rect")
+    //             .attr("x", d => x(d["Date of birth"]))
+    //             .attr("y", (d, i) => y(i))
+    //             .attr("width", d => x(d["Date of death"]) - x(d["Date of birth"]))
+    //             .attr("height", d => y.bandwidth())
+    //             .attr("fill", "rgb(150,150,150,0.2)")
+    //
+    //         g.append("text")
+    //             .attr("x", d => x(d["Date of birth"]) + 5)
+    //             .attr("y", (d, i) => y(i) + y.bandwidth() / 1.2)
+    //             .text(d => d.Name)
+    //
+    //         return g
+    //     })
 
     svg
         .selectAll('.event')
@@ -159,6 +263,16 @@ function render() {
 
             return g
         })
+}
+
+function getEntityType(entity) {
+    if (persons.includes(entity)) {
+        return nodeTypes.person
+    } else if (institutions.includes(entity)) {
+        return nodeTypes.institution
+    } else if (publications.includes(entity)) {
+        return nodeTypes.publication
+    }
 }
 
 export function updateTimeLine(yearMinV, yearMaxV) {

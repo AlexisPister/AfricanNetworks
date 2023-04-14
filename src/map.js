@@ -57,17 +57,14 @@ async function importData() {
     mapData.features = mapData.features.filter(d => countries.includes(d.properties.NAME))
 
     events = await d3.csv(`./data/${FOLDER}/Events.csv`, d => {
-        // d["Date"] = parseEventDate(d["Date"])
         return d
     })
 
     publications = await d3.csv(`./data/${FOLDER}/Publications.csv`, d => {
-        // d["Date"] = parseEventDate(d["Date"])
         return d
     })
 
     institutions = await d3.csv(`./data/${FOLDER}/Institutions.csv`, d => {
-        // d["Date"] = parseEventDate(d["Date"])
         return d
     })
 
@@ -78,7 +75,7 @@ async function importData() {
 
 
 async function render() {
-    console.log("FFFFF ", forceViewer);
+    // console.log("FFFFF ", forceViewer);
 
     const nations = g
         .append("g")
@@ -115,9 +112,8 @@ async function render() {
         .attr("width", 10)
         .attr("height", 10)
         .attr("stroke", "black")
-        .attr("fill", "blue")
+        .attr("fill", "gray")
         .attr("stroke-width", 2)
-
 
     nations.append("title").text((d) => d.properties.geounit);
     g.call(zoom);
