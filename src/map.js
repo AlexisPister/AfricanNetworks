@@ -48,7 +48,7 @@ function parseEventDate(date) {
 }
 
 async function importData() {
-    const mapPath = "../data/ne_10m_admin_0_countries_lakes.json";
+    const mapPath = "./data/ne_10m_admin_0_countries_lakes.json";
 
     mapData = await d3.json(mapPath);
     mapData.features = mapData.features.filter(d => countries.includes(d.properties.NAME))
