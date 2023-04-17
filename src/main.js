@@ -295,7 +295,7 @@ d3.select("#force-radio")
     .on("click", (e) => {
         isTripartite = false;
         d3.select("#force")
-            .style("height", "800px")
+            .style("height", "730px")
         renderTemplates()
     })
 
