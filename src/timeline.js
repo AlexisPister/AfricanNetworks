@@ -1,3 +1,6 @@
+import {updateNodelinkSelection} from "./main.js";
+
+
 let [width, height] = computeSvgDims("timeline")
 const margin = {
     top: 20,
@@ -215,6 +218,11 @@ function render() {
                 .style("opacity", d => {
                     return 0.8
                 })
+                .on("click", (e, d) => {
+                    console.log(99)
+                    updateNodelinkSelection(d.Name)
+                })
+
 
             g.append("line")
                 .style("stroke", "black")

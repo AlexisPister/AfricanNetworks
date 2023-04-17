@@ -248,8 +248,19 @@ function update() {
         forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
     }
     if (tripartiteViewer) {
-        console.log(tripartiteViewer)
         tripartiteViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
+    }
+}
+
+export function updateNodelinkSelection(nodeId) {
+    // Not sure if really needed
+    let netpanNode = completeNetwork.nodes.filter(n => n.id == nodeId)[0];
+    console.log(123, netpanNode)
+    if (forceViewer) {
+        forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
+    }
+    if (tripartiteViewer) {
+        tripartiteViewer.setParam("nodeSelection", [nodeId])
     }
 }
 
@@ -283,22 +294,16 @@ slider.noUiSlider.on("update", (e) => {
 d3.select("#force-radio")
     .on("click", (e) => {
         isTripartite = false;
-        // update()
-
         d3.select("#force")
-            .style("height", "900px")
-
+            .style("height", "800px")
         renderTemplates()
     })
 
 d3.select("#tripartite-radio")
     .on("click", (e) => {
         isTripartite = true;
-
         d3.select("#force")
             .style("height", "1100px")
-
-        // update()
         renderTemplates()
     })
 

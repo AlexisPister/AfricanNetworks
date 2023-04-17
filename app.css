@@ -89,7 +89,7 @@ h2 {
 
 .netpan-vis {
     /*display: flex;*/
-    min-height: 900px;
+    min-height: 800px;
     border: 1px solid black;
     /*background-color: rgba(194, 191, 191, 0.2);*/
 }
@@ -186,6 +186,12 @@ input[type="radio"]:checked + label {
 
 #map-div {
     grid-column: 1 / 3;
+}
+
+/* FORCE ERASE PARAMS OF NETPANORAMA TEMPLATE*/
+#mapDiv {
+    height: auto !important;
+    width: auto !important;
 }
 
 

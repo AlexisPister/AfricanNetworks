@@ -1,4 +1,4 @@
-import {forceViewer} from "./main.js";
+import {forceViewer, updateNodelinkSelection} from "./main.js";
 
 const [width, height] = computeSvgDims("map")
 const margin = {
@@ -129,6 +129,9 @@ async function render() {
             return colorScale(getNodeType(d))
         })
         .classed("dot", true)
+        .on("click", (e, d) => {
+            updateNodelinkSelection(d.Name)
+        })
 
     // const pubs = g
     //     .append("g")
