@@ -264,6 +264,12 @@
         "[publicationColor]",
         "[eventColor]"
       ],
+      "range2": [
+        "[personColor]",
+        "[institutionColor]",
+        "[publicationColor]",
+        "[institutionColor]"
+      ],
       "domain": [
         "person",
         "institution",
@@ -279,6 +285,12 @@
         "square",
         "diamond",
         "triangle"
+      ],
+      "range2": [
+        "circle",
+        "square",
+        "diamond",
+        "square"
       ],
       "domain": [
         "person",

@@ -36,5 +36,6 @@ const COUNTRY_TO_CITY = {
 
 const PLACES_TO_KEEP = ["Kenya", "Nairobi", "Uganda", "Kampala", "Tanzania", "Dodoma"]
 
+const RADIUS = 8;
 // Not needed if global import script tag
 // export {PERSON_COLOR, INSTITUTION_COLOR, PUBLICATION_COLOR, EVENT_COLOR, SELECTION_COLOR}

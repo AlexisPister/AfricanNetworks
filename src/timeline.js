@@ -28,8 +28,7 @@ function parseYear(timeValue) {
     timeValue = timeValue.toString();
     if (timeValue[timeValue.length - 1] == "s") {
         year = timeValue.slice(-5, -1)
-    }
-    else {
+    } else {
         year = timeValue.slice(-4)
     }
 
@@ -98,7 +97,10 @@ importData().then(() => {
 
     // TODO: check date format
     let axisBottom = d3.axisBottom(x)
-        .tickPadding(2)
+    // let axisBottom = d3.axisBottom(x.nice())
+        .ticks(5)
+    //     .tickValues([2022])
+    //     .tickPadding(2)
     // .tickFormat(d3.timeFormat("%y"))
 
     svg = d3.select("#timeline")
@@ -180,7 +182,7 @@ function getEndYear(d) {
 function render() {
     let entitiesSel = svg
         .selectAll('.entity')
-        .data(entities)
+        .data(entities, d => d)
         .join((enter) => {
             let g = enter.append("g")
                 .classed("entity", true)
@@ -190,12 +192,8 @@ function render() {
                     return x(getBeginYear(d))
                 })
                 .attr("y", (d, i) => y(i))
-                .attr("width", d => {
-                    if (getEndYear(d)) return x(getEndYear(d)) - x(getBeginYear(d))
-                    return width - margin.left - margin.right - x(getBeginYear(d))
-                })
+                .attr("width", timeLineWidth)
                 .attr("height", d => y.bandwidth())
-                // .attr("fill", "rgb(150,150,150,0.2)")
                 .attr("fill", d => {
                     let type = getEntityType(d)
                     if (type == nodeTypes.person) {
@@ -210,6 +208,27 @@ function render() {
                     return 0.8
                 })
 
+            g.append("line")
+                // .filter(d => {
+                //     let endYear = getEndYear(d);
+                //     return endYear
+                // })
+                .style("stroke", "black")
+                .style("stroke-width", "2")
+                .attr("x1", d => {
+                    return x(getBeginYear(d)) + timeLineWidth(d)
+                })
+                .attr("y1", (d, i) => y(i))
+                .attr("x2", d => {
+                    return x(getBeginYear(d)) + timeLineWidth(d)
+                })
+                .attr("y2", (d, i) => y(i) + y.bandwidth())
+                .style("display", (d, i) => {
+                    let endYear = getEndYear(d);
+                    return endYear ? "" : "none"
+                })
+            // .style("stroke-dasharray", ("2, 3"))
+
             g.append("text")
                 .attr("x", d => x(getBeginYear(d)) + 5)
                 .attr("y", (d, i) => y(i) + y.bandwidth() / 1.1)
@@ -218,28 +237,6 @@ function render() {
 
             return g
         })
-
-    // personsSel = svg
-    //     .selectAll('.person')
-    //     .data(persons)
-    //     .join((enter) => {
-    //         let g = enter.append("g")
-    //             .classed("person", true)
-    //
-    //         g.append("rect")
-    //             .attr("x", d => x(d["Date of birth"]))
-    //             .attr("y", (d, i) => y(i))
-    //             .attr("width", d => x(d["Date of death"]) - x(d["Date of birth"]))
-    //             .attr("height", d => y.bandwidth())
-    //             .attr("fill", "rgb(150,150,150,0.2)")
-    //
-    //         g.append("text")
-    //             .attr("x", d => x(d["Date of birth"]) + 5)
-    //             .attr("y", (d, i) => y(i) + y.bandwidth() / 1.2)
-    //             .text(d => d.Name)
-    //
-    //         return g
-    //     })
 
     svg
         .selectAll('.event')
@@ -263,6 +260,11 @@ function render() {
 
             return g
         })
+}
+
+function timeLineWidth(d) {
+    if (getEndYear(d)) return x(getEndYear(d)) - x(getBeginYear(d))
+    return width - margin.left - margin.right - x(getBeginYear(d))
 }
 
 function getEntityType(entity) {

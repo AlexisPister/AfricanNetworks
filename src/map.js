@@ -19,12 +19,6 @@ const svg = d3.select("#map")
 const g = svg
     .append("g")
 
-// TODO: center auto
-// g.attr("transform", "translate(-450, -160)")
-
-
-console.log("WW ", svg.attr("width"), width, height)
-
 const path = d3.geoPath()
 const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 
@@ -38,10 +32,13 @@ let projection = d3.geoNaturalEarth1()
     .scale(1600) // This is like the zoom
     .translate([width / 2, height / 2])
 
-let mapData, institutions, publications, events, places;
+
+let mapData, institutions, publications, events, places, nodes;
 
 
 importData().then((data) => {
+    setCoordinates();
+    setForce();
     render();
 })
 
@@ -71,49 +68,82 @@ async function importData() {
     places = await d3.csv(`./data/${FOLDER}/Places.csv`, d => {
         return d
     })
+
+    nodes = publications.concat(institutions);
+    nodes = nodes.filter(i => i["Place"] && PLACES_TO_KEEP.includes(i["Place"]))
+}
+
+function setCoordinates() {
+    nodes.forEach(n => {
+        let [lat, long] = getCoordinates(n.Place);
+        let coords = projection([long, lat]);
+        n["x"] = coords[0]
+        n["y"] = coords[1]
+    })
+}
+
+function setForce() {
+    const simulation = d3.forceSimulation(nodes)
+        .force("collision", d3.forceCollide().radius(RADIUS))
+        .force("x", d3.forceX().x(d => d.x).strength(1))
+        .force("y", d3.forceY().y(d => d.y).strength(1))
+    simulation.tick(400);
+    console.log(nodes)
 }
 
 
 async function render() {
     // console.log("FFFFF ", forceViewer);
-
     const nations = g
         .append("g")
         .attr("cursor", "pointer")
         .selectAll("path")
         .data(mapData.features)
-        // .data(topojson.feature(mapData, mapData.objects.continent_Africa_subunits).features)
         .join("path")
-        // .on("click", clicked)
-        // .attr("d", path)
         .attr("d", d3.geoPath().projection(projection))
-        // .attr("transform", "scale(6)")
-        // .attr("transform", "scale(9)")
-        // .attr("transform", "scale(20)")
         .attr("stroke", "black")
         .attr("fill", "grey")
         .attr("stroke-width", 1);
 
-    const pubs = g
+    const nodesSelection = g
         .append("g")
-        .selectAll(".institution")
-        .data(institutions.filter(i => i["Place"] && PLACES_TO_KEEP.includes(i["Place"])))
-        .join("rect")
-        .attr("x", d => {
-            let [lat, long] = getCoordinates(d.Place);
-            let coords = projection([long, lat]);
-            return coords[0]
+        .selectAll(".dot")
+        .data(nodes)
+        .join("path")
+        .attr("d", d => {
+            if (getNodeType(d) == nodeTypes.publication) {
+                return d3.symbol().type(d3.symbolDiamond).size(180)(d);
+            } else if (getNodeType(d) == nodeTypes.institution) {
+                return d3.symbol().type(d3.symbolSquare).size(180)(d);
+            }
         })
-        .attr("y", d => {
-            let [lat, long] = getCoordinates(d.Place);
-            let coords = projection([long, lat]);
-            return coords[1]
-        })
-        .attr("width", 10)
-        .attr("height", 10)
         .attr("stroke", "black")
-        .attr("fill", "gray")
-        .attr("stroke-width", 2)
+        .attr("transform", (d, i) => `translate(${d.x}, ${d.y})`)
+        .style("fill", function (d) {
+            return colorScale(getNodeType(d))
+        })
+        .classed("dot", true)
+
+    // const pubs = g
+    //     .append("g")
+    //     .selectAll(".institution")
+    //     .data(institutions.filter(i => i["Place"] && PLACES_TO_KEEP.includes(i["Place"])))
+    //     .join("rect")
+    //     .attr("x", d => {
+    //         let [lat, long] = getCoordinates(d.Place);
+    //         let coords = projection([long, lat]);
+    //         return coords[0]
+    //     })
+    //     .attr("y", d => {
+    //         let [lat, long] = getCoordinates(d.Place);
+    //         let coords = projection([long, lat]);
+    //         return coords[1]
+    //     })
+    //     .attr("width", 10)
+    //     .attr("height", 10)
+    //     .attr("stroke", "black")
+    //     .attr("fill", "gray")
+    //     .attr("stroke-width", 2)
 
     nations.append("title").text((d) => d.properties.geounit);
     g.call(zoom);
@@ -125,6 +155,7 @@ function zoomed(event) {
 }
 
 function getCoordinates(placeName) {
+    placeName = placeName.split(";")[0]
     let place = places.filter(p => p.Place == placeName)[0];
     let lat, long;
     if (place.Type == "Country") {
@@ -137,6 +168,14 @@ function getCoordinates(placeName) {
         long = place.Longitude;
     }
     return [lat, long];
+}
+
+function getNodeType(node) {
+    if (institutions.includes(node)) {
+        return nodeTypes.institution;
+    } else if (publications.includes(node)) {
+        return nodeTypes.publication;
+    }
 }
 
 

@@ -120,16 +120,17 @@ h2 {
 #connected-to {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
 }
 
-#connected-to-1 {
-    width: 50%;
+/*#connected-to-1 {*/
+/*    width: 50%;*/
 
-}
+/*}*/
 
-#connected-to-1 {
-    width: 50%;
-}
+/*#connected-to-1 {*/
+/*    width: 50%;*/
+/*}*/
 
 
 .radio-button {
