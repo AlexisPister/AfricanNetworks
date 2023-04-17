@@ -1,4 +1,5 @@
 {
+  "x22": 100,
   "data": [
     {
       "name": "people",
@@ -409,13 +410,25 @@
         },
         "align": "",
         "fill": {
-          "condition": {
+          "conditions": [{
             "test": "datum.degree > 2",
             "value": "black"
           },
+          {
+            "inSelection": "outnodes.nodes",
+            "value": "black"
+          }],
           "value": "none"
         },
-        "dx": 10,
+        "fontSize": "10",
+        "dx": {
+          "condition": {
+            "test": "datum._type == 'publication'",
+            "value": 15,
+            "value2": -100
+          },
+          "value": 15
+        },
         "dy": 4
       }
     }

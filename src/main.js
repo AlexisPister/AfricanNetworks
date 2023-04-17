@@ -1,4 +1,5 @@
-import {updateTimeLine} from "./timeline.js";
+import {updateTimeLine, updateTimelineSelection} from "./timeline.js";
+import {updateSelection} from "./map.js";
 
 let yearMinSel = 1000
 let yearMaxSel = 3000
@@ -107,8 +108,11 @@ async function renderTemplates() {
 async function selectNodeCb(e) {
     let node = e.nodes[0];
     let type = node._type
-    let nodeData = getPersonInfo(e.nodes[0].id);
-    console.log("node: ", e, node, nodeData)
+    let nodeData = getPersonInfo(node.id);
+    // console.log("node: ", e, node, nodeData)
+
+    updateSelection(node.id)
+    updateTimelineSelection(node.id)
     displayNodeSelection(node, nodeData, type)
 }
 
@@ -124,6 +128,7 @@ async function displayNodeSelection(node, nodeData, type) {
     // Wait so that the selection is the current one and not the previous one
     await new Promise(resolve => setTimeout(resolve, 1));
     let neighbors = forceViewer.state.outnodes.nodes;
+    console.log("neighbors ", neighbors)
     // let neighborsWithData = neighbors.map(neighbor => {
     //     let data = getPersonInfo(neighbor.id)
     //     if (data) {
@@ -141,6 +146,7 @@ async function displayNodeSelection(node, nodeData, type) {
 
         setOneNeighborPanel(1, neighbors, nodeTypes.institution, "Worked with:")
         setOneNeighborPanel(2, neighbors, nodeTypes.publication, "Published at:")
+        setOneNeighborPanel(3, neighbors, nodeTypes.event, "Participated in:")
     } else if (type == "institution") {
         generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
         dob = nodeData ? nodeData["Date of Creation"] : ""
@@ -148,6 +154,7 @@ async function displayNodeSelection(node, nodeData, type) {
 
         setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
         setOneNeighborPanel(2, null)
+        setOneNeighborPanel(3, null)
     } else if (type == "publication") {
         generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
         dob = nodeData ? nodeData["Date of Creation"] : ""
@@ -155,6 +162,15 @@ async function displayNodeSelection(node, nodeData, type) {
 
         setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
         setOneNeighborPanel(2, null)
+        setOneNeighborPanel(3, null)
+    } else if (type == "event") {
+        generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
+        dob = nodeData ? nodeData["Date of Creation"] : ""
+        dod = nodeData ? nodeData["Date of closing"] : ""
+
+        setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
+        setOneNeighborPanel(2, null)
+        setOneNeighborPanel(3, null)
     }
 
     let name = nodeData ? nodeData["Name"] : node.id;
@@ -198,14 +214,22 @@ function renderOneNeighborEntity(div, entity, nodeType) {
     if (nodeType == nodeTypes.person) {
         div
             .append("div")
+            .classed("neighbor-element", true)
             .html(entity.id)
     } else if (nodeType == nodeTypes.institution) {
         div
             .append("div")
+            .classed("neighbor-element", true)
             .html(entity.id)
     } else if (nodeType == nodeTypes.publication) {
         div
             .append("div")
+            .classed("neighbor-element", true)
+            .html(entity.id)
+    } else if (nodeType == nodeTypes.event) {
+        div
+            .append("div")
+            .classed("neighbor-element", true)
             .html(entity.id)
     }
 }

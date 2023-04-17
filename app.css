@@ -84,29 +84,20 @@ h2 {
     grid-template-columns: 2fr 1fr;
     /*grid-template-columns: 2fr 10fr;*/
     background-color: white;
-
 }
 
 
 .netpan-vis {
     /*display: flex;*/
-    /*width: 1000px;*/
-    /*height: 1100px;*/
-    /*height: 800px;*/
-    /*height: 1000px;*/
     min-height: 900px;
     border: 1px solid black;
     /*background-color: rgba(194, 191, 191, 0.2);*/
 }
 
-#selected-node-span {
-
-}
-
 #infos {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    /*justify-content: space-around;*/
     /*text-justify: inter-word;*/
 }
 
@@ -119,8 +110,9 @@ h2 {
 
 #connected-to {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    /*flex-direction: row;*/
+    flex-direction: column;
+    /*justify-content: space-evenly;*/
 }
 
 /*#connected-to-1 {*/
@@ -131,6 +123,16 @@ h2 {
 /*#connected-to-1 {*/
 /*    width: 50%;*/
 /*}*/
+
+.neighbor-element {
+    display: inline-block;
+    background-color: rgba(182, 182, 182, 0.4);
+    margin-right: 2%;
+    margin-left: 1%;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    padding: 0 1%;
+}
 
 
 .radio-button {
@@ -158,10 +160,10 @@ input[type="radio"]:checked + label {
 }
 
 #time-slider {
-    margin-right: 60px;
-    margin-left: 60px;
+    margin: 60px;
+    /*margin-right: 60px;*/
+    /*margin-left: 60px;*/
 }
-
 
 #map {
     width: 100%;

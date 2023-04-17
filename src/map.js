@@ -93,7 +93,6 @@ function setForce() {
 
 
 async function render() {
-    // console.log("FFFFF ", forceViewer);
     const nations = g
         .append("g")
         .attr("cursor", "pointer")
@@ -117,7 +116,14 @@ async function render() {
                 return d3.symbol().type(d3.symbolSquare).size(180)(d);
             }
         })
-        .attr("stroke", "black")
+        .attr("stroke", d => {
+            if (d.selected) return SELECTION_COLOR
+            return "black"
+        })
+        .attr("stroke-width", d => {
+            if (d.selected) return 3
+            return 1
+        })
         .attr("transform", (d, i) => `translate(${d.x}, ${d.y})`)
         .style("fill", function (d) {
             return colorScale(getNodeType(d))
@@ -176,6 +182,22 @@ function getNodeType(node) {
     } else if (publications.includes(node)) {
         return nodeTypes.publication;
     }
+}
+
+export function updateSelection(nodeId) {
+    resetSelection()
+    nodes.forEach(n => {
+        if (n.Name == nodeId) {
+            n.selected = true;
+        }
+    })
+    render();
+}
+
+function resetSelection() {
+    nodes.forEach(n => {
+        n.selected = false;
+    })
 }
 
 

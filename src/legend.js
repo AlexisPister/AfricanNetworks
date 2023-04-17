@@ -28,7 +28,27 @@ legend.selectAll(".dot")
     })
     .classed("dot", true)
 
-// Add one dot in the legend for each name.
+
+// Horizontal legend
+// legend.selectAll(".llabel")
+//     .data(nodeTypesNames)
+//     .join("text")
+//     .attr("x", function (d, i) {
+//         return marginRight + 20 + i * 100
+//     })
+//     .attr("y", function (d, i) {
+//         return marginTop
+//     }) // 100 is where the first dot appears. 25 is the distance between dots
+//     .style("fill", function (d) {
+//         return colorScale(d)
+//     })
+//     .text(function (d) {
+//         return d
+//     })
+//     .attr("text-anchor", "left")
+//     .style("alignment-baseline", "middle")
+//     .classed("llabel", true)
+
 legend.selectAll(".llabel")
     .data(nodeTypesNames)
     .join("text")

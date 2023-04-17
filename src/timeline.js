@@ -97,7 +97,7 @@ importData().then(() => {
 
     // TODO: check date format
     let axisBottom = d3.axisBottom(x)
-    // let axisBottom = d3.axisBottom(x.nice())
+        // let axisBottom = d3.axisBottom(x.nice())
         .ticks(5)
     //     .tickValues([2022])
     //     .tickPadding(2)
@@ -204,15 +204,19 @@ function render() {
                         return PUBLICATION_COLOR
                     }
                 })
+                .attr("stroke", d => {
+                    if (d.selected) return SELECTION_COLOR
+                    return ""
+                })
+                .attr("stroke-width", d => {
+                    if (d.selected) return 3
+                    return 1
+                })
                 .style("opacity", d => {
                     return 0.8
                 })
 
             g.append("line")
-                // .filter(d => {
-                //     let endYear = getEndYear(d);
-                //     return endYear
-                // })
                 .style("stroke", "black")
                 .style("stroke-width", "2")
                 .attr("x1", d => {
@@ -281,5 +285,21 @@ export function updateTimeLine(yearMinV, yearMaxV) {
     yearMin = yearMinV
     yearMax = yearMaxV
     render();
+}
+
+export function updateTimelineSelection(nodeId) {
+    resetSelection();
+    entities.forEach(n => {
+        if (n.Name == nodeId) {
+            n.selected = true;
+        }
+    })
+    render();
+}
+
+function resetSelection() {
+    entities.forEach(n => {
+        n.selected = false;
+    })
 }
 
