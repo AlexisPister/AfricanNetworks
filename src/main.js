@@ -94,8 +94,6 @@ async function renderTemplates() {
             {paramCallbacks: {nodeSelection: selectNodeCb}});
 
         completeNetwork = forceViewer.state["PI-net"];
-        // console.log("state ", forceViewer)
-        // console.log("NET ", completeNetwork)
     }
     // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
     // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");

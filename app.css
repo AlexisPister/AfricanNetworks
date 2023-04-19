@@ -117,7 +117,6 @@ h2 {
 
 /*#connected-to-1 {*/
 /*    width: 50%;*/
-
 /*}*/
 
 /*#connected-to-1 {*/
@@ -172,6 +171,7 @@ input[type="radio"]:checked + label {
 
 #timeline {
     width: 100%;
+    /*width: 50%;*/
     height: 100%;
     z-index: 2000;
 }
