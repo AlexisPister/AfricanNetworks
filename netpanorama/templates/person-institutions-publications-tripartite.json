@@ -1,5 +1,6 @@
 {
-  "x22": 100,
+  "x2": 200,
+  "width": "[width]",
   "data": [
     {
       "name": "people",

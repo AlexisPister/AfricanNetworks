@@ -1,6 +1,7 @@
 import {forceViewer, updateNodelinkSelection} from "./main.js";
 
-const [width, height] = computeSvgDims("map")
+// const [width, height] = computeSvgDims("map")
+const [width, height] = computeSvgDims("timeline")
 const margin = {
     top: 20,
     left: 20,
@@ -8,14 +9,14 @@ const margin = {
     bottom: 20
 }
 
-
 // setTimeout(() => {
 //     console.log(111, forceViewer)
 // }, 1000)
 
 // const countries = ["Uganda", "Tanzania", "Kenya", "Ghana"];
 const countries = ["Uganda", "Tanzania", "Kenya"];
-const svg = d3.select("#map")
+// const svg = d3.select("#map")
+const svg = d3.select("#timeline")
 const g = svg
     .append("g")
 
@@ -25,12 +26,11 @@ const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 // Map and projection
 // let projection = d3.geoMercator()
 let projection = d3.geoNaturalEarth1()
-    // .center([-6.3728253, 34.8924826]) // GPS of location to zoom on
-    // .center([-0.976635, 33.937761]) // GPS of location to zoom on
     .center([33.937761, -0.976635]) // GPS of location to zoom on
-    // .center([2, 34.8924826]) // GPS of location to zoom on
-    .scale(1600) // This is like the zoom
-    .translate([width / 2, height / 2])
+    // .scale(1600) // For single panel map
+    .scale(700) // When merged with timeline
+    // .translate([width / 2, height / 2]) // CENTER
+    .translate([width / 8, height / 1.5])
 
 
 let mapData, institutions, publications, events, places, nodes;
@@ -84,7 +84,7 @@ function setCoordinates() {
 
 function setForce() {
     const simulation = d3.forceSimulation(nodes)
-        .force("collision", d3.forceCollide().radius(RADIUS))
+        .force("collision", d3.forceCollide().radius(RADIUS_MAP + 1))
         .force("x", d3.forceX().x(d => d.x).strength(1))
         .force("y", d3.forceY().y(d => d.y).strength(1))
     simulation.tick(400);
@@ -111,9 +111,9 @@ async function render() {
         .join("path")
         .attr("d", d => {
             if (getNodeType(d) == nodeTypes.publication) {
-                return d3.symbol().type(d3.symbolDiamond).size(180)(d);
+                return d3.symbol().type(d3.symbolDiamond).size(RADIUS_MAP * 10)(d);
             } else if (getNodeType(d) == nodeTypes.institution) {
-                return d3.symbol().type(d3.symbolSquare).size(180)(d);
+                return d3.symbol().type(d3.symbolSquare).size(RADIUS_MAP * 10)(d);
             }
         })
         .attr("stroke", d => {

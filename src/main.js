@@ -8,9 +8,11 @@ let isTripartite = false;
 let completeNetwork;
 export let forceViewer, tripartiteViewer;
 
-const [entitiesData, peopleData, institutionsData, publicationsData, personInst, personPub] = await fetchData();
+const [width, height] = computeSvgDims("force")
+console.log(width, height)
+
+const [entitiesData, peopleData, institutionsData, publicationsData, eventsData, personInst, personPub] = await fetchData();
 const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
-// console.log("DATA", entitiesData);
 renderGeneralInfo(peopleData, institutionsData, publicationsData);
 renderTemplates();
 
@@ -36,7 +38,16 @@ async function fetchData() {
             return data.data
         })
         .catch(err => console.log(err))
-    const entities = institutions.concat(publications).concat(persons)
+    // const entities = institutions.concat(publications).concat(persons)
+
+    let events = await fetch(`./data/${FOLDER}/Events.csv`)
+        .then((data) => data.text())
+        .then(v => {
+            let data = Papa.parse(v, {header: true})
+            return data.data
+        })
+        .catch(err => console.log(err))
+    const entities = institutions.concat(publications).concat(persons).concat(events)
 
     let personInst = await fetch(`./data/${FOLDER}/Person-Institution.csv`)
         .then((data) => data.text())
@@ -54,7 +65,7 @@ async function fetchData() {
         .catch(err => console.log(err))
 
 
-    return [entities, persons, institutions, publications, personInst, personPubs];
+    return [entities, persons, institutions, publications, events, personInst, personPubs];
 }
 
 function getTimeInterval(personInst, personPub) {
@@ -69,6 +80,7 @@ async function renderTemplates() {
 // async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
     if (isTripartite) {
         tripartiteViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
+            width: width - 100,
             yearMin: yearMinSel,
             yearMax: yearMaxSel,
             dataFolder: `\"${FOLDER}\"`,
@@ -80,8 +92,8 @@ async function renderTemplates() {
         }, "force", {paramCallbacks: {nodeSelection: selectNodeCb}});
     } else {
         forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {
-                // layoutAlg: "\"webcola\"",
-                layoutAlg: "\"d3-force\"",
+                width: width - 100,
+                height: height - 100,
                 yearMin: yearMinSel,
                 yearMax: yearMaxSel,
                 dataFolder: `\"${FOLDER}\"`,
@@ -126,7 +138,6 @@ async function displayNodeSelection(node, nodeData, type) {
     // Wait so that the selection is the current one and not the previous one
     await new Promise(resolve => setTimeout(resolve, 1));
     let neighbors = forceViewer.state.outnodes.nodes;
-    console.log("neighbors ", neighbors)
     // let neighborsWithData = neighbors.map(neighbor => {
     //     let data = getPersonInfo(neighbor.id)
     //     if (data) {
@@ -239,6 +250,8 @@ function renderGeneralInfo(peopleData, institutionData, pubData) {
         .html(institutionData.length)
     d3.select("#n-publications")
         .html(pubData.length)
+    d3.select("#n-events")
+        .html(eventsData.length)
 }
 
 function update() {
@@ -253,7 +266,6 @@ function update() {
 export function updateNodelinkSelection(nodeId) {
     // Not sure if really needed
     let netpanNode = completeNetwork.nodes.filter(n => n.id == nodeId)[0];
-    console.log(123, netpanNode)
     if (forceViewer) {
         forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
     }

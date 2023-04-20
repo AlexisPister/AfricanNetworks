@@ -1,8 +1,9 @@
 {
-  "zoom": true,
-  "width22": 300,
-  "width": 900,
-  "height": 500,
+  "zoom222": true,
+  "width": "[width]",
+  "height": "[height]",
+  "width2": 300,
+  "height2": 700,
   "data": [
     {
       "name": "people",
