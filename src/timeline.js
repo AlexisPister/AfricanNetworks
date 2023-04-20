@@ -219,7 +219,7 @@ function render() {
                     return 0.8
                 })
                 .on("click", (e, d) => {
-                    console.log(99)
+                    console.log(999, d.Name)
                     updateNodelinkSelection(d.Name)
                 })
 

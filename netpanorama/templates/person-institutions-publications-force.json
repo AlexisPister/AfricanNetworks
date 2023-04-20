@@ -4,6 +4,11 @@
   "height": "[height]",
   "width2": 300,
   "height2": 700,
+  "style": {
+    "noDisplay": {
+      "display": "none"
+    }
+  },
   "data": [
     {
       "name": "people",
@@ -86,7 +91,10 @@
     },
     {
       "name": "selectedYears",
-      "value": [1000, 2020]
+      "value": [
+        1000,
+        2020
+      ]
     }
   ],
   "networks": [
@@ -189,7 +197,9 @@
                 "field": "Event"
               },
               "target_node_type": "event",
-              "data": ["*"]
+              "data": [
+                "*"
+              ]
             }
           ]
         }
@@ -245,12 +255,6 @@
           "force": "nbody",
           "strength": -1,
           "distanceMax": 10
-        },
-        {
-          "force": "center",
-          "x": 50,
-          "y": 50,
-          "strength": 2
         },
         {
           "force": "collide",
@@ -370,17 +374,31 @@
         },
         "align": "",
         "fill": {
-          "conditions": [{
-            "test": "datum.degree > 4",
-            "value": "black"
-          },
-          {
-            "inSelection": "outnodes.nodes",
-            "value": "black"
-          }],
+          "conditions": [
+            {
+              "test": "datum.degree > 4",
+              "value": "black"
+            },
+            {
+              "inSelection": "outnodes.nodes",
+              "value": "black"
+            }
+          ],
           "value": "none"
         },
-        "dx": 4,
+        "dx": {
+          "conditions": [
+            {
+              "test": "datum.degree > 4",
+              "value": 4
+            },
+            {
+              "inSelection": "outnodes.nodes",
+              "value": 4
+            }
+          ],
+          "value": 2000
+        },
         "dy": -4
       }
     },

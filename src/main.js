@@ -1,9 +1,11 @@
 import {updateTimeLine, updateTimelineSelection} from "./timeline.js";
 import {updateSelection} from "./map.js";
+import {updateStory} from "./stories.js";
 
 let yearMinSel = 1000
 let yearMaxSel = 3000
 let isTripartite = false;
+let isStoryMode = false;
 
 let completeNetwork;
 export let forceViewer, tripartiteViewer;
@@ -15,6 +17,7 @@ const [entitiesData, peopleData, institutionsData, publicationsData, eventsData,
 const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
 renderGeneralInfo(peopleData, institutionsData, publicationsData);
 renderTemplates();
+setEvents();
 
 async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
@@ -263,9 +266,11 @@ function update() {
     }
 }
 
+// TODO: some nodes of the timeline are not in the node-links (not in any link?)
 export function updateNodelinkSelection(nodeId) {
     // Not sure if really needed
     let netpanNode = completeNetwork.nodes.filter(n => n.id == nodeId)[0];
+    console.log("netpannode", netpanNode)
     if (forceViewer) {
         forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
     }
@@ -275,45 +280,70 @@ export function updateNodelinkSelection(nodeId) {
 }
 
 
-let slider = document.getElementById('time-slider');
-noUiSlider.create(slider, {
-    start: [yearMin, yearMax],
-    connect: true,
-    range: {
-        'min': Math.round(yearMin),
-        'max': yearMax
-    },
-    step: 1,
-    format: {
-        from: function (value) {
-            return parseInt(value);
+function setEvents() {
+    let slider = document.getElementById('time-slider');
+    noUiSlider.create(slider, {
+        start: [yearMin, yearMax],
+        connect: true,
+        range: {
+            'min': Math.round(yearMin),
+            'max': yearMax
         },
-        to: function (value) {
-            return parseInt(value);
-        }
-    },
-    behaviour: 'tap-drag',
-    tooltips: true,
-});
-slider.noUiSlider.on("update", (e) => {
-    [yearMinSel, yearMaxSel] = [e[0], e[1]];
-    update();
-})
+        step: 1,
+        format: {
+            from: function (value) {
+                return parseInt(value);
+            },
+            to: function (value) {
+                return parseInt(value);
+            }
+        },
+        behaviour: 'tap-drag',
+        tooltips: true,
+    });
 
-
-d3.select("#force-radio")
-    .on("click", (e) => {
-        isTripartite = false;
-        d3.select("#force")
-            .style("height", "730px")
-        renderTemplates()
+    slider.noUiSlider.on("update", (e) => {
+        [yearMinSel, yearMaxSel] = [e[0], e[1]];
+        update();
     })
 
-d3.select("#tripartite-radio")
-    .on("click", (e) => {
-        isTripartite = true;
-        d3.select("#force")
-            .style("height", "1100px")
-        renderTemplates()
-    })
+    d3.select("#force-radio")
+        .on("click", (e) => {
+            isTripartite = false;
+            d3.select("#force")
+                .style("height", "730px")
+            renderTemplates()
+        })
+
+    d3.select("#tripartite-radio")
+        .on("click", (e) => {
+            isTripartite = true;
+            d3.select("#force")
+                .style("height", "1100px")
+            renderTemplates()
+        })
+
+
+    d3.select("#exploration")
+        .on("click", (e) => {
+            isStoryMode = false;
+            d3.select("#scenario-div")
+                .style("display", "none")
+            d3.select("#exploration-div")
+                .style("display", "")
+            // renderTemplates()
+        })
+
+    d3.select("#stories")
+        .on("click", (e) => {
+            isStoryMode = true;
+            d3.select("#scenario-div")
+                .style("display", "")
+            d3.select("#exploration-div")
+                .style("display", "none")
+            updateStory();
+            // renderTemplates()
+        })
+}
+
 

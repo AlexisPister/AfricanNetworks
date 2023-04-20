@@ -2,8 +2,7 @@ const legend = d3.select("#legend")
 let nodeTypesNames = Object.values(nodeTypes);
 
 const marginTop = 10
-const marginRight = 10
-
+const marginRight = 15
 const legendPadding = 130;
 
 
