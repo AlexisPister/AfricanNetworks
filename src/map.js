@@ -30,7 +30,7 @@ let projection = d3.geoNaturalEarth1()
     // .scale(1600) // For single panel map
     .scale(700) // When merged with timeline
     // .translate([width / 2, height / 2]) // CENTER
-    .translate([width / 8, height / 1.5])
+    .translate([width / 9, height / 1.4])
 
 
 let mapData, institutions, publications, events, places, nodes;

@@ -62,9 +62,7 @@ body {
 .block {
     /* In percent, the padding depend of the size of the current div*/
     /*padding: 1.5%;*/
-    padding: 1.1em;
-
-
+    padding: 1em;
     border: 1px solid black;
 
     /* WHITE MODE */
@@ -90,7 +88,7 @@ body {
 }
 
 #intro-phrase {
-    font-size: 10pt;
+    /*font-size: 10pt;*/
     margin-bottom: 1%;
     text-align: justify;
     text-justify: inter-word;
@@ -115,13 +113,15 @@ body {
 }
 
 h1 {
-    font-size: 3.2em;
+    font-size: 3.5em;
     line-height: 1.1;
     margin-top: 0;
 }
 
 h2 {
+    font-size: 2.1em;
     margin-bottom: 4px;
+    padding-top: 0;
 }
 
 #main-vis {
