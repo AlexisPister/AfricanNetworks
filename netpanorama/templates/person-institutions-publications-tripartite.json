@@ -215,6 +215,11 @@
         "direction": "descending"
       },
       "data": "PI-net.nodes"
+    },
+    {
+      "name": "optimal",
+      "method": "barycentre",
+      "network": "PI-net"
     }
   ],
   "layouts": [
@@ -229,7 +234,8 @@
       ],
       "y": [
         {
-          "order": "degree"
+          "order": "optimal",
+          "order2": "degree"
         }
       ],
       "data": "PI-net.nodes",

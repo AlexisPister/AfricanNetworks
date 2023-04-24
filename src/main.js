@@ -11,8 +11,6 @@ let completeNetwork;
 export let forceViewer, tripartiteViewer;
 
 const [width, height] = computeSvgDims("force")
-console.log(width, height)
-
 const [entitiesData, peopleData, institutionsData, publicationsData, eventsData, personInst, personPub] = await fetchData();
 const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
 renderGeneralInfo(peopleData, institutionsData, publicationsData);
@@ -186,9 +184,11 @@ async function displayNodeSelection(node, nodeData, type) {
     }
 
     let name = nodeData ? nodeData["Name"] : node.id;
-
     let activity = nodeData ? nodeData["Main Activity"] : ""
     let origin = nodeData ? nodeData["General Info/biography"] : ""
+
+    let imgPath = `data/photos/${name}.jpg`
+    console.log(imgPath)
 
     d3.select("#name")
         .html(name)
@@ -200,6 +200,8 @@ async function displayNodeSelection(node, nodeData, type) {
         .html(dod)
     d3.select("#activity")
         .html(activity)
+    d3.select("#img")
+        .attr("src", imgPath)
 }
 
 function setOneNeighborPanel(number, neighbor, selectedNodeType, title) {
@@ -275,7 +277,18 @@ export function updateNodelinkSelection(nodeId) {
         forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
     }
     if (tripartiteViewer) {
-        tripartiteViewer.setParam("nodeSelection", [nodeId])
+        tripartiteViewer.setParam("nodeSelection", {nodes: nodeId, links: []})
+    }
+}
+
+export function updateNodeslinksSelection(nodeIds) {
+    let netpanNodes = completeNetwork.nodes.filter(n => nodeIds.includes(n.id));
+    console.log("netpannode", netpanNode)
+    if (forceViewer) {
+        forceViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
+    }
+    if (tripartiteViewer) {
+        tripartiteViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
     }
 }
 
