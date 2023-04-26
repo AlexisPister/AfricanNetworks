@@ -109,14 +109,11 @@ var NetPanoramaTemplateViewer;
             Object.defineProperty(e, "__esModule", {value: !0}), e.render = void 0;
             const o = i(n(5038)), a = n(4901), s = n(7734);
             e.render = (t, e, n, i, u) => r(void 0, void 0, void 0, (function* () {
-                console.log("STARTING");
                 const c = yield(t => r(void 0, void 0, void 0, (function* () {
                     let e = "";
                     return "string" != typeof t || t.trim().startsWith("{") ? e = "string" == typeof t ? t : JSON.stringify(t) : yield fetch(t).then((t => t.text())).then((t => e = t)), e
                 })))(t);
-                console.log({templateString: c});
                 const l = (0, o.default)(c, e);
-                console.log({populatedTemplate: l});
                 let h = l;
                 u && Array.isArray(u) && u.length > 0 && (0, a.applyPatch)(l, (0, a.deepClone)(u)).newDocument, console.log({patchedTemplate: h});
                 const f = yield function (t, e, n) {
@@ -57627,7 +57624,6 @@ var NetPanoramaTemplateViewer;
                         const t = Math.min(p, g);
                         p = t, g = t
                     }
-                    console.log({minY: d, maxY: f, xScaling: p, yScaling: g});
                     for (const t of s) {
                         const e = r.get(t.id);
                         r.get(t.id).x = u === h ? Math.min(Math.max(u, 0), i.width) : p * (e.x - h), r.get(t.id).y = f === d ? Math.min(Math.max(f, 0), i.width) : g * (e.y - d), r.get(t.id).width *= p, r.get(t.id).height *= g
@@ -61815,7 +61811,7 @@ var NetPanoramaTemplateViewer;
                             const i = yield Un(this.spec, g, [], d, this.funcs);
                             f(i.sceneJSON)
                         })), b = (t, e) => Sa(this, void 0, void 0, (function* () {
-                            console.log(`UPDATED PARAM ${t} to ${e}`), g[t] = e, t in this.paramCallbacks && this.paramCallbacks[t](e);
+                            g[t] = e, t in this.paramCallbacks && this.paramCallbacks[t](e);
                             const n = yield Un(this.spec, g, [t], d, this.funcs);
                             f(n.sceneJSON)
                         }));

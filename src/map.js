@@ -71,6 +71,7 @@ async function importData() {
 
     nodes = publications.concat(institutions);
     nodes = nodes.filter(i => i["Place"] && PLACES_TO_KEEP.includes(i["Place"]))
+    nodes = nodes.filter(d => d.Name != "" && d.Name != " ")
 }
 
 function setCoordinates() {
@@ -88,7 +89,6 @@ function setForce() {
         .force("x", d3.forceX().x(d => d.x).strength(1))
         .force("y", d3.forceY().y(d => d.y).strength(1))
     simulation.tick(400);
-    console.log(nodes)
 }
 
 

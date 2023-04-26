@@ -42,7 +42,7 @@ body {
 
     /*margin: 6px 3%;*/
     /*margin: 6px 0;*/
-    margin: 6px 3%;
+    margin: 6px 2%;
 }
 
 #main-axis {
@@ -205,7 +205,7 @@ h2 {
     /*text-justify: inter-word;*/
     text-align: justify;
     /*text-align: justify-all;*/
-    padding-right: 20px;
+    /*padding-right: 20px;*/
 }
 
 #connected-to {
@@ -329,6 +329,30 @@ input[type="radio"]:checked + label {
 
 #entity-select {
     width: 70%;
+}
+
+.span-person {
+    background-color: #00A3DD;
+    color: white;
+}
+
+.span-institution {
+    background-color: #1EB53A;
+    color: white;
+}
+
+.span-publication {
+    background-color: #DA0000;
+    color: white;
+}
+
+.span-event {
+    background-color: #006600;
+    color: white;
+}
+
+.field {
+    font-weight: bold;
 }
 
 

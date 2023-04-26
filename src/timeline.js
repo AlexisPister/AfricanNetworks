@@ -26,11 +26,14 @@ function parseEventDate(date) {
     return +date.slice(-4)
 }
 
-function parseYear(timeValue) {
+export function parseYear(timeValue) {
     let year
+
     timeValue = timeValue.toString();
     if (timeValue[timeValue.length - 1] == "s") {
         year = timeValue.slice(-5, -1)
+    } else if (timeValue[timeValue.length - 1] == "0" && timeValue[timeValue.length - 2] == ".") {
+        year = timeValue.slice(0, -2)
     } else {
         year = timeValue.slice(-4)
     }
@@ -40,7 +43,6 @@ function parseYear(timeValue) {
     }
 
     year = +year;
-    // console.log(timeValue, year)
     return year;
 }
 
@@ -63,6 +65,7 @@ async function importData() {
     })
 
     institutions = await d3.csv(`./data/${FOLDER}/Institutions.csv`, d => {
+        console.log(2, d["Date of Creation"], parseYear(d["Date of Creation"]))
         d["Date of closing"] = parseYear(d["Date of closing"])
         d["Date of Creation"] = parseYear(d["Date of Creation"])
         return d

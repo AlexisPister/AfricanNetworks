@@ -1,21 +1,11 @@
-import {forceViewer, updateNodelinkSelection} from "./main.js";
+import {forceViewer, updateNodelinkSelection, updateNodeslinksSelection, fetchData} from "./main.js";
 
-function loadstory() {
-    let data = d3.csv("./data/stories/EAISCA.csv")
-    return data
-}
+let [entitiesData, peopleData, institutionsData, publicationsData, eventsData, personInst, personPub] = await fetchData();
 
-let STORY = await loadstory();
-console.log(222, STORY)
-
-// Toy Example
-// let STORY = [
-//     `Tom Mboya, labour leader and nationalist politician, is first in contact with Robert Gabor, a Hungarian exile in the United States with ties to the CIA. Gabor runs the International Feature Service (IFS), an anti-communist wire service for newspapers across the globe. Mboya publishes two articles with the IFS, which were reproduced in 25 newspapers around the world.`,
-//     `International Feature Service becomes Peace with Freedom, a non-profit organization that apparently acted as a CIA front organization. Peace with Freedom made monthly donations to the Kenya Federation of Labour, the trade union umbrella body run by Mboya, until June 1964. With Heinz Putzrath of the Friedrich Ebert Foundation, Peace with Freedom funds the printing and publishing of the KFL’s newspaper, Mfanyi Kazi.`,
-//     `Gabor, Putzrath, George Githii, at this time a close ally of Mboya, and Tony Hughes, press secretary for KANU, agree to found the East African Institute of Social and Cultural Affairs. Githii was the inaugural general secretary. A governing board – including Bibi Titi Mohamed, Wilbert Chagula and Okot p’Btek – was formed but never meets.`
-// ]
-
+let STORY;
+await loadstory("EAISCA");
 let storyIndex = 0;
+
 
 d3.select("#story-arrow-right")
     .on("click", (e) => {
@@ -28,6 +18,20 @@ d3.select("#story-arrow-left")
         updateStory()
     })
 
+d3.select("#story-selection")
+    .on("change", async (e, d) => {
+        let storyName = e.target.value;
+        await loadstory(storyName)
+        storyIndex = 0
+        updateStory();
+    })
+
+
+async function loadstory(storyName) {
+    STORY = await d3.csv(`./data/stories/${storyName}.csv`)
+    d3.select("#story-title")
+        .html(storyName)
+}
 
 function storyForward() {
     storyIndex += 1;
@@ -40,20 +44,63 @@ function storyBackward() {
 }
 
 export function updateStory() {
+    let [text, entities] = findStoryEntities(STORY[storyIndex].Text);
 
     d3.select("#story-time")
         .html(STORY[storyIndex].Date)
     d3.select("#story-text")
-        .html(STORY[storyIndex].Text)
+        .html(text)
+    // .html(STORY[storyIndex].Text)
+
     d3.select("#story-page")
-        .html(`${storyIndex + 1} / ${STORY.length}` )
+        .html(`${storyIndex + 1} / ${STORY.length}`)
 
-    let entities = STORY[storyIndex].Entities.split(";")
 
-    entities.forEach(entity => {
-        entity = entity.trim();
-        updateNodelinkSelection(entity)
+    updateNodeslinksSelection(entities.map(e => e.Name))
+
+    // let entities = STORY[storyIndex].Entities.split(";")
+    // entities.forEach(entity => {
+    //     entity = entity.trim();
+    //     updateNodelinkSelection(entity)
+    // })
+}
+
+function findStoryEntities(text) {
+    Array.prototype.insert = function (index, ...items) {
+        this.splice(index, 0, ...items);
+    };
+
+    let textHTML = text;
+    let foundEntities = [];
+    entitiesData.forEach(entity => {
+        let name = entity.Name
+        let index = textHTML.indexOf(name);
+        if (index != -1) {
+            // console.log(name, index)
+            foundEntities.push(entity)
+
+            let split = textHTML.split(name)
+            // console.log(split)
+
+            let type = getEntityType(entity);
+            let span = `<span class=span-${type}>${name}</span>`
+            split.insert(1, span)
+            textHTML = split.join("")
+        }
     })
+    return [textHTML, foundEntities];
+}
+
+function getEntityType(entity) {
+    if (peopleData.includes(entity)) {
+        return nodeTypes.person
+    } else if (institutionsData.includes(entity)) {
+        return nodeTypes.institution
+    } else if (publicationsData.includes(entity)) {
+        return nodeTypes.publication
+    } else if (eventsData.includes(entity)) {
+        return nodeTypes.event
+    }
 }
 
 

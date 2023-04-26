@@ -1,4 +1,4 @@
-import {updateTimeLine, updateTimelineSelection} from "./timeline.js";
+import {parseYear, updateTimeLine, updateTimelineSelection} from "./timeline.js";
 import {updateSelection} from "./map.js";
 import {updateStory} from "./stories.js";
 
@@ -18,7 +18,7 @@ renderTemplates();
 setEvents();
 setupSearch();
 
-async function fetchData() {
+export async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
         .then((data) => data.text())
         .then(v => {
@@ -49,7 +49,7 @@ async function fetchData() {
             return data.data
         })
         .catch(err => console.log(err))
-    const entities = institutions.concat(publications).concat(persons).concat(events)
+    let entities = institutions.concat(publications).concat(persons).concat(events)
 
     let personInst = await fetch(`./data/${FOLDER}/Person-Institution.csv`)
         .then((data) => data.text())
@@ -66,6 +66,18 @@ async function fetchData() {
         })
         .catch(err => console.log(err))
 
+    entities = entities.filter(d => d.Name != "" && d.Name != " " && d.Name)
+    console.log(entities.map(n => n.Name))
+
+    entities.sort(function (a, b) {
+        if (a.Name < b.Name) {
+            return -1;
+        }
+        if (a.Name > b.Name) {
+            return 1;
+        }
+        return 0;
+    });
 
     return [entities, persons, institutions, publications, events, personInst, personPubs];
 }
@@ -124,14 +136,16 @@ async function renderTemplates() {
 }
 
 async function selectNodeCb(e) {
-    let node = e.nodes[0];
-    let type = node._type
-    let nodeData = getPersonInfo(node.id);
+    if (e.nodes.length > 0) {
+        let node = e.nodes[0];
+        let type = node._type
+        let nodeData = getPersonInfo(node.id);
 
-    updateSelection(node.id)
-    updateTimelineSelection(node.id)
-    displayNodeSelection(node, nodeData, type)
-    setSearchValue(node.id)
+        updateSelection(node.id)
+        updateTimelineSelection(node.id)
+        displayNodeSelection(node, nodeData, type)
+        setSearchValue(node.id)
+    }
 }
 
 function getPersonInfo(personName) {
@@ -156,10 +170,17 @@ async function displayNodeSelection(node, nodeData, type) {
     // })
     // console.log("DATA ", nodeData, type, neighbors);
 
+    d3.select("#date-tilt")
+        .html("-")
+
     if (type == "person") {
         dob = nodeData ? nodeData["Date of birth"] : "";
         dod = nodeData ? nodeData["Date of death"] : "";
         generalInfo = nodeData ? nodeData["General Info/biography"] : "";
+
+        let activity = nodeData ? nodeData["Main Activity"] : ""
+        d3.select("#activity")
+            .html(`<span class="field">Activity</span>: ${activity}`)
 
         setOneNeighborPanel(1, neighbors, nodeTypes.institution, "Worked with:")
         setOneNeighborPanel(2, neighbors, nodeTypes.publication, "Published at:")
@@ -169,6 +190,9 @@ async function displayNodeSelection(node, nodeData, type) {
         dob = nodeData ? nodeData["Date of Creation"] : ""
         dod = nodeData ? nodeData["Date of closing"] : ""
 
+        d3.select("#activity")
+            .html("")
+
         setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
         setOneNeighborPanel(2, null)
         setOneNeighborPanel(3, null)
@@ -177,26 +201,42 @@ async function displayNodeSelection(node, nodeData, type) {
         dob = nodeData ? nodeData["Date of Creation"] : ""
         dod = nodeData ? nodeData["Date of closing"] : ""
 
+        let subject = nodeData ? nodeData["Subject"] : ""
+        d3.select("#activity")
+            .html(`<span class="field">Subject</span>: ${subject}`)
+
         setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
         setOneNeighborPanel(2, null)
         setOneNeighborPanel(3, null)
     } else if (type == "event") {
         generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
-        dob = nodeData ? nodeData["Date of Creation"] : ""
-        dod = nodeData ? nodeData["Date of closing"] : ""
+        dob = ""
+        dod = ""
 
         setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
         setOneNeighborPanel(2, null)
         setOneNeighborPanel(3, null)
+
+        d3.select("#activity")
+            .html("")
+    }
+
+    if (dob) dob = parseYear(dob);
+    if (dod) dod = parseYear(dod);
+
+    if (type == "event" && nodeData) {
+        d3.select("#date-tilt")
+            .html(nodeData["Date"])
+    } else if (!dod) {
+        d3.select("#date-tilt")
+            .html("")
     }
 
     let name = nodeData ? nodeData["Name"] : node.id;
-    let activity = nodeData ? nodeData["Main Activity"] : ""
     let origin = nodeData ? nodeData["General Info/biography"] : ""
 
     let imgPath = `data/photos/${name}.jpg`
     let imgExist = linkCheck(imgPath)
-    // console.log(imgPath, imgExist)
 
     d3.select("#name")
         .html(name)
@@ -206,11 +246,14 @@ async function displayNodeSelection(node, nodeData, type) {
         .html(dob)
     d3.select("#dof")
         .html(dod)
-    d3.select("#activity")
-        .html(activity)
+
 
     d3.select("#img")
-        .attr("src", imgPath)
+        .attr("src", () => {
+            if (imgExist) {
+                return imgPath
+            }
+        })
         .style("display", () => {
             return imgExist ? "" : "none"
         })
@@ -383,13 +426,13 @@ function setupZoom() {
 
     svg
         .call(d3.zoom()
-        // .extent([[0, 0], [width, height]])
-        // .scaleExtent([1, 8])
-        .on("zoom", zoomed))
-        // .on("wheel.zoom", (e) => {
-        //     console.log(222, e)
-        //     // e.preventDefault();
-        // });
+            // .extent([[0, 0], [width, height]])
+            // .scaleExtent([1, 8])
+            .on("zoom", zoomed))
+    // .on("wheel.zoom", (e) => {
+    //     console.log(222, e)
+    //     // e.preventDefault();
+    // });
 
 
     function zoomed({transform}) {
@@ -399,7 +442,7 @@ function setupZoom() {
 
 function setupSearch() {
     d3.select("#entity-select")
-        .on("change", (e,d) => {
+        .on("change", (e, d) => {
             let entityName = e.target.value;
             updateNodelinkSelection(entityName)
         })

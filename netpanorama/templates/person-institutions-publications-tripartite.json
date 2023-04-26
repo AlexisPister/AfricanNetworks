@@ -1,6 +1,7 @@
 {
   "x2": 200,
   "width": "[width]",
+  "heightz": 400,
   "data": [
     {
       "name": "people",
@@ -190,11 +191,23 @@
         }
         ],
         "transform": [
-            {"type": "filterNodes", "expression": "datum.id !== '' "},
-            {"type": "filterNodes", "expression": "datum.id !== ' ' "},
-            {"type": "removeIsolated"},
-            {"type": "metric", "metric": "degree"}
-        ]
+        {
+          "type": "filterNodes",
+          "expression": "datum.id !== '' "
+        },
+        {
+          "type": "filterNodes",
+          "expression": "datum.id !== ' ' "
+        },
+        {
+          "type": "metric",
+          "metric": "degree"
+        },
+        {"type": "filterEdges", "expression": "datum.target._type != 'event' || datum.source.degree > 1"},
+        {
+          "type": "removeIsolated"
+        }
+      ]
     }
   ],
 
