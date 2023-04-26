@@ -16,6 +16,7 @@ const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
 renderGeneralInfo(peopleData, institutionsData, publicationsData);
 renderTemplates();
 setEvents();
+setupSearch();
 
 async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
@@ -78,7 +79,10 @@ function getTimeInterval(personInst, personPub) {
 
 
 async function renderTemplates() {
-// async function renderTemplates(tripartite=false, yearMin=1000, yearMax=2000) {
+
+    d3.select("#force")
+        .html("")
+
     if (isTripartite) {
         tripartiteViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
             width: width - 100,
@@ -114,17 +118,20 @@ async function renderTemplates() {
 
     // let links = forceViewer.state["PI-net"].links
     // return forceViewer
+
+    // TODO: handle this callback in different scenarios
+    setupZoom();
 }
 
 async function selectNodeCb(e) {
     let node = e.nodes[0];
     let type = node._type
     let nodeData = getPersonInfo(node.id);
-    // console.log("node: ", e, node, nodeData)
 
     updateSelection(node.id)
     updateTimelineSelection(node.id)
     displayNodeSelection(node, nodeData, type)
+    setSearchValue(node.id)
 }
 
 function getPersonInfo(personName) {
@@ -188,7 +195,8 @@ async function displayNodeSelection(node, nodeData, type) {
     let origin = nodeData ? nodeData["General Info/biography"] : ""
 
     let imgPath = `data/photos/${name}.jpg`
-    console.log(imgPath)
+    let imgExist = linkCheck(imgPath)
+    // console.log(imgPath, imgExist)
 
     d3.select("#name")
         .html(name)
@@ -200,8 +208,12 @@ async function displayNodeSelection(node, nodeData, type) {
         .html(dod)
     d3.select("#activity")
         .html(activity)
+
     d3.select("#img")
         .attr("src", imgPath)
+        .style("display", () => {
+            return imgExist ? "" : "none"
+        })
 }
 
 function setOneNeighborPanel(number, neighbor, selectedNodeType, title) {
@@ -272,7 +284,6 @@ function update() {
 export function updateNodelinkSelection(nodeId) {
     // Not sure if really needed
     let netpanNode = completeNetwork.nodes.filter(n => n.id == nodeId)[0];
-    console.log("netpannode", netpanNode)
     if (forceViewer) {
         forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
     }
@@ -283,17 +294,20 @@ export function updateNodelinkSelection(nodeId) {
 
 export function updateNodeslinksSelection(nodeIds) {
     let netpanNodes = completeNetwork.nodes.filter(n => nodeIds.includes(n.id));
-    console.log("netpannode", netpanNode)
+    // console.log("netpannode", netpanNode)
     if (forceViewer) {
         forceViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
     }
     if (tripartiteViewer) {
         tripartiteViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
     }
+
+
 }
 
 
 function setEvents() {
+    // console.log(yearMin, yearMax)
     let slider = document.getElementById('time-slider');
     noUiSlider.create(slider, {
         start: [yearMin, yearMax],
@@ -357,6 +371,51 @@ function setEvents() {
             updateStory();
             // renderTemplates()
         })
+}
+
+function setupZoom() {
+    let svg = d3.select("#force")
+        .select("svg")
+
+    let g = svg
+        .select("g")
+        .select("g")
+
+    svg
+        .call(d3.zoom()
+        // .extent([[0, 0], [width, height]])
+        // .scaleExtent([1, 8])
+        .on("zoom", zoomed))
+        // .on("wheel.zoom", (e) => {
+        //     console.log(222, e)
+        //     // e.preventDefault();
+        // });
+
+
+    function zoomed({transform}) {
+        g.attr("transform", transform);
+    }
+}
+
+function setupSearch() {
+    d3.select("#entity-select")
+        .on("change", (e,d) => {
+            let entityName = e.target.value;
+            updateNodelinkSelection(entityName)
+        })
+        .selectAll("option")
+        .data(entitiesData)
+        .join("option")
+        .text(d => {
+            return d.Name
+        })
+        .attr("value", d => d.Name)
+}
+
+function setSearchValue(entityId) {
+    d3.select("#entity-select")
+        .select(`option[value="${entityId}"]`)
+        .attr("selected", true)
 }
 
 

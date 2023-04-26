@@ -17,7 +17,8 @@ const EVENT_COLOR = KENYA_GREEN
 const SELECTION_COLOR = UGANDA_YELLOW
 
 // const FOLDER = "march-19";
-const FOLDER = "april-02";
+// const FOLDER = "april-02";
+const FOLDER = "april-26";
 
 const nodeTypes = {
     person: "person",

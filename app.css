@@ -30,6 +30,7 @@ body {
 
     /*WHITE MODE */
     background-color: white;
+    /*background-color: #efebeb;*/
     color: black;
 
     /*background-image: url('./paper-623167.jpg');*/
@@ -77,15 +78,18 @@ body {
 
 .block {
     /* In percent, the padding depend of the size of the current div*/
-    /*padding: 1.5%;*/
     padding: 1em;
-    border: 1px solid black;
+    border: 3px solid lightgray;
+    border-radius: 10px;
 
     /* WHITE MODE */
-    background-color: rgba(255, 238, 198, 0.6);
+    /*background-color: rgba(255, 238, 198, 0.6);*/
+    /*background-color: rgb(250, 235, 200);*/
+    background-color: rgba(255, 234, 194, 0.5);
 
     /* BLACK MODE */
     /*background-color: rgba(75, 70, 58, 0.6);*/
+    /*background-color: rgba(75, 70, 58, 1);*/
 }
 
 #key-measures {
@@ -157,6 +161,10 @@ h2 {
     flex-direction: column;
     /*justify-content: space-around;*/
     /*text-justify: inter-word;*/
+    flex-grow: 0;
+    flex-shrink: 0;
+    /*width: 80%;*/
+    flex-basis: 100%;
 }
 
 #img {
@@ -188,7 +196,7 @@ h2 {
 .netpan-vis {
     /*display: flex;*/
     min-height: 730px;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     /*background-color: rgba(194, 191, 191, 0.2);*/
 }
 
@@ -237,7 +245,7 @@ input[type="radio"] {
     display: none;
 }
 
-label {
+label.button {
     display: inline-block;
     padding: 10px;
     margin: 5px;
@@ -313,6 +321,14 @@ input[type="radio"]:checked + label {
 .right-arrow {
     border-left: 10px solid black;
     transform: rotate(-135deg);
+}
+
+#selection {
+    display: inline-block;
+}
+
+#entity-select {
+    width: 70%;
 }
 
 

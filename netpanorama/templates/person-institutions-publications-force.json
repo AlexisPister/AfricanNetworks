@@ -219,7 +219,8 @@
         {
           "type": "metric",
           "metric": "degree"
-        }
+        },
+        {"type": "filterEdges", "expression": "datum.target._type != 'event' || datum.source.degree > 1"}
       ]
     }
   ],

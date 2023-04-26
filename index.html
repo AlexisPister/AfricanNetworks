@@ -44,9 +44,9 @@
         <div id="modes" class="block">
             <div class="radio-button">
                 <input type="radio" id="exploration" name="mode" value="exploration" checked>
-                <label for="exploration">Exploration</label>
+                <label class="button" for="exploration">Exploration</label>
                 <input type="radio" id="stories" name="mode" value="stories">
-                <label for="stories">Stories</label>
+                <label class="button" for="stories">Stories</label>
             </div>
         </div>
         <div id="key-measures" class="block">
@@ -63,7 +63,6 @@
     <div id="main-vis">
         <div id="infos" class="block">
 <!--            <svg id="legend" height="80"></svg>-->
-
             <div id="scenario-div" style="display: none">
             <h2 class="subtitle">EAISCA</h2>
                 <!--            <div id="scenario-div" style="">-->
@@ -78,11 +77,19 @@
 
             <div id="exploration-div">
                 <div id="select-info">
+                    <div id="selection">
+                    <label for="entity-select">Selection:</label>
+                    <select name="entities" id="entity-select">
+                        <option value="">--Please choose an option--</option>
+                    </select>
+                    </div>
+
                     <h2 class="subtitle">
-                        <span id="name"> Select a Node </span>
+                        <span id="name"></span>
                     </h2>
+
                     <div id="infoAndImage">
-                        <img id="img" src="data/photos/Busarad.jpg">
+                        <img id="img">
 <!--                        <div id="infobio">-->
                             <span id="dob">xxxx</span> - <span id="dod">xxxx</span><br>
                             <span id="activity">xxxx</span>
@@ -114,9 +121,9 @@
                 <h2 class="subtitle">Node-Link</h2>
                 <div class="radio-button">
                     <input type="radio" id="force-radio" name="options" value="option1" checked>
-                    <label for="force-radio">Force</label>
+                    <label class="button" for="force-radio">Force</label>
                     <input type="radio" id="tripartite-radio" name="options" value="option2">
-                    <label for="tripartite-radio">Tripartite</label>
+                    <label class="button" for="tripartite-radio">Tripartite</label>
                 </div>
                 <div id="time-slider"></div>
             </div>
