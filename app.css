@@ -355,6 +355,16 @@ input[type="radio"]:checked + label {
     font-weight: bold;
 }
 
+#footer {
+    flex-grow: 10;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#row-footer {
+    margin-bottom: 0;
+}
+
 
 /*@media (prefers-color-scheme: light) {*/
 /*    :root {*/

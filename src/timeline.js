@@ -248,7 +248,7 @@ function render() {
                 .attr("x", d => x(getBeginYear(d)) + 5)
                 .attr("y", (d, i) => y(i) + y.bandwidth() / 1.1)
                 .text(d => d.Name)
-                .attr("font-size", "12pt")
+                .attr("font-size", "11pt")
 
             return g
         })
