@@ -103,6 +103,7 @@ async function renderTemplates() {
             publicationColor: `\"${PUBLICATION_COLOR}\"`,
             eventColor: `\"${EVENT_COLOR}\"`
         }, "force", {paramCallbacks: {nodeSelection: selectNodeCb}});
+        forceViewer = tripartiteViewer;
     } else {
         forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {
                 width: width - 100,
@@ -137,8 +138,7 @@ async function selectNodeCb(e) {
         let node = e.nodes[0];
         let type = node._type
         let nodeData = getPersonInfo(node.id);
-
-        console.log("click ", node, type, nodeData)
+        // console.log("click ", node, type, nodeData)
 
         updateSelection(node.id)
         updateTimelineSelection(node.id)
@@ -207,7 +207,7 @@ async function displayNodeSelection(node, nodeData, type) {
         let subject = nodeData ? nodeData["Subject"] : ""
         d3.select("#activity")
             .html(`<span class="field">Subject</span>: ${subject}`)
-        
+
         let typeToPerson = getTypeToEntity(links, PUB_LINK_TYPE)
         setOneNeighborPanel(1, neighbors, nodeTypes.person, typeToPerson, "People:")
         setOneNeighborPanel(2, null);
@@ -263,19 +263,19 @@ async function displayNodeSelection(node, nodeData, type) {
 
 function getTypeToEntity(links, typeKey) {
     let typeToEntities = {};
-        links.forEach(l => {
-            let linkData = l.data;
-            let type = linkData[typeKey]
-            if (typeToEntities[type]) {
-                typeToEntities[type].push(l);
-            } else {
-                typeToEntities[type] = [l];
-            }
-        })
+    links.forEach(l => {
+        let linkData = l.data;
+        let type = linkData[typeKey]
+        if (typeToEntities[type]) {
+            typeToEntities[type].push(l);
+        } else {
+            typeToEntities[type] = [l];
+        }
+    })
     return typeToEntities
 }
 
-function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToEntity, title) {
+function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToLinks, title) {
     let titleSel = d3.select(`#connected-to-${number}-title`)
     let listSel = d3.select(`#connected-to-${number}-list`)
 
@@ -290,20 +290,64 @@ function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToEntity, t
         .html(title)
 
 
-    if (typeToEntity) {
-        for (let type of Object.keys(typeToEntity)) {
-            listSel.append("h4")
-                .text(type)
+    if (typeToLinks) {
+        for (let type of Object.keys(typeToLinks)) {
 
-            let entities = typeToEntity[type];
-            entities.forEach(entity => {
-                listSel.append("div")
-                    .text(`${entity.source.id} - ${entity.data.Year}`)
+            let title;
+            if (type == "") {
+                title = "Unknown"
+            } else if (!type.endsWith("s")) {
+                title = type + "s"
+            } else {
+                title = type
+            }
+
+            listSel.append("h4")
+                .text(title)
+
+            let links = typeToLinks[type];
+            let nodeToLinks = {};
+            for (let link of links) {
+                let nodeId = link.source.id;
+                if (nodeToLinks[nodeId]) {
+                    nodeToLinks[nodeId].push(link)
+                } else {
+                    nodeToLinks[nodeId] = [link]
+                }
+            }
+
+            // console.log(nodeToLinks)
+            for (let node of Object.keys(nodeToLinks)) {
+                let links = nodeToLinks[node];
+                if (links.length > 1) {
+                    let link = links[0]
+                    listSel.append("div")
+                    .text(`${link.source.id}`)
                     .classed("neighbor-element", true)
                     .on("click", () => {
-                        updateNodelinkSelection(entity.source.id)
+                        updateNodelinkSelection(link.source.id)
                     })
-            })
+                } else {
+                    let link = links[0]
+                    listSel.append("div")
+                    // .text(`${link.source.id} - ${link.data.Year}`)
+                    .text(`${link.source.id}`)
+                    .classed("neighbor-element", true)
+                    .on("click", () => {
+                        updateNodelinkSelection(link.source.id)
+                    })
+                }
+            }
+
+            // links.forEach(entity => {
+            //     let time = entity.data;
+            //     listSel.append("div")
+            //         .text(`${entity.source.id} - ${entity.data.Year}`)
+            //         .classed("neighbor-element", true)
+            //         .on("click", () => {
+            //             updateNodelinkSelection(entity.source.id)
+            //         })
+            // })
         }
     } else {
         let entities = neighbor.filter(n => n._type == selectedNodeType)
@@ -314,27 +358,36 @@ function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToEntity, t
 }
 
 function renderOneNeighborEntity(div, entity, nodeType) {
-    if (nodeType == nodeTypes.person) {
-        div
+
+     div
             .append("div")
             .classed("neighbor-element", true)
             .html(entity.id)
-    } else if (nodeType == nodeTypes.institution) {
-        div
-            .append("div")
-            .classed("neighbor-element", true)
-            .html(entity.id)
-    } else if (nodeType == nodeTypes.publication) {
-        div
-            .append("div")
-            .classed("neighbor-element", true)
-            .html(entity.id)
-    } else if (nodeType == nodeTypes.event) {
-        div
-            .append("div")
-            .classed("neighbor-element", true)
-            .html(entity.id)
-    }
+            .on("click", () => {
+                updateNodelinkSelection(entity.id)
+            })
+
+    // if (nodeType == nodeTypes.person) {
+    //     div
+    //         .append("div")
+    //         .classed("neighbor-element", true)
+    //         .html(entity.id)
+    // } else if (nodeType == nodeTypes.institution) {
+    //     div
+    //         .append("div")
+    //         .classed("neighbor-element", true)
+    //         .html(entity.id)
+    // } else if (nodeType == nodeTypes.publication) {
+    //     div
+    //         .append("div")
+    //         .classed("neighbor-element", true)
+    //         .html(entity.id)
+    // } else if (nodeType == nodeTypes.event) {
+    //     div
+    //         .append("div")
+    //         .classed("neighbor-element", true)
+    //         .html(entity.id)
+    // }
 }
 
 function renderGeneralInfo(peopleData, institutionData, pubData) {
@@ -467,7 +520,7 @@ function setupZoom() {
     // });
 
     // let tooltip = svg.select("div[style='absolute']")
-        // .attr("transform", "translate")
+    // .attr("transform", "translate")
     // console.log("tt ", tooltip)
 
 

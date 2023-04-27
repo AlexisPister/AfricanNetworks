@@ -73,19 +73,28 @@ function findStoryEntities(text) {
     let textHTML = text;
     let foundEntities = [];
     entitiesData.forEach(entity => {
-        let name = entity.Name
+        let name = entity.Name;
+
+        let alias = entity.Alias;
+
         let index = textHTML.indexOf(name);
         if (index != -1) {
-            // console.log(name, index)
             foundEntities.push(entity)
-
             let split = textHTML.split(name)
-            // console.log(split)
-
             let type = getEntityType(entity);
             let span = `<span class=span-${type}>${name}</span>`
             split.insert(1, span)
             textHTML = split.join("")
+        } else if (alias) {
+            let index = textHTML.indexOf(alias);
+            if (index != -1) {
+                foundEntities.push(entity)
+                let split = textHTML.split(alias)
+                let type = getEntityType(entity);
+                let span = `<span class=span-${type}>${alias}</span>`
+                split.insert(1, span)
+                textHTML = split.join("")
+            }
         }
     })
     return [textHTML, foundEntities];

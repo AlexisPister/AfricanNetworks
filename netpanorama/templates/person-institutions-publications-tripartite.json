@@ -352,10 +352,13 @@
             },
             {
               "test": "datum.data.Year > params.selectedYears[0] && datum.data.Year < params.selectedYears[1]",
-              "value": "rgb(20, 20, 20, 0.3)"
+              "value": "lightgray"
             }
           ],
-          "value": "lightgray"
+          "value": "gray"
+        },
+        "strokeDash": {
+          "expression": "datum.data.Year ? 0 : 2"
         }
       }
     },
@@ -435,12 +438,12 @@
         "align": "",
         "fill": {
           "conditions": [{
-            "test": "datum.degree > 2",
-            "value": "black"
+            "test": "datum.degree > 1",
+            "value": "white"
           },
           {
             "inSelection": "outnodes.nodes",
-            "value": "black"
+            "value": "white"
           }],
           "value": "none"
         },
