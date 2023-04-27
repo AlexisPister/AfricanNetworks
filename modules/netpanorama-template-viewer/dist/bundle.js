@@ -58980,7 +58980,10 @@ var NetPanoramaTemplateViewer;
                 return {links: [], nodes: o}
             }, kn = (t, e, n, r) => {
                 let i = [];
-                for (const t of e.nodes) i = "source" === r.direction ? [...i, n.inLinks.get(t.id)] : "target" === r.direction ? [...i, n.outLinks.get(t.id)] : [...i, ...n.inLinks.get(t.id), ...n.outLinks.get(t.id), ...n.undirectedLinks.get(t.id)];
+                for (const t of e.nodes) i = "source" === r.direction ? [...i, n.inLinks.get(t.id)] : "target" === r.direction ? [...i, n.outLinks.get(t.id)] : [...i,
+                    ...n.inLinks.get(t.id) ? n.inLinks.get(t.id) : [],
+                    ...n.outLinks.get(t.id) ? n.outLinks.get(t.id) : [],
+                    ...n.undirectedLinks.get(t.id) ? n.undirectedLinks.get(t.id) : []];
                 return i = Array.from(new Set(i)), {links: i, nodes: []}
             }, En = (t, e, n, r) => {
                 let i;
@@ -59003,9 +59006,9 @@ var NetPanoramaTemplateViewer;
                 for (let t = 0; t < i; t++) {
                     const t = new Set;
                     for (const e of o) {
-                        if ("in" === r.direction || "both" === r.direction) for (const r of n.inLinks.get(e.id)) t.add(r.source), a.add(r.source), s.add(r);
-                        if ("out" === r.direction || "both" === r.direction) for (const r of n.outLinks.get(e.id)) t.add(r.target), a.add(r.target), s.add(r);
-                        for (const r of n.undirectedLinks.get(e.id)) {
+                        if ("in" === r.direction || "both" === r.direction) for (const r of n.inLinks.get(e.id) ? n.inLinks.get(e.id) : []) t.add(r.source), a.add(r.source), s.add(r);
+                        if ("out" === r.direction || "both" === r.direction) for (const r of n.outLinks.get(e.id) ? n.outLinks.get(e.id) : []) t.add(r.target), a.add(r.target), s.add(r);
+                        for (const r of n.undirectedLinks.get(e.id) ? n.undirectedLinks.get(e.id) : []) {
                             const n = r.source.id === e.id ? r.target : r.source;
                             t.add(n), a.add(n), s.add(r)
                         }
@@ -59949,7 +59952,7 @@ var NetPanoramaTemplateViewer;
                             links: []
                         }), i.set(n.selection, r), o.set(n.selection, n)
                     }
-                    a && (n(i, o), console.log("CURSOR INTERACTION TRIGGERED:", {ev: t, target: e}))
+                    a && (n(i, o))
                 };
             var rr = "http://www.w3.org/1999/xhtml";
             const ir = {

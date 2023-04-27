@@ -15,8 +15,10 @@
 
 a {
     font-weight: 500;
-    color: #646cff;
-    text-decoration: inherit;
+    /*color: #646cff;*/
+    color: white;
+    /*text-decoration: inherit;*/
+    text-decoration: underline;
 }
 
 a:hover {
@@ -26,15 +28,17 @@ a:hover {
 body {
     /*BLACK MODE */
     /*background-color: #112322;*/
-    /*color: white;*/
+    color: white;
 
     /*WHITE MODE */
-    background-color: white;
+    /*background-color: white;*/
     /*background-color: #efebeb;*/
-    color: black;
+    /*color: black;*/
 
     /*background-image: url('./paper-623167.jpg');*/
     /*background-image: url('./darken-background.jpg');*/
+    background-image: url('./darken.jpg');
+    /*background-image: url('./journalBackground.png');*/
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -79,17 +83,17 @@ body {
 .block {
     /* In percent, the padding depend of the size of the current div*/
     padding: 1em;
-    border: 3px solid lightgray;
-    border-radius: 10px;
+    /*border: 3px solid lightgray;*/
+    /*border-radius: 10px;*/
 
     /* WHITE MODE */
     /*background-color: rgba(255, 238, 198, 0.6);*/
     /*background-color: rgb(250, 235, 200);*/
-    background-color: rgba(255, 234, 194, 0.5);
+    /*background-color: rgba(255, 234, 194, 0.5);*/
 
     /* BLACK MODE */
-    /*background-color: rgba(75, 70, 58, 0.6);*/
-    /*background-color: rgba(75, 70, 58, 1);*/
+    /*background-color: rgba(75, 70, 58, 0.9);*/
+    background-color: rgba(59, 18, 14, 0.9);
 }
 
 #key-measures {
@@ -105,7 +109,7 @@ body {
 }
 
 #main-title {
-    width: 25%;
+    width: 30%;
     flex-shrink: 0;
 }
 
@@ -132,14 +136,14 @@ body {
 /*}*/
 
 #title {
-    font-size: 3.3em;
+    font-size: 3em;
     line-height: 1.4em;
 }
 
-h1 {
-    font-size: 3.5em;
-    line-height: 1.1;
-    margin-top: 0;
+#subtitle {
+    font-size: 2.1em;
+    /*line-height: 1.4em;*/
+    color: lightgrey;
 }
 
 h2 {
@@ -222,6 +226,10 @@ h2 {
 /*#connected-to-1 {*/
 /*    width: 50%;*/
 /*}*/
+/*...n.inLinks.get(t.id) ? n.inLinks.get(t.id) : [],*/
+/*                    ...n.outLinks.get(t.id) ? n.outLinks.get(t.id) : [],*/
+/*                    ...n.undirectedLinks.get(t.id) ? n.undirectedLinks.get(t.id) : []*/
+
 
 .neighbor-element {
     display: inline-block;
@@ -231,6 +239,10 @@ h2 {
     margin-bottom: 4px;
     margin-top: 4px;
     padding: 0 1%;
+}
+
+.neighbor-element:hover {
+    cursor: pointer;
 }
 
 
@@ -359,6 +371,13 @@ input[type="radio"]:checked + label {
     flex-grow: 10;
     padding-top: 2px;
     padding-bottom: 2px;
+    display: flex;
+    flex-direction: row;
+    /*justify-content: space-around;*/
+}
+
+#footer>a {
+    margin-right: 2%;
 }
 
 #row-footer {

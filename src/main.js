@@ -67,8 +67,6 @@ export async function fetchData() {
         .catch(err => console.log(err))
 
     entities = entities.filter(d => d.Name != "" && d.Name != " " && d.Name)
-    console.log(entities.map(n => n.Name))
-
     entities.sort(function (a, b) {
         if (a.Name < b.Name) {
             return -1;
@@ -78,7 +76,6 @@ export async function fetchData() {
         }
         return 0;
     });
-
     return [entities, persons, institutions, publications, events, personInst, personPubs];
 }
 
@@ -91,7 +88,6 @@ function getTimeInterval(personInst, personPub) {
 
 
 async function renderTemplates() {
-
     d3.select("#force")
         .html("")
 
@@ -135,11 +131,14 @@ async function renderTemplates() {
     setupZoom();
 }
 
+// TODO: fix when clicking on timeline
 async function selectNodeCb(e) {
     if (e.nodes.length > 0) {
         let node = e.nodes[0];
         let type = node._type
         let nodeData = getPersonInfo(node.id);
+
+        console.log("click ", node, type, nodeData)
 
         updateSelection(node.id)
         updateTimelineSelection(node.id)
@@ -160,6 +159,8 @@ async function displayNodeSelection(node, nodeData, type) {
     // Wait so that the selection is the current one and not the previous one
     await new Promise(resolve => setTimeout(resolve, 1));
     let neighbors = forceViewer.state.outnodes.nodes;
+    let links = forceViewer.state.outnodes.links;
+    // console.log(neighbors, links)
     // let neighborsWithData = neighbors.map(neighbor => {
     //     let data = getPersonInfo(neighbor.id)
     //     if (data) {
@@ -172,6 +173,8 @@ async function displayNodeSelection(node, nodeData, type) {
 
     d3.select("#date-tilt")
         .html("-")
+    d3.select("#activity")
+        .html("")
 
     if (type == "person") {
         dob = nodeData ? nodeData["Date of birth"] : "";
@@ -182,18 +185,18 @@ async function displayNodeSelection(node, nodeData, type) {
         d3.select("#activity")
             .html(`<span class="field">Activity</span>: ${activity}`)
 
-        setOneNeighborPanel(1, neighbors, nodeTypes.institution, "Worked with:")
-        setOneNeighborPanel(2, neighbors, nodeTypes.publication, "Published at:")
-        setOneNeighborPanel(3, neighbors, nodeTypes.event, "Participated in:")
+        setOneNeighborPanel(1, neighbors, nodeTypes.institution, null, "Worked with:")
+        setOneNeighborPanel(2, neighbors, nodeTypes.publication, null, "Published at:")
+        setOneNeighborPanel(3, neighbors, nodeTypes.event, null, "Participated in:")
     } else if (type == "institution") {
         generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
         dob = nodeData ? nodeData["Date of Creation"] : ""
         dod = nodeData ? nodeData["Date of closing"] : ""
 
-        d3.select("#activity")
-            .html("")
+        // TODO; split when several values
+        let typeToPerson = getTypeToEntity(links, INST_LINK_TYPE)
 
-        setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
+        setOneNeighborPanel(1, neighbors, nodeTypes.person, typeToPerson, "People:")
         setOneNeighborPanel(2, null)
         setOneNeighborPanel(3, null)
     } else if (type == "publication") {
@@ -204,21 +207,21 @@ async function displayNodeSelection(node, nodeData, type) {
         let subject = nodeData ? nodeData["Subject"] : ""
         d3.select("#activity")
             .html(`<span class="field">Subject</span>: ${subject}`)
-
-        setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
-        setOneNeighborPanel(2, null)
-        setOneNeighborPanel(3, null)
+        
+        let typeToPerson = getTypeToEntity(links, PUB_LINK_TYPE)
+        setOneNeighborPanel(1, neighbors, nodeTypes.person, typeToPerson, "People:")
+        setOneNeighborPanel(2, null);
+        setOneNeighborPanel(3, null);
     } else if (type == "event") {
         generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
         dob = ""
         dod = ""
 
-        setOneNeighborPanel(1, neighbors, nodeTypes.person, "People:")
+        // TODO: put a higher order class
+        let typeToPerson = getTypeToEntity(links, EVENT_LINK_TYPE)
+        setOneNeighborPanel(1, neighbors, nodeTypes.person, typeToPerson, "People:")
         setOneNeighborPanel(2, null)
         setOneNeighborPanel(3, null)
-
-        d3.select("#activity")
-            .html("")
     }
 
     if (dob) dob = parseYear(dob);
@@ -244,9 +247,8 @@ async function displayNodeSelection(node, nodeData, type) {
         .html(generalInfo)
     d3.select("#dob")
         .html(dob)
-    d3.select("#dof")
+    d3.select("#dod")
         .html(dod)
-
 
     d3.select("#img")
         .attr("src", () => {
@@ -259,7 +261,21 @@ async function displayNodeSelection(node, nodeData, type) {
         })
 }
 
-function setOneNeighborPanel(number, neighbor, selectedNodeType, title) {
+function getTypeToEntity(links, typeKey) {
+    let typeToEntities = {};
+        links.forEach(l => {
+            let linkData = l.data;
+            let type = linkData[typeKey]
+            if (typeToEntities[type]) {
+                typeToEntities[type].push(l);
+            } else {
+                typeToEntities[type] = [l];
+            }
+        })
+    return typeToEntities
+}
+
+function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToEntity, title) {
     let titleSel = d3.select(`#connected-to-${number}-title`)
     let listSel = d3.select(`#connected-to-${number}-list`)
 
@@ -273,10 +289,28 @@ function setOneNeighborPanel(number, neighbor, selectedNodeType, title) {
     titleSel
         .html(title)
 
-    let entities = neighbor.filter(n => n._type == selectedNodeType)
-    entities.forEach(e => {
-        renderOneNeighborEntity(listSel, e, selectedNodeType);
-    })
+
+    if (typeToEntity) {
+        for (let type of Object.keys(typeToEntity)) {
+            listSel.append("h4")
+                .text(type)
+
+            let entities = typeToEntity[type];
+            entities.forEach(entity => {
+                listSel.append("div")
+                    .text(`${entity.source.id} - ${entity.data.Year}`)
+                    .classed("neighbor-element", true)
+                    .on("click", () => {
+                        updateNodelinkSelection(entity.source.id)
+                    })
+            })
+        }
+    } else {
+        let entities = neighbor.filter(n => n._type == selectedNodeType)
+        entities.forEach(e => {
+            renderOneNeighborEntity(listSel, e, selectedNodeType);
+        })
+    }
 }
 
 function renderOneNeighborEntity(div, entity, nodeType) {
@@ -344,8 +378,6 @@ export function updateNodeslinksSelection(nodeIds) {
     if (tripartiteViewer) {
         tripartiteViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
     }
-
-
 }
 
 
@@ -433,6 +465,10 @@ function setupZoom() {
     //     console.log(222, e)
     //     // e.preventDefault();
     // });
+
+    // let tooltip = svg.select("div[style='absolute']")
+        // .attr("transform", "translate")
+    // console.log("tt ", tooltip)
 
 
     function zoomed({transform}) {

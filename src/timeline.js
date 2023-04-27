@@ -65,7 +65,6 @@ async function importData() {
     })
 
     institutions = await d3.csv(`./data/${FOLDER}/Institutions.csv`, d => {
-        console.log(2, d["Date of Creation"], parseYear(d["Date of Creation"]))
         d["Date of closing"] = parseYear(d["Date of closing"])
         d["Date of Creation"] = parseYear(d["Date of Creation"])
         return d
@@ -76,7 +75,6 @@ async function importData() {
 
 importData().then(() => {
     entities = persons.concat(institutions).concat(publications);
-
     // persons = persons.filter(d => d["Date of birth"] && d["Date of death"])
     // persons.sort((a, b) => a["Date of birth"] - b["Date of birth"])
 
@@ -249,6 +247,7 @@ function render() {
                 .attr("y", (d, i) => y(i) + y.bandwidth() / 1.1)
                 .text(d => d.Name)
                 .attr("font-size", "11pt")
+                .attr("fill", "white")
 
             return g
         })

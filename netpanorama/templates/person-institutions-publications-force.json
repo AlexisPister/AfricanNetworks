@@ -217,9 +217,13 @@
           "type": "metric",
           "metric": "degree"
         },
-        {"type": "filterEdges", "expression": "datum.target._type != 'event' || datum.source.degree > 1"},
+        {"type2": "filterEdges", "expression": "datum.target._type != 'event' || datum.source.degree > 1"},
         {
-          "type": "removeIsolated"
+          "type2": "removeIsolated"
+        },
+        {
+          "type": "metric",
+          "metric": "degree"
         }
       ]
     }
@@ -358,10 +362,13 @@
             },
             {
               "test": "datum.data.Year > params.selectedYears[0] && datum.data.Year < params.selectedYears[1]",
-              "value": "black"
+              "value": "lightgray"
             }
           ],
-          "value": "lightgray"
+          "value": "gray"
+        },
+        "strokeDash": {
+          "expression": "datum.data.Year ? 0 : 2"
         }
       }
     },
@@ -378,11 +385,11 @@
           "conditions": [
             {
               "test": "datum.degree > 4",
-              "value": "black"
+              "value": "white"
             },
             {
               "inSelection": "outnodes.nodes",
-              "value": "black"
+              "value": "white"
             }
           ],
           "value": "none"

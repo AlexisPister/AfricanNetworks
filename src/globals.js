@@ -18,7 +18,9 @@ const SELECTION_COLOR = UGANDA_YELLOW
 
 // const FOLDER = "march-19";
 // const FOLDER = "april-02";
-const FOLDER = "april-26";
+// const FOLDER = "april-26";
+const FOLDER = "april-27";
+
 
 const nodeTypes = {
     person: "person",
@@ -29,10 +31,12 @@ const nodeTypes = {
 
 const colorScale = d3.scaleOrdinal().domain(Object.values(nodeTypes)).range([PERSON_COLOR, INSTITUTION_COLOR, PUBLICATION_COLOR, EVENT_COLOR])
 
+//  TODO: change capital of Tanzania
 const COUNTRY_TO_CITY = {
     Kenya: "Nairobi",
     Uganda: "Kampala",
-    Tanzania: "Dodoma"
+    // Tanzania: "Dodoma"
+    Tanzania: "Dar es Salaam"
 }
 
 const PLACES_TO_KEEP = ["Kenya", "Nairobi", "Uganda", "Kampala", "Tanzania", "Dodoma"]
@@ -41,3 +45,8 @@ const RADIUS = 8;
 const RADIUS_MAP = 4;
 // Not needed if global import script tag
 // export {PERSON_COLOR, INSTITUTION_COLOR, PUBLICATION_COLOR, EVENT_COLOR, SELECTION_COLOR}
+
+
+const INST_LINK_TYPE = "Type of relationship (general)";
+const PUB_LINK_TYPE = "Type of relationship (writer, reader, etc)";
+const EVENT_LINK_TYPE = "Type of relationship (participated, created, against)"
