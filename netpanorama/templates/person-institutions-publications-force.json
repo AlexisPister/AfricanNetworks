@@ -138,8 +138,8 @@
           ]
         },
         {
-          "data": "Events",
-          "yieldsNodes": [
+          "data2": "Events",
+          "yieldsNodes2": [
             {
               "id_field": "Name",
               "type": "event",
@@ -186,8 +186,8 @@
           ]
         },
         {
-          "data": "PE",
-          "yieldsLinks": [
+          "data2": "PE",
+          "yieldsLinks2": [
             {
               "source_id": {
                 "field": "Person"
