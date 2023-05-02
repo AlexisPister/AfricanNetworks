@@ -219,7 +219,7 @@
         },
         {"type2": "filterEdges", "expression": "datum.target._type != 'event' || datum.source.degree > 1"},
         {
-          "type2": "removeIsolated"
+          "type": "removeIsolated"
         },
         {
           "type": "metric",

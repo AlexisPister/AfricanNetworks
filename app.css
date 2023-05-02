@@ -199,7 +199,8 @@ h2 {
 
 .netpan-vis {
     /*display: flex;*/
-    min-height: 730px;
+    /*min-height: 730px;*/
+    min-height: 60vh;
     /*border: 1px solid black;*/
     /*background-color: rgba(194, 191, 191, 0.2);*/
 }
