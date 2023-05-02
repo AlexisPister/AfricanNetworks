@@ -397,8 +397,9 @@ function renderGeneralInfo(peopleData, institutionData, pubData) {
         .html(institutionData.length)
     d3.select("#n-publications")
         .html(pubData.length)
-    d3.select("#n-events")
-        .html(eventsData.length)
+
+    // d3.select("#n-events")
+    //     .html(eventsData.length)
 }
 
 function update() {
