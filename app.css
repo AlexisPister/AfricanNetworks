@@ -39,9 +39,11 @@ body {
     /*background-image: url('./darken-background.jpg');*/
     background-image: url('./darken.jpg');
     /*background-image: url('./journalBackground.png');*/
-    background-repeat: no-repeat;
+    /*background-repeat: no-repeat;*/
+    /*background-repeat: repeat-y;*/
     background-size: cover;
-    background-position: center;
+    /*background-position: center;*/
+    /*background-position: ;*/
 
 
     /*margin: 6px 3%;*/
@@ -220,18 +222,6 @@ h2 {
     /*justify-content: space-evenly;*/
 }
 
-/*#connected-to-1 {*/
-/*    width: 50%;*/
-/*}*/
-
-/*#connected-to-1 {*/
-/*    width: 50%;*/
-/*}*/
-/*...n.inLinks.get(t.id) ? n.inLinks.get(t.id) : [],*/
-/*                    ...n.outLinks.get(t.id) ? n.outLinks.get(t.id) : [],*/
-/*                    ...n.undirectedLinks.get(t.id) ? n.undirectedLinks.get(t.id) : []*/
-
-
 .neighbor-element {
     display: inline-block;
     background-color: rgba(182, 182, 182, 0.4);
@@ -262,6 +252,27 @@ label.button {
     display: inline-block;
     padding: 10px;
     margin: 5px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+.storyButton {
+    /*display: table;*/
+    display: inline-block;
+    padding: 8px;
+    margin: 5px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+#other-story {
+    display: table;
+    padding: 1px 8px;
+    /*margin: 5px;*/
+    margin-left: -2%;
+    margin-top: -2%;
     cursor: pointer;
     border: 2px solid #ccc;
     border-radius: 5px;

@@ -143,8 +143,13 @@ async function selectNodeCb(e) {
         updateSelection(node.id)
         updateTimelineSelection(node.id)
         displayNodeSelection(node, nodeData, type)
-        setSearchValue(node.id)
+        setSearchValue(node.id);
     }
+
+    // Small hack: Wait for visualization to end rendering
+    setTimeout(
+        setupZoom, 500
+    )
 }
 
 function getPersonInfo(personName) {
@@ -236,10 +241,9 @@ async function displayNodeSelection(node, nodeData, type) {
     }
 
     let name = nodeData ? nodeData["Name"] : node.id;
-    let origin = nodeData ? nodeData["General Info/biography"] : ""
-
-    let imgPath = `data/photos/${name}.jpg`
-    let imgExist = linkCheck(imgPath)
+    let origin = nodeData ? nodeData["General Info/biography"] : "";
+    let imgPath = `data/photos/${name}.jpg`;
+    let imgExist = linkCheck(imgPath);
 
     d3.select("#name")
         .html(name)
@@ -322,20 +326,20 @@ function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToLinks, ti
                 if (links.length > 1) {
                     let link = links[0]
                     listSel.append("div")
-                    .text(`${link.source.id}`)
-                    .classed("neighbor-element", true)
-                    .on("click", () => {
-                        updateNodelinkSelection(link.source.id)
-                    })
+                        .text(`${link.source.id}`)
+                        .classed("neighbor-element", true)
+                        .on("click", () => {
+                            updateNodelinkSelection(link.source.id)
+                        })
                 } else {
                     let link = links[0]
                     listSel.append("div")
-                    // .text(`${link.source.id} - ${link.data.Year}`)
-                    .text(`${link.source.id}`)
-                    .classed("neighbor-element", true)
-                    .on("click", () => {
-                        updateNodelinkSelection(link.source.id)
-                    })
+                        // .text(`${link.source.id} - ${link.data.Year}`)
+                        .text(`${link.source.id}`)
+                        .classed("neighbor-element", true)
+                        .on("click", () => {
+                            updateNodelinkSelection(link.source.id)
+                        })
                 }
             }
 
@@ -358,14 +362,13 @@ function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToLinks, ti
 }
 
 function renderOneNeighborEntity(div, entity, nodeType) {
-
-     div
-            .append("div")
-            .classed("neighbor-element", true)
-            .html(entity.id)
-            .on("click", () => {
-                updateNodelinkSelection(entity.id)
-            })
+    div
+        .append("div")
+        .classed("neighbor-element", true)
+        .html(entity.id)
+        .on("click", () => {
+            updateNodelinkSelection(entity.id)
+        })
 
     // if (nodeType == nodeTypes.person) {
     //     div
@@ -482,24 +485,38 @@ function setEvents() {
 
     d3.select("#exploration")
         .on("click", (e) => {
-            isStoryMode = false;
-            d3.select("#scenario-div")
-                .style("display", "none")
-            d3.select("#exploration-div")
-                .style("display", "")
+            // isStoryMode = false;
+            goToExploration();
             // renderTemplates()
         })
 
     d3.select("#stories")
         .on("click", (e) => {
             isStoryMode = true;
-            d3.select("#scenario-div")
+            d3.select("#scenario-choice-div")
                 .style("display", "")
+            d3.select("#scenario-div")
+                .style("display", "none")
             d3.select("#exploration-div")
                 .style("display", "none")
-            updateStory();
+
+            // updateStory();
             // renderTemplates()
         })
+}
+
+function goToExploration() {
+    isStoryMode = false;
+
+    d3.select("#scenario-choice-div")
+        .style("display", "none")
+    d3.select("#scenario-div")
+        .style("display", "none")
+    d3.select("#exploration-div")
+        .style("display", "")
+
+    d3.select("#exploration")
+        .property("checked", true)
 }
 
 function setupZoom() {
@@ -524,6 +541,10 @@ function setupZoom() {
     // .attr("transform", "translate")
     // console.log("tt ", tooltip)
 
+    svg
+        .on("click", () => {
+            goToExploration();
+        })
 
     function zoomed({transform}) {
         g.attr("transform", transform);

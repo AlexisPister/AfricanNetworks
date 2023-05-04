@@ -1,10 +1,21 @@
 import {forceViewer, updateNodelinkSelection, updateNodeslinksSelection, fetchData} from "./main.js";
 
+const STORIES = ["EAISCA", "EAISCA", "African Writer Conference", "EALB", "East African Community", "The University of East Africa"]
 let [entitiesData, peopleData, institutionsData, publicationsData, eventsData, personInst, personPub] = await fetchData();
-
 let STORY;
-await loadstory("EAISCA");
+// await loadstory("EAISCA");
 let storyIndex = 0;
+
+renderStoryChoice();
+
+d3.select("#other-story")
+    .on("click", (e) => {
+        d3.select("#scenario-choice-div")
+        .style("display", "")
+        d3.select("#scenario-div")
+        .style("display", "none")
+    })
+    .attr("cursor", "pointer")
 
 
 d3.select("#story-arrow-right")
@@ -18,16 +29,37 @@ d3.select("#story-arrow-left")
         updateStory()
     })
 
+// OLD
 d3.select("#story-selection")
     .on("change", async (e, d) => {
         let storyName = e.target.value;
         await loadstory(storyName)
-        storyIndex = 0
+        storyIndex = 0;
         updateStory();
     })
 
+function renderStoryChoice() {
+    d3.select("#story-buttons")
+    .selectAll(".storyButton")
+    .data(STORIES)
+    .join("div")
+    .text(d => d)
+    .on("click", (e, d) => {
+        loadstory(d).then(() => {
+            updateStory()
+        })
+    })
+    .classed("storyButton", true)
+    .attr("cursor", "pointer")
+}
 
 async function loadstory(storyName) {
+    d3.select("#scenario-choice-div")
+        .style("display", "none")
+    d3.select("#scenario-div")
+        .style("display", "")
+
+    storyIndex = 0
     STORY = await d3.csv(`./data/stories/${storyName}.csv`)
     d3.select("#story-title")
         .html(storyName)
@@ -50,14 +82,11 @@ export function updateStory() {
         .html(STORY[storyIndex].Date)
     d3.select("#story-text")
         .html(text)
-    // .html(STORY[storyIndex].Text)
 
     d3.select("#story-page")
         .html(`${storyIndex + 1} / ${STORY.length}`)
 
-
     updateNodeslinksSelection(entities.map(e => e.Name))
-
     // let entities = STORY[storyIndex].Entities.split(";")
     // entities.forEach(entity => {
     //     entity = entity.trim();
