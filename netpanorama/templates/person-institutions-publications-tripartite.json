@@ -1,7 +1,8 @@
 {
   "x2": 200,
   "width": "[width]",
-  "heightz": 400,
+  "width2": 2000,
+  "height2": 2000,
   "data": [
     {
       "name": "people",
@@ -296,7 +297,8 @@
     {
       "name": "radius",
       "type": "linear",
-      "range": [50, 100],
+      "range2": [50, 100],
+      "range": [50, 500],
       "domain": { "data": "PI-net.nodes", "field": "degree" }
     },
     {
@@ -435,7 +437,13 @@
         "text": {
           "field": "id"
         },
-        "align": "",
+        "align": {
+          "condition": {
+            "test": "datum._type == 'publication'",
+            "value": "right"
+          },
+          "value": ""
+      },
         "fill": {
           "conditions": [{
             "test": "datum.degree > 1",
@@ -451,8 +459,8 @@
         "dx": {
           "condition": {
             "test": "datum._type == 'publication'",
-            "value": 15,
-            "value2": -100
+            "value2": 15,
+            "value": -8
           },
           "value": 15
         },

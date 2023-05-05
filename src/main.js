@@ -133,7 +133,6 @@ async function renderTemplates() {
 
 // TODO: fix when clicking on timeline
 async function selectNodeCb(e) {
-    console.log("node ", e.nodes)
     if (e.nodes.length > 0 && e.nodes[0]) {
         let node = e.nodes[0];
         let type = node._type
@@ -293,7 +292,6 @@ function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToLinks, ti
     titleSel
         .html(title)
 
-
     if (typeToLinks) {
         for (let type of Object.keys(typeToLinks)) {
 
@@ -400,41 +398,45 @@ function renderGeneralInfo(peopleData, institutionData, pubData) {
         .html(institutionData.length)
     d3.select("#n-publications")
         .html(pubData.length)
-
     // d3.select("#n-events")
     //     .html(eventsData.length)
 }
 
 function update() {
-    if (forceViewer) {
-        forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
-    }
-    if (tripartiteViewer) {
-        tripartiteViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
-    }
+    forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
+
+    // if (forceViewer) {
+    //     forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
+    // }
+    // if (tripartiteViewer) {
+    //     tripartiteViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
+    // }
 }
 
 // TODO: some nodes of the timeline are not in the node-links (not in any link?)
 export function updateNodelinkSelection(nodeId) {
     // Not sure if really needed
     let netpanNode = completeNetwork.nodes.filter(n => n.id == nodeId)[0];
-    if (forceViewer) {
-        forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
-    }
-    if (tripartiteViewer) {
-        tripartiteViewer.setParam("nodeSelection", {nodes: nodeId, links: []})
-    }
+    forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
+    // if (forceViewer) {
+    //     forceViewer.setParam("nodeSelection", {nodes: [netpanNode], links: []})
+    // }
+    // if (tripartiteViewer) {
+    //     tripartiteViewer.setParam("nodeSelection", {nodes: nodeId, links: []})
+    // }
 }
 
 export function updateNodeslinksSelection(nodeIds) {
     let netpanNodes = completeNetwork.nodes.filter(n => nodeIds.includes(n.id));
     // console.log("netpannode", netpanNode)
-    if (forceViewer) {
         forceViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
-    }
-    if (tripartiteViewer) {
-        tripartiteViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
-    }
+
+    // if (forceViewer) {
+    //     forceViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
+    // }
+    // if (tripartiteViewer) {
+    //     tripartiteViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
+    // }
 }
 
 
@@ -485,9 +487,7 @@ function setEvents() {
 
     d3.select("#exploration")
         .on("click", (e) => {
-            // isStoryMode = false;
             goToExploration();
-            // renderTemplates()
         })
 
     d3.select("#stories")
