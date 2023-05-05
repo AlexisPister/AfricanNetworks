@@ -7,14 +7,13 @@ let yearMaxSel = 3000
 let isTripartite = false;
 let isStoryMode = false;
 
-let completeNetwork;
-export let forceViewer, tripartiteViewer;
+export let forceViewer, tripartiteViewer, completeNetwork;
 
 const [width, height] = computeSvgDims("force")
 const [entitiesData, peopleData, institutionsData, publicationsData, eventsData, personInst, personPub] = await fetchData();
 const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
 renderGeneralInfo(peopleData, institutionsData, publicationsData);
-renderTemplates();
+await renderTemplates();
 setEvents();
 setupSearch();
 
@@ -134,7 +133,8 @@ async function renderTemplates() {
 
 // TODO: fix when clicking on timeline
 async function selectNodeCb(e) {
-    if (e.nodes.length > 0) {
+    console.log("node ", e.nodes)
+    if (e.nodes.length > 0 && e.nodes[0]) {
         let node = e.nodes[0];
         let type = node._type
         let nodeData = getPersonInfo(node.id);
@@ -191,7 +191,7 @@ async function displayNodeSelection(node, nodeData, type) {
             .html(`<span class="field">Activity</span>: ${activity}`)
 
         setOneNeighborPanel(1, neighbors, nodeTypes.institution, null, "Worked with:")
-        setOneNeighborPanel(2, neighbors, nodeTypes.publication, null, "Published at:")
+        setOneNeighborPanel(2, neighbors, nodeTypes.publication, null, "Published with:")
         setOneNeighborPanel(3, neighbors, nodeTypes.event, null, "Participated in:")
     } else if (type == "institution") {
         generalInfo = nodeData ? nodeData["General Info (biography, description, etc)"] : ""
@@ -552,13 +552,16 @@ function setupZoom() {
 }
 
 function setupSearch() {
+    // Filter entities without any link
+    let entities = entitiesData.filter(d => completeNetwork.nodes.map(n => n.id).includes(d.Name))
+
     d3.select("#entity-select")
         .on("change", (e, d) => {
             let entityName = e.target.value;
             updateNodelinkSelection(entityName)
         })
         .selectAll("option")
-        .data(entitiesData)
+        .data(entities)
         .join("option")
         .text(d => {
             return d.Name

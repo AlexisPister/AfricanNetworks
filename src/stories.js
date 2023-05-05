@@ -1,6 +1,15 @@
 import {forceViewer, updateNodelinkSelection, updateNodeslinksSelection, fetchData} from "./main.js";
 
-const STORIES = ["EAISCA", "EAISCA", "African Writer Conference", "EALB", "East African Community", "The University of East Africa"]
+// const STORIES = ["EAISCA", "African Writer Conference", "EALB", "East African Community", "The University of East Africa"]
+
+const STORIES = ["African Writers Conference",
+    "East African Community",
+    "East African Literature Bureau",
+    "Pan-African Freedom Movement for East and Central Africa",
+    "The East African Institute of Social and Cultural Affairs",
+    "The University of East Africa"
+]
+
 let [entitiesData, peopleData, institutionsData, publicationsData, eventsData, personInst, personPub] = await fetchData();
 let STORY;
 // await loadstory("EAISCA");
@@ -11,9 +20,9 @@ renderStoryChoice();
 d3.select("#other-story")
     .on("click", (e) => {
         d3.select("#scenario-choice-div")
-        .style("display", "")
+            .style("display", "")
         d3.select("#scenario-div")
-        .style("display", "none")
+            .style("display", "none")
     })
     .attr("cursor", "pointer")
 
@@ -40,17 +49,17 @@ d3.select("#story-selection")
 
 function renderStoryChoice() {
     d3.select("#story-buttons")
-    .selectAll(".storyButton")
-    .data(STORIES)
-    .join("div")
-    .text(d => d)
-    .on("click", (e, d) => {
-        loadstory(d).then(() => {
-            updateStory()
+        .selectAll(".storyButton")
+        .data(STORIES)
+        .join("div")
+        .text(d => d)
+        .on("click", (e, d) => {
+            loadstory(d).then(() => {
+                updateStory()
+            })
         })
-    })
-    .classed("storyButton", true)
-    .attr("cursor", "pointer")
+        .classed("storyButton", true)
+        .attr("cursor", "pointer")
 }
 
 async function loadstory(storyName) {

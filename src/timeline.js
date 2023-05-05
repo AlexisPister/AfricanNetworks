@@ -1,5 +1,9 @@
-import {updateNodelinkSelection} from "./main.js";
+import {updateNodelinkSelection, completeNetwork} from "./main.js";
 
+// console.log(1, completeNetwork)
+// setTimeout(() => {
+//     console.log(111, completeNetwork)
+// }, 100)
 
 let [width, height] = computeSvgDims("timeline")
 const margin = {
@@ -16,7 +20,6 @@ let events;
 let entities;
 let publications;
 let institutions;
-let personsSel;
 let x;
 let y;
 let yearMin = 1000;
@@ -73,95 +76,92 @@ async function importData() {
     return [persons];
 }
 
-importData().then(() => {
-    entities = persons.concat(institutions).concat(publications);
-    // persons = persons.filter(d => d["Date of birth"] && d["Date of death"])
-    // persons.sort((a, b) => a["Date of birth"] - b["Date of birth"])
+setTimeout(() => {
+    importData()
+        .then(() => {
+            entities = persons.concat(institutions).concat(publications);
 
-    // Filter and sort
-    // entities = entities.filter(d => getBeginYear(d) && getEndYear(d))
-    entities = entities.filter(d => getBeginYear(d))
-    entities.sort((a, b) => getBeginYear(a) - getBeginYear(b))
+            // Filter and sort
+            // entities = entities.filter(d => getBeginYear(d) && getEndYear(d))
+            entities = entities.filter(d => getBeginYear(d))
+            entities.sort((a, b) => getBeginYear(a) - getBeginYear(b))
 
-    x = d3.scaleLinear()
-        .domain([d3.min(entities, d => getBeginYear(d)), d3.max(entities, d => getEndYear(d))])
-        .range([margin.left, width - margin.left - margin.right])
-    y = d3.scaleBand()
-        .domain(d3.range(entities.length))
-        .range([margin.top, height - margin.bottom - margin.top])
-        .padding(0.2)
+            // Remove nodes without any links
+            entities = entities.filter(d => completeNetwork.nodes.map(n => n.id).includes(d.Name))
+            // console.log(completeNetwork, entities)
 
-    // x = d3.scaleLinear()
-    //     .domain([d3.min(persons, d => d["Date of birth"]), d3.max(persons, d => d["Date of death"])])
-    //     .range([0, width - margin.left - margin.right])
-    // y = d3.scaleBand()
-    //     .domain(d3.range(persons.length))
-    //     .range([0, height - margin.bottom - margin.top])
-    //     .padding(0.2)
+            x = d3.scaleLinear()
+                .domain([d3.min(entities, d => getBeginYear(d)), d3.max(entities, d => getEndYear(d))])
+                .range([margin.left, width - margin.left - margin.right])
+            y = d3.scaleBand()
+                .domain(d3.range(entities.length))
+                .range([margin.top, height - margin.bottom - margin.top])
+                .padding(0.2)
 
-    // TODO: check date format
-    let axisBottom = d3.axisBottom(x)
-        // let axisBottom = d3.axisBottom(x.nice())
-        .ticks(5)
-    //     .tickValues([2022])
-    //     .tickPadding(2)
-    // .tickFormat(d3.timeFormat("%y"))
+            // TODO: check date format
+            let axisBottom = d3.axisBottom(x)
+                // let axisBottom = d3.axisBottom(x.nice())
+                .ticks(5)
+            //     .tickValues([2022])
+            //     .tickPadding(2)
+            // .tickFormat(d3.timeFormat("%y"))
 
-    svg = d3.select("#timeline")
-        .append("g")
+            svg = d3.select("#timeline")
+                .append("g")
 
-    svg
-        .append("g")
-        // .attr("transform", (d,i)=>`translate(${margin.left} ${margin.top-10})`)
-        .call(axisBottom)
+            svg
+                .append("g")
+                // .attr("transform", (d,i)=>`translate(${margin.left} ${margin.top-10})`)
+                .call(axisBottom)
 
-    // personsSel = g
-    //     .selectAll('.person')
-    //     .persons(persons)
-    //     .join((enter) => {
-    //         let g = enter.append("g")
-    //             .classed("person", true)
-    //
-    //         g.append("rect")
-    //             .attr("x", d => x(d["Date of birth"]))
-    //             .attr("y", (d, i) => y(i))
-    //             .attr("width", d => x(d["Date of death"]) - x(d["Date of birth"]))
-    //             .attr("height", d => y.bandwidth())
-    //             .attr("fill", "rgb(150,150,150,0.2)")
-    //
-    //         g.append("text")
-    //             .attr("x", d => x(d["Date of birth"]) + 5)
-    //             .attr("y", (d, i) => y(i) + y.bandwidth() / 1.2)
-    //             .text(d => d.Name)
-    //
-    //         return g
-    //     })
-    //
-    // g
-    //     .selectAll('.event')
-    //     .persons(events)
-    //     .join(enter => {
-    //         let g = enter.append("g")
-    //             .classed("event", true)
-    //
-    //         // g.append("line")
-    //         //     .attr("x1", d => x(d.Date))
-    //         //     .attr("x2", d => x(d.Date))
-    //         //     .attr("y1", d => 0)
-    //         //     .attr("y2", d => height)
-    //         //     .attr("stroke", "red")
-    //         //
-    //         // g.append("text")
-    //         //     .attr("x", d => x(d.Date) + 2)
-    //         //     .attr("y", (d, i) => height - i * 100)
-    //         //     .text(d => d.Name)
-    //         //     .style("fill", "red")
-    //
-    //         return g
-    //     })
+            // personsSel = g
+            //     .selectAll('.person')
+            //     .persons(persons)
+            //     .join((enter) => {
+            //         let g = enter.append("g")
+            //             .classed("person", true)
+            //
+            //         g.append("rect")
+            //             .attr("x", d => x(d["Date of birth"]))
+            //             .attr("y", (d, i) => y(i))
+            //             .attr("width", d => x(d["Date of death"]) - x(d["Date of birth"]))
+            //             .attr("height", d => y.bandwidth())
+            //             .attr("fill", "rgb(150,150,150,0.2)")
+            //
+            //         g.append("text")
+            //             .attr("x", d => x(d["Date of birth"]) + 5)
+            //             .attr("y", (d, i) => y(i) + y.bandwidth() / 1.2)
+            //             .text(d => d.Name)
+            //
+            //         return g
+            //     })
+            //
+            // g
+            //     .selectAll('.event')
+            //     .persons(events)
+            //     .join(enter => {
+            //         let g = enter.append("g")
+            //             .classed("event", true)
+            //
+            //         // g.append("line")
+            //         //     .attr("x1", d => x(d.Date))
+            //         //     .attr("x2", d => x(d.Date))
+            //         //     .attr("y1", d => 0)
+            //         //     .attr("y2", d => height)
+            //         //     .attr("stroke", "red")
+            //         //
+            //         // g.append("text")
+            //         //     .attr("x", d => x(d.Date) + 2)
+            //         //     .attr("y", (d, i) => height - i * 100)
+            //         //     .text(d => d.Name)
+            //         //     .style("fill", "red")
+            //
+            //         return g
+            //     })
 
-    render()
-})
+            render()
+        })
+}, 100)
 
 function getBeginYear(d) {
     if (d["Date of birth"]) {

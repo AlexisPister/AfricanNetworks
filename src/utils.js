@@ -8,7 +8,8 @@ function computeSvgDims(id) {
 function linkCheck(url) {
     try {
         let http = new XMLHttpRequest();
-        http.open('HEAD', url, false);
+        // http.open('HEAD', url, false);
+        http.open('GET', url, false);
         http.send();
         return http.status != 404;
     } catch (e) {
