@@ -9,7 +9,7 @@ let isStoryMode = false;
 
 export let forceViewer, tripartiteViewer, completeNetwork;
 
-const [width, height] = computeSvgDims("force")
+const [width, height] = computeSvgParentDims("force")
 const [entitiesData, peopleData, institutionsData, publicationsData, eventsData, personInst, personPub] = await fetchData();
 const [yearMin, yearMax] = getTimeInterval(personInst, personPub)
 renderGeneralInfo(peopleData, institutionsData, publicationsData);
@@ -92,7 +92,8 @@ async function renderTemplates() {
 
     if (isTripartite) {
         tripartiteViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
-            width: width - 100,
+            width: width - 293,
+            // width: width,
             yearMin: yearMinSel,
             yearMax: yearMaxSel,
             dataFolder: `\"${FOLDER}\"`,
@@ -367,7 +368,6 @@ function renderOneNeighborEntity(div, entity, nodeType) {
         .on("click", () => {
             updateNodelinkSelection(entity.id)
         })
-
     // if (nodeType == nodeTypes.person) {
     //     div
     //         .append("div")
@@ -402,9 +402,10 @@ function renderGeneralInfo(peopleData, institutionData, pubData) {
     //     .html(eventsData.length)
 }
 
+
+
 function update() {
     forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
-
     // if (forceViewer) {
     //     forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
     // }
@@ -428,8 +429,7 @@ export function updateNodelinkSelection(nodeId) {
 
 export function updateNodeslinksSelection(nodeIds) {
     let netpanNodes = completeNetwork.nodes.filter(n => nodeIds.includes(n.id));
-    // console.log("netpannode", netpanNode)
-        forceViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
+    forceViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
 
     // if (forceViewer) {
     //     forceViewer.setParam("nodeSelection", {nodes: netpanNodes, links: []})
@@ -441,7 +441,6 @@ export function updateNodeslinksSelection(nodeIds) {
 
 
 function setEvents() {
-    // console.log(yearMin, yearMax)
     let slider = document.getElementById('time-slider');
     noUiSlider.create(slider, {
         start: [yearMin, yearMax],

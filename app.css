@@ -111,8 +111,19 @@ body {
 }
 
 #main-title {
-    width: 30%;
+    /*width: 30%;*/
+    width: 29%;
     flex-shrink: 0;
+
+    display: flex;
+    flex-direction: row;
+}
+
+
+#title-icons {
+    width: 20%;
+    /*background-color: red;*/
+    margin-right: 2%;
 }
 
 .subtitle {
@@ -143,7 +154,8 @@ body {
 }
 
 #subtitle {
-    font-size: 2.1em;
+    /*font-size: 2.1em;*/
+    font-size: 1.8em;
     /*line-height: 1.4em;*/
     color: lightgrey;
 }

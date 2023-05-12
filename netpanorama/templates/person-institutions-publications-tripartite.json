@@ -1,5 +1,5 @@
 {
-  "x2": 200,
+  "x": 130,
   "width": "[width]",
   "width2": 2000,
   "height2": 2000,
@@ -54,7 +54,6 @@
       }
     }
   ],
-
   "parameters": [
     {
       "name": "nodeSelection",
@@ -86,10 +85,12 @@
     },
     {
       "name": "selectedYears",
-      "value": [1000, 2020]
+      "value": [
+        1000,
+        2020
+      ]
     }
   ],
-
   "networks": [
     {
       "name": "PI-net",
@@ -110,7 +111,7 @@
           "data": "Institutions",
           "yieldsNodes": [
             {
-            "id_field": "Name",
+              "id_field": "Name",
               "type": "institution",
               "data": [
                 "*"
@@ -154,7 +155,9 @@
                 "field": "Institution"
               },
               "target_node_type": "institution",
-              "data": ["*"]
+              "data": [
+                "*"
+              ]
             }
           ]
         },
@@ -170,7 +173,9 @@
                 "field": "Publication"
               },
               "target_node_type": "publication",
-              "data": ["*"]
+              "data": [
+                "*"
+              ]
             }
           ]
         },
@@ -186,12 +191,14 @@
                 "field": "Event"
               },
               "target_node_type": "event",
-              "data": ["*"]
+              "data": [
+                "*"
+              ]
             }
           ]
         }
-        ],
-        "transform": [
+      ],
+      "transform": [
         {
           "type": "filterNodes",
           "expression": "datum.id !== '' "
@@ -204,18 +211,20 @@
           "type": "metric",
           "metric": "degree"
         },
-        {"type": "filterEdges", "expression": "datum.target._type != 'event' || datum.source.degree > 1"},
+        {
+          "type": "filterEdges",
+          "expression": "datum.target._type != 'event' || datum.source.degree > 1"
+        },
         {
           "type": "removeIsolated"
         },
-          {
+        {
           "type": "metric",
           "metric": "degree"
         }
       ]
     }
   ],
-
   "orderings": [
     {
       "name": "alphabetical",
@@ -227,7 +236,10 @@
     {
       "name": "degree",
       "orderBy": {
-        "fieldsss": ["_type", "degree"],
+        "fieldsss": [
+          "_type",
+          "degree"
+        ],
         "expression2": "datum.degree",
         "expression": "datum.degree + ((datum._type) ? ((datum._type == 'event') ? 100 : 0) : 0)",
         "direction": "descending"
@@ -263,9 +275,9 @@
   ],
   "scales": [
     {
-        "name": "color",
-        "type": "ordinal",
-        "range": [
+      "name": "color",
+      "type": "ordinal",
+      "range": [
         "[personColor]",
         "[institutionColor]",
         "[publicationColor]",
@@ -297,9 +309,18 @@
     {
       "name": "radius",
       "type": "linear",
-      "range2": [50, 100],
-      "range": [50, 500],
-      "domain": { "data": "PI-net.nodes", "field": "degree" }
+      "range2": [
+        50,
+        100
+      ],
+      "range": [
+        50,
+        500
+      ],
+      "domain": {
+        "data": "PI-net.nodes",
+        "field": "degree"
+      }
     },
     {
       "name": "color-link",
@@ -364,7 +385,6 @@
         }
       }
     },
-
     {
       "entries": "PI-net.nodes",
       "ifInSelection": "nodeSelection.nodes",
@@ -384,7 +404,6 @@
         }
       ]
     },
-
     {
       "entries": "PI-net.nodes",
       "layout": "PI-jigsaw",
@@ -428,14 +447,16 @@
           "selection": "nodeSelection"
         }
       ]
-      },
+    },
     {
       "entries": "PI-net.nodes",
       "layout": "PI-jigsaw",
       "mark": {
         "type": "text",
         "text": {
-          "field": "id"
+          "fieldz": "Name",
+          "expression2": "datum.id.split('(')[0]",
+          "expression": "datum.data ? datum.data.Name : datum.id"
         },
         "align": {
           "condition": {
@@ -443,19 +464,23 @@
             "value": "right"
           },
           "value": ""
-      },
-        "fill": {
-          "conditions": [{
-            "test": "datum.degree > 1",
-            "value": "white"
-          },
-          {
-            "inSelection": "outnodes.nodes",
-            "value": "white"
-          }],
-          "value": "none"
         },
-        "fontSize": "10",
+        "fill": {
+          "conditions": [
+            {
+              "test": "datum.degree > 1",
+              "value": "white"
+            },
+            {
+              "inSelection": "outnodes.nodes",
+              "value": "white"
+            }
+          ],
+          "value2": "none",
+          "value": "white"
+        },
+        "fontSize": "9",
+        "lineBreak2": 20,
         "dx": {
           "condition": {
             "test": "datum._type == 'publication'",

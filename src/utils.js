@@ -1,9 +1,18 @@
-function computeSvgDims(id) {
+function computeSvgParentDims(id) {
     let svg = d3.select(`#${id}`);
     let containerWidth = svg.node().parentNode.getBoundingClientRect().width;
     let containerHeight = svg.node().parentNode.getBoundingClientRect().height;
     return [containerWidth, containerHeight];
 }
+
+function computeSvgDims(id) {
+    let svg = d3.select(`#${id}`);
+    let containerWidth = svg.node().getBoundingClientRect().width;
+    let containerHeight = svg.node().getBoundingClientRect().height;
+    return [containerWidth, containerHeight];
+}
+
+
 
 function linkCheck(url) {
     try {

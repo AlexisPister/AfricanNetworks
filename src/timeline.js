@@ -5,7 +5,7 @@ import {updateNodelinkSelection, completeNetwork} from "./main.js";
 //     console.log(111, completeNetwork)
 // }, 100)
 
-let [width, height] = computeSvgDims("timeline")
+let [width, height] = computeSvgParentDims("timeline")
 const margin = {
     top: 20,
     left: 20,

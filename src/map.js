@@ -1,7 +1,7 @@
 import {forceViewer, updateNodelinkSelection} from "./main.js";
 
 // const [width, height] = computeSvgDims("map")
-const [width, height] = computeSvgDims("timeline")
+const [width, height] = computeSvgParentDims("timeline")
 const margin = {
     top: 20,
     left: 20,

@@ -5,13 +5,46 @@ const marginTop = 10
 const marginRight = 15
 const legendPadding = 130;
 
-let diameter = 25;
+let diameter = 30;
+let legendSize = 250;
 
-
+drawTitleIcons()
 appendLegendType(nodeTypes.person)
 appendLegendType(nodeTypes.institution)
 appendLegendType(nodeTypes.publication)
 appendLegendType(nodeTypes.event)
+
+function drawTitleIcons() {
+    let types = [nodeTypes.person, nodeTypes.institution, nodeTypes.publication]
+    let svgDims = computeSvgDims("title-icons");
+    const margin = svgDims[1] / 8;
+    const marginH = svgDims[0] / 10;
+    let size = legendSize * 7
+
+    d3.select("#title-icons")
+        .selectAll("icon")
+        .data(types)
+        .join("path")
+        .attr("d", d => {
+                if (d == nodeTypes.person) {
+                    return d3.symbol().type(d3.symbolCircle).size(size)(d);
+                } else if (d == nodeTypes.institution) {
+                    return d3.symbol().type(d3.symbolSquare).size(size)(d);
+                } else if (d == nodeTypes.publication) {
+                    return d3.symbol().type(d3.symbolDiamond).size(size)(d);
+                }
+            }
+        )
+        .style("fill", function (d) {
+            return colorScale(d)
+        })
+        .style("stroke", "black")
+        .style("stroke-width", 3)
+        .attr("transform", (d, i) => {
+            return `translate(${svgDims[0] / 2}, ${margin + i * (diameter / 2 + (svgDims[1] - margin) / 3)})`
+        })
+
+}
 
 function appendLegendType(type) {
     let sel;
@@ -27,20 +60,20 @@ function appendLegendType(type) {
 
     sel
         .append("svg")
-        .attr("transform", `translate(0, 2)`)
+        .attr("transform", `translate(0, 3)`)
         .lower()
-        .attr("width",diameter)
+        .attr("width", diameter)
         .attr("height", diameter)
         .append("path")
         .attr("d", d => {
             if (type == nodeTypes.person) {
-                return d3.symbol().type(d3.symbolCircle).size(180)(d);
+                return d3.symbol().type(d3.symbolCircle).size(legendSize)(d);
             } else if (type == nodeTypes.institution) {
-                return d3.symbol().type(d3.symbolSquare).size(180)(d);
+                return d3.symbol().type(d3.symbolSquare).size(legendSize)(d);
             } else if (type == nodeTypes.publication) {
-                return d3.symbol().type(d3.symbolDiamond).size(180)(d);
+                return d3.symbol().type(d3.symbolDiamond).size(legendSize)(d);
             } else if (type == nodeTypes.event) {
-                return d3.symbol().type(d3.symbolTriangle).size(180)(d);
+                return d3.symbol().type(d3.symbolTriangle).size(legendSize)(d);
             }
         })
         .style("fill", function () {
