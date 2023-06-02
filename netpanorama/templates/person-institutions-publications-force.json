@@ -362,10 +362,10 @@
             },
             {
               "test": "datum.data.Year > params.selectedYears[0] && datum.data.Year < params.selectedYears[1]",
-              "value": "lightgray"
+              "value": "#F7F7F7"
             }
           ],
-          "value": "gray"
+          "value": "#9C9C9C"
         },
         "strokeDash": {
           "expression": "datum.data.Year ? 0 : 2"
