@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "intersection-observer": "^0.12.2",
     "nouislider": "^15.7.0",
-    "papaparse": "^5.4.1"
+    "papaparse": "^5.4.1",
+    "scrollama": "^3.2.0"
   }
 }

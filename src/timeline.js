@@ -5,7 +5,11 @@ import {updateNodelinkSelection, completeNetwork} from "./main.js";
 //     console.log(111, completeNetwork)
 // }, 100)
 
+
+
+
 let [width, height] = computeSvgParentDims("timeline")
+console.log(222, width, height)
 const margin = {
     top: 20,
     left: 20,
@@ -77,6 +81,7 @@ async function importData() {
 }
 
 setTimeout(() => {
+    [width, height] = computeSvgParentDims("timeline")
     importData()
         .then(() => {
             entities = persons.concat(institutions).concat(publications);

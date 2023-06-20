@@ -1,8 +1,7 @@
 {
   "x": 130,
+  "height": "[height]",
   "width": "[width]",
-  "width2": 2000,
-  "height2": 2000,
   "data": [
     {
       "name": "people",

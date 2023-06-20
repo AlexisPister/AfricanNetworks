@@ -1,7 +1,6 @@
 import {forceViewer, updateNodelinkSelection, updateNodeslinksSelection, fetchData} from "./main.js";
 
-// const STORIES = ["EAISCA", "African Writer Conference", "EALB", "East African Community", "The University of East Africa"]
-
+const scroller = scrollama();
 const STORIES = ["African Writers Conference",
     "East African Community",
     "East African Literature Bureau",
@@ -17,26 +16,31 @@ let storyIndex = 0;
 
 renderStoryChoice();
 
-d3.select("#other-story")
+d3.selectAll(".other-story")
     .on("click", (e) => {
         d3.select("#scenario-choice-div")
             .style("display", "")
         d3.select("#scenario-div")
             .style("display", "none")
+
+        scroller.destroy();
+        updateNodeslinksSelection([])
+
+        window.location = "#text-anchor"
     })
     .attr("cursor", "pointer")
 
 
-d3.select("#story-arrow-right")
-    .on("click", (e) => {
-        storyForward();
-        updateStory()
-    })
-d3.select("#story-arrow-left")
-    .on("click", (e) => {
-        storyBackward();
-        updateStory()
-    })
+// d3.select("#story-arrow-right")
+//     .on("click", (e) => {
+//         storyForward();
+//         updateStory()
+//     })
+// d3.select("#story-arrow-left")
+//     .on("click", (e) => {
+//         storyBackward();
+//         updateStory()
+//     })
 
 // OLD
 d3.select("#story-selection")
@@ -44,7 +48,7 @@ d3.select("#story-selection")
         let storyName = e.target.value;
         await loadstory(storyName)
         storyIndex = 0;
-        updateStory();
+        // updateStory();
     })
 
 function renderStoryChoice() {
@@ -55,7 +59,7 @@ function renderStoryChoice() {
         .text(d => d)
         .on("click", (e, d) => {
             loadstory(d).then(() => {
-                updateStory()
+                // updateStory()
             })
         })
         .classed("storyButton", true)
@@ -70,8 +74,45 @@ async function loadstory(storyName) {
 
     storyIndex = 0
     STORY = await d3.csv(`./data/stories/${storyName}.csv`)
+
     d3.select("#story-title")
         .html(storyName)
+
+    d3.select("#story-content")
+        .selectAll(".story-step")
+        .data(STORY, d => {
+            return d.Text
+        })
+        .join((enter) => {
+                enter = enter.append("div")
+
+                enter
+                    .append("div")
+                    .html((d, i) => STORY[i].Date)
+                    .classed("story-time", true)
+
+                enter.append("div")
+                    .html((d, i) => {
+                        let [text, entities] = findStoryEntities(d.Text);
+                        return text
+                    })
+
+                return enter
+            }, (update) => update,
+            (exit) => exit.remove())
+        .classed("story-step", true)
+
+    scroller
+        .setup({
+            step: ".story-step",
+        })
+        .onStepEnter((response) => {
+            let [text, entities] = findStoryEntities(STORY[response.index].Text);
+            updateNodeslinksSelection(entities.map(e => e.Name))
+        })
+        .onStepExit((response) => {
+            // { element, index, direction }
+        });
 }
 
 function storyForward() {
@@ -96,11 +137,6 @@ export function updateStory() {
         .html(`${storyIndex + 1} / ${STORY.length}`)
 
     updateNodeslinksSelection(entities.map(e => e.Name))
-    // let entities = STORY[storyIndex].Entities.split(";")
-    // entities.forEach(entity => {
-    //     entity = entity.trim();
-    //     updateNodelinkSelection(entity)
-    // })
 }
 
 function findStoryEntities(text) {

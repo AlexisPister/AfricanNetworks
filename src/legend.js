@@ -8,7 +8,7 @@ const legendPadding = 130;
 let diameter = 30;
 let legendSize = 250;
 
-drawTitleIcons()
+// drawTitleIcons()
 appendLegendType(nodeTypes.person)
 appendLegendType(nodeTypes.institution)
 appendLegendType(nodeTypes.publication)

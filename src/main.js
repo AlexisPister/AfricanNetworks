@@ -1,6 +1,5 @@
 import {parseYear, updateTimeLine, updateTimelineSelection} from "./timeline.js";
 import {updateSelection} from "./map.js";
-import {updateStory} from "./stories.js";
 
 let yearMinSel = 1000
 let yearMaxSel = 3000
@@ -90,9 +89,12 @@ async function renderTemplates() {
     d3.select("#force")
         .html("")
 
+    console.log("HEIG ", height)
     if (isTripartite) {
         tripartiteViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
             width: width - 293,
+            // height: height * 1.3,
+            height: height * 0.9,
             // width: width,
             yearMin: yearMinSel,
             yearMax: yearMaxSel,
@@ -470,16 +472,27 @@ function setEvents() {
     d3.select("#force-radio")
         .on("click", (e) => {
             isTripartite = false;
-            d3.select("#force")
+            // d3.select("#force")
+            // // d3.select("#force-container")
+            //     .style("height", "730px")
+
+
+            d3.select("#force-container")
                 .style("height", "730px")
+            d3.select("#temporal-container")
+                .style("height", "730px")
+
             renderTemplates()
         })
 
     d3.select("#tripartite-radio")
         .on("click", (e) => {
             isTripartite = true;
-            d3.select("#force")
-                .style("height", "1100px")
+            // d3.select("#force")
+            d3.select("#force-container")
+                .style("height", "1000px")
+            d3.select("#temporal-container")
+                .style("height", "1000px")
             renderTemplates()
         })
 

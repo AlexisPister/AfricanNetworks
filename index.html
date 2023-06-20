@@ -6,210 +6,208 @@
     <title>African Networks</title>
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="modules/nouislider/dist/nouislider.min.css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=IM+Fell+English"/>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Libre+Baskerville"/>
 </head>
 <body>
 
 <div id="main-axis">
-    <div id="head" class="row">
-        <div id="main-title" class="block">
-<!--            <div id="title"><strong>Another World?</strong><br>East Africa and the Global 1960s</div>-->
-<!--            <div id="subtitle">Visualising cultural, intellectual and political networks</div>-->
+    <!--    <div id="head" class="row">-->
+    <div id="main-title" class="row block">
+        <!--            <div id="title"><strong>Another World?</strong><br>East Africa and the Global 1960s</div>-->
+        <!--            <div id="subtitle">Visualising cultural, intellectual and political networks</div>-->
 
-            <svg id="title-icons">
-            </svg>
-            <div>
-            <div id="title"><strong>Another World?</strong><br>East Africa and the Global 1960s</div>
+<!--        <svg id="title-icons">-->
+<!--        </svg>-->
+        <div>
+            <div id="title"><strong id="another-world">Another World?</strong><br>East Africa and the Global 1960s</div>
             <div id="subtitle">Visualising cultural, intellectual and political networks</div>
-            </div>
-
         </div>
-        <div id="intro-phrase" class="block">
-            <!--            <p style="margin-top: 0">This interface is intended as a visualisation to accompany the findings of the Leverhulme-funded project-->
-            <!--            ‘Another World? East Africa and the Global 1960s’. The 1960s were a vibrant time in East African history,-->
-            <!--            when Kenya, Uganda and Tanzania all gained independence. The hopes for decolonisation were tangible in-->
-            <!--                politics, art and society, and the optimism was felt across the region.</p>-->
+    </div>
 
-            <!--            <p>East Africa’s global connections were powerful and real at independence; however, by the early 1970s, these were broken down due to conflict-->
-            <!--            and nationalism. With this visualisation we want to highlight the vibrancy of the 1960s: while short-lived-->
-            <!--            and fragile, this was a moment when East Africa enjoyed a global moment and a sense of freedom.</p>-->
-
-            <!--            <p>The circles of this East African cosmopolitan elite were small. Politicians, intellectuals, writers, artists and-->
-            <!--                activists travelled and socialised in shared spaces, such as at universities, conferences, or even in bars.</p>-->
-
-            <!--            <p>With this visualisation, we want to highlight the scale of activity, centred around institutions these-->
-            <!--            figures attended or worked at, events they participated in, and publications written for. It also showcases-->
-            <!--            the strength of regionalism in this period, buttressed by the East African Community, which enabled travel-->
-            <!--            and the development of connections between people and institutions, even if only for a decade between 1967-->
-            <!--            and 1977. Some names are repeated frequently, highlighting the overlapping areas of activity, and the small-->
-            <!--            nature of these circles. In using this interface, we hope users will get an idea of the dynamic nature of-->
-            <!--            this decade, reflected in its political and cultural activity, before the connections broke down in the-->
-            <!--            1970s.</p>-->
-
-            <p style="margin-top: 0">The 1960s were a vibrant time in East African history, when <strong>Kenya</strong>,
-                <strong>Uganda</strong> and <strong>Tanzania</strong> all gained independence. The hopes for
-                decolonisation were tangible in politics, art and society, and the optimism was felt across the region.
-                East Africa’s global connections were <strong>powerful</strong> and real at independence; however, by
-                the early 1970s, these were broken down due to conflict and nationalism. </p>
-
-            <p>The visualisation highlights the <strong>vibrancy</strong> of the 1960s: while short-lived and fragile,
-                this was a moment when East Africa enjoyed a global moment and a sense of <strong>freedom</strong>.
-                The circles of this <strong>East African cosmopolitan elite</strong> were small. Politicians,
-                intellectuals, writers, artists and activists, all travelled and socialised in shared spaces, such as at
-                universities, conferences, and bars.
+    <div id="intro-phrase" class="row block">
+        <p style="margin-top: 0">The 1960s were a vibrant time in East African history, when <strong>Kenya</strong>,
+            <strong>Uganda</strong> and <strong>Tanzania</strong> all gained independence. The hopes for
+            decolonisation were tangible in politics, art and society, and the optimism was felt across the region.
             </p>
 
             <p>
-                The visualisation highlights the scale of activity, centred around <strong>institutions</strong> these figures attended
-                or worked at, <strong>events</strong> they participated in, and <strong>publications</strong> written for. It showcases the strength of
-                <strong>regionalism</strong> in this period, buttressed by the <strong>East African Community</strong>, which enabled travel and the
-                development of connections. Some names are repeated frequently, highlighting the overlapping areas of
-                activity, and the small nature of these circles. The data represented is a small selection of larger
-                networks, some of which, due to reasons of scope, could not be represented here.
+            East Africa’s global connections were <strong>powerful</strong> and real at independence; however, by
+            the early 1970s, these were broken down due to conflict and nationalism. </p>
+
+        <p>The visualisation highlights the <strong>vibrancy</strong> of the 1960s: while short-lived and fragile,
+            this was a moment when East Africa enjoyed a global moment and a sense of <strong>freedom</strong>.
             </p>
+
+        <p>
+            The circles of this <strong>East African cosmopolitan elite</strong> were small. Politicians,
+            intellectuals, writers, artists and activists, all travelled and socialised in shared spaces, such as at
+            universities, conferences, and bars.
+        </p>
+
+        <p id="text-anchor">
+            The visualisation highlights the scale of activity, centred around <strong>institutions</strong> these
+            figures attended
+            or worked at, <strong>events</strong> they participated in, and <strong>publications</strong> written for.
+            It showcases the strength of
+            <strong>regionalism</strong> in this period, buttressed by the <strong>East African Community</strong>,
+            which enabled travel and the
+            development of connections. Some names are repeated frequently, highlighting the overlapping areas of
+            activity, and the small nature of these circles. The data represented is a small selection of larger
+            networks, some of which, due to reasons of scope, could not be represented here.
+        </p>
+    </div>
+
+    <div id="legend-row" class="row block">
+        <div id="legendPeople" class="key-measure"><span id="n-people"></span> People</div>
+        <div id="legendInstitutions" class="key-measure"><span id="n-institutions"></span> Institutions</div>
+        <div id="legendPublications" class="key-measure"><span id="n-publications"></span> Publications</div>
+        <!--            <div id="legendEvents" class="key-measure"><span id="n-events"></span> Events</div>-->
+    </div>
+    <div class="row block radio-button">
+        <input type="radio" id="exploration" name="mode" value="exploration" checked>
+        <label class="button" for="exploration">Exploration</label>
+        <input type="radio" id="stories" name="mode" value="stories">
+        <label class="button" for="stories">Stories</label>
+    </div>
+
+    <div id="main-vis" class="row-no-align block">
+    <div id="infos" class="inside-block">
+        <div id="scenario-choice-div" style="display: none">
+            <!--            <div id="scenario-choice-div">-->
+            <div id="story-buttons">
+            </div>
+        </div>
+
+        <div id="scenario-div" style="display: none">
+            <div class="other-story">◄ Choose another story</div>
+
+            <h2 id="story-title" class="subtitle">EAISCA</h2>
+<!--            <div class="arrow-container">-->
+<!--                <button id="story-arrow-left" class="arrow-button">◄ Back</button>-->
+<!--                <span id="story-page"></span>-->
+<!--                <button id="story-arrow-right" class="arrow-button">Next ►</button>-->
+<!--            </div>-->
+<!--            <strong>-->
+<!--                <div id="story-time"></div>-->
+<!--            </strong>-->
+            <div id="story-content">
+            </div>
+            <div class="other-story">◄ Choose another story</div>
+        </div>
+
+        <div id="exploration-div">
+            <div id="select-info">
+                <div id="selection">
+                    <label for="entity-select">Selection:</label>
+                    <select name="entities" id="entity-select">
+                        <option value="">--Please choose an option--</option>
+                    </select>
+                </div>
+
+                <h2 class="subtitle">
+                    <span id="name"></span>
+                </h2>
+
+                <div id="infoAndImage">
+                    <img id="img">
+                    <span id="dob"></span> <span id="date-tilt">-</span> <span id="dod"></span><br>
+                    <span id="activity"></span>
+                    <div id="bio"></div>
+                </div>
+
+            </div>
+            <div id="connected-to">
+                <div id="connected-to-1">
+                    <h3 id="connected-to-1-title"></h3>
+                    <div id="connected-to-1-list"></div>
+                </div>
+                <div id="connected-to-2">
+                    <h3 id="connected-to-2-title"></h3>
+                    <div id="connected-to-2-list"></div>
+                </div>
+                <div id="connected-to-3">
+                    <h3 id="connected-to-3-title"></h3>
+                    <div id="connected-to-3-list"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="legend-row" class="row">
-        <div id="modes" class="block">
+    <div id="force-container" class="netpan-vis inside-block">
+        <div id="force-options">
+            <h2 class="subtitle">Node-Link</h2>
             <div class="radio-button">
-                <input type="radio" id="exploration" name="mode" value="exploration" checked>
-                <label class="button" for="exploration">Exploration</label>
-                <input type="radio" id="stories" name="mode" value="stories">
-                <label class="button" for="stories">Stories</label>
+                <input type="radio" id="force-radio" name="options" value="option1" checked>
+                <label class="button layout-option" for="force-radio">Force</label>
+                <input type="radio" id="tripartite-radio" name="options" value="option2">
+                <label class="button layout-option" for="tripartite-radio">Tripartite</label>
             </div>
+            <div id="time-slider"></div>
         </div>
-        <div id="key-measures" class="block">
-            <div id="legendPeople" class="key-measure"><span id="n-people"></span> People</div>
-            <div id="legendInstitutions" class="key-measure"><span id="n-institutions"></span> Institutions</div>
-            <div id="legendPublications" class="key-measure"><span id="n-publications"></span> Publications</div>
-<!--            <div id="legendEvents" class="key-measure"><span id="n-events"></span> Events</div>-->
+
+        <div id="force">
         </div>
     </div>
 
-    <!--    </div>-->
-
-    <div id="main-vis" class="row">
-        <div id="infos" class="block">
-            <div id="scenario-choice-div" style="display: none">
-<!--            <div id="scenario-choice-div">-->
-                <div id="story-buttons">
-                </div>
-            </div>
-
-            <div id="scenario-div" style="display: none">
-<!--                <div id="story-selection-div">-->
-<!--                    <label for="story-selection">Story:</label>-->
-<!--                    <select name="entities" id="story-selection">-->
-<!--                        <option value="EAISCA">EAISCA</option>-->
-<!--                        <option value="PAFMECA">PAFMECA</option>-->
-<!--                        <option value="African Writer Conference">African Writer Conference</option>-->
-<!--                        <option value="EALB">EALB</option>-->
-<!--                        <option value="East African Community">East African Community</option>-->
-<!--                        <option value="The University of East Africa">The University of East Africa</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-                <div id="other-story">◄ Choose another story</div>
-
-                <h2 id="story-title" class="subtitle">EAISCA</h2>
-                <div class="arrow-container">
-                    <button id="story-arrow-left" class="arrow-button">◄ Back</button>
-                    <span id="story-page"></span>
-                    <button id="story-arrow-right" class="arrow-button">Next ►</button>
-                </div>
-                <strong>
-                    <div id="story-time"></div>
-                </strong>
-                <div id="story-text"></div>
-            </div>
-
-            <div id="exploration-div">
-                <div id="select-info">
-                    <div id="selection">
-                        <label for="entity-select">Selection:</label>
-                        <select name="entities" id="entity-select">
-                            <option value="">--Please choose an option--</option>
-                        </select>
-                    </div>
-
-                    <h2 class="subtitle">
-                        <span id="name"></span>
-                    </h2>
-
-                    <div id="infoAndImage">
-                        <img id="img">
-                        <span id="dob"></span> <span id="date-tilt">-</span> <span id="dod"></span><br>
-                        <span id="activity"></span>
-                        <div id="bio"></div>
-                    </div>
-
-                </div>
-                <div id="connected-to">
-                    <div id="connected-to-1">
-                        <h3 id="connected-to-1-title"></h3>
-                        <div id="connected-to-1-list"></div>
-                    </div>
-                    <div id="connected-to-2">
-                        <h3 id="connected-to-2-title"></h3>
-                        <div id="connected-to-2-list"></div>
-                    </div>
-                    <div id="connected-to-3">
-                        <h3 id="connected-to-3-title"></h3>
-                        <div id="connected-to-3-list"></div>
-                    </div>
-                </div>
-            </div>
+    <div class="netpan-vis inside-block" id="temporal-container">
+        <h2 class="subtitle">Timeline and Map</h2>
+        <div id="timeline-container">
+            <svg id="timeline"></svg>
         </div>
-
-        <div class="netpan-vis block">
-            <div id="force-options">
-                <h2 class="subtitle">Node-Link</h2>
-                <div class="radio-button">
-                    <input type="radio" id="force-radio" name="options" value="option1" checked>
-                    <label class="button" for="force-radio">Force</label>
-                    <input type="radio" id="tripartite-radio" name="options" value="option2">
-                    <label class="button" for="tripartite-radio">Tripartite</label>
-                </div>
-                <div id="time-slider"></div>
-            </div>
-
-            <div id="force">
-            </div>
-        </div>
-
-        <div class="netpan-vis block" id="temporal-container">
-            <h2 class="subtitle">Timeline and Map</h2>
-            <div id="timeline-container">
-                <svg id="timeline"></svg>
-            </div>
-            <!--            <svg id="timeline" width="1000" height="1000"></svg>-->
-        </div>
-        <!--        <div class="netpan-vis" id="map-container">-->
-        <!--            <svg id="map"></svg>-->
-        <!--        </div>-->
-
-        <!--        <div class="netpan-vis" id="bipartite"></div>-->
-        <!--        <div class="netpan-vis" id="tripartite"></div>-->
+        <!--            <svg id="timeline" width="1000" height="1000"></svg>-->
     </div>
+    <!--        <div class="netpan-vis" id="map-container">-->
+    <!--            <svg id="map"></svg>-->
+    <!--        </div>-->
 
-    <div class="row" id="row-footer">
-        <div id="footer" class="block">
-            <a href="https://globaleastafrica.org/">Project website</a>
-            <a href="https://globaleastafrica.org/global-lives">Biography collection</a>
-            <a href="https://globaleastafrica.org/global-lives/resource">Teaching resource</a>
-            <a href="https://globaleastafrica.org/publications">Project publications</a>
-            <a href="https://twitter.com/GlobalEAfrica">Twitter</a>
-            <a href="https://globaleastafrica.org/contact">Contact</a>
-        </div>
+    <!--        <div class="netpan-vis" id="bipartite"></div>-->
+    <!--        <div class="netpan-vis" id="tripartite"></div>-->
+</div>
+</div>
+
+<!--    <div id="legend-row" class="row">-->
+<!--        <div id="modes" class="block">-->
+<!--            <div class="radio-button">-->
+<!--                <input type="radio" id="exploration" name="mode" value="exploration" checked>-->
+<!--                <label class="button" for="exploration">Exploration</label>-->
+<!--                <input type="radio" id="stories" name="mode" value="stories">-->
+<!--                <label class="button" for="stories">Stories</label>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div id="key-measures" class="block">-->
+<!--            <div id="legendPeople" class="key-measure"><span id="n-people"></span> People</div>-->
+<!--            <div id="legendInstitutions" class="key-measure"><span id="n-institutions"></span> Institutions</div>-->
+<!--            <div id="legendPublications" class="key-measure"><span id="n-publications"></span> Publications</div>-->
+<!--            &lt;!&ndash;            <div id="legendEvents" class="key-measure"><span id="n-events"></span> Events</div>&ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    </div>-->
+
+
+
+<div class="row" id="row-footer">
+    <div id="footer" class="block">
+        <a href="https://globaleastafrica.org/">Project website</a>
+        <a href="https://globaleastafrica.org/global-lives">Biography collection</a>
+        <a href="https://globaleastafrica.org/global-lives/resource">Teaching resource</a>
+        <a href="https://globaleastafrica.org/publications">Project publications</a>
+        <a href="https://twitter.com/GlobalEAfrica">Twitter</a>
+        <a href="https://globaleastafrica.org/contact">Contact</a>
     </div>
+</div>
 </div>
 
 <!-- TODO: use local scripts -->
-<script src="https://d3js.org/d3.v7.min.js"></script>
+<!--<script src="https://d3js.org/d3.v7.min.js"></script>-->
+<script src="modules/d3.min.js"></script>
 <script src="https://unpkg.com/topojson-client@3"></script>
 <!--Modify node_modules to module folder, otherwise gh-page does not work-->
 <script src="modules/papaparse/papaparse.min.js"></script>
 <script src="modules/nouislider/dist/nouislider.min.js"></script>
 <script src="modules/netpanorama-template-viewer/dist/bundle.js"></script>
+<script src="modules/scrollama/build/scrollama.min.js"></script>
 
 <script type="text/javascript" src="src/utils.js"></script>
 <script type="text/javascript" src="src/globals.js"></script>
