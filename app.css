@@ -110,6 +110,7 @@ body {
 .inside-block {
     padding: 1em;
     vertical-align: top;
+    display: flex;
 }
 
 #key-measures {
@@ -223,6 +224,10 @@ h2 {
     /*position: relative;*/
 
     /*height: 5000px;*/
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 #infos {
@@ -276,14 +281,21 @@ h2 {
     top: 10%;
 
     width: 35%;
+    /*width: 28%;*/
     /*background-color: #ddd;*/
 }
 
+
+#force-container {
+    height: 80vh;
+}
+
 #temporal-container {
-    float: right;
+    /*float: right;*/
     /*height: 60vh;*/
     height: 80vh;
 }
+
 
 
 #bio {

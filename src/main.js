@@ -500,6 +500,7 @@ function setEvents() {
     d3.select("#exploration")
         .on("click", (e) => {
             goToExploration();
+            slider.noUiSlider.enable();
         })
 
     d3.select("#stories")
@@ -511,6 +512,8 @@ function setEvents() {
                 .style("display", "none")
             d3.select("#exploration-div")
                 .style("display", "none")
+
+            slider.noUiSlider.disable();
 
             // updateStory();
             // renderTemplates()
