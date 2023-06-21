@@ -16,6 +16,10 @@ await renderTemplates();
 setEvents();
 setupSearch();
 
+onresize = (event) => {
+    console.log(22)
+};
+
 export async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
         .then((data) => data.text())
@@ -85,11 +89,10 @@ function getTimeInterval(personInst, personPub) {
 }
 
 
-async function renderTemplates() {
+export async function renderTemplates() {
     d3.select("#force")
         .html("")
 
-    console.log("HEIG ", height)
     if (isTripartite) {
         tripartiteViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
             width: width - 293,

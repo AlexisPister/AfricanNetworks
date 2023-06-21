@@ -1,15 +1,12 @@
-import {updateNodelinkSelection, completeNetwork} from "./main.js";
+import {updateNodelinkSelection, completeNetwork, renderTemplates} from "./main.js";
+import {render as renderMap} from "./map.js";
 
 // console.log(1, completeNetwork)
 // setTimeout(() => {
 //     console.log(111, completeNetwork)
 // }, 100)
 
-
-
-
 let [width, height] = computeSvgParentDims("timeline")
-console.log(222, width, height)
 const margin = {
     top: 20,
     left: 20,
@@ -28,6 +25,15 @@ let x;
 let y;
 let yearMin = 1000;
 let yearMax = 2200;
+
+svg = d3.select("#timeline")
+        .append("g")
+let gAxis = svg
+    .append("g")
+
+onresize = (event) => {
+    processAndrender();
+};
 
 function parseEventDate(date) {
     return +date.slice(-4)
@@ -81,92 +87,51 @@ async function importData() {
 }
 
 setTimeout(() => {
-    [width, height] = computeSvgParentDims("timeline")
+    // [width, height] = computeSvgParentDims("timeline");
     importData()
         .then(() => {
-            entities = persons.concat(institutions).concat(publications);
-
-            // Filter and sort
-            // entities = entities.filter(d => getBeginYear(d) && getEndYear(d))
-            entities = entities.filter(d => getBeginYear(d))
-            entities.sort((a, b) => getBeginYear(a) - getBeginYear(b))
-
-            // Remove nodes without any links
-            entities = entities.filter(d => completeNetwork.nodes.map(n => n.id).includes(d.Name))
-            // console.log(completeNetwork, entities)
-
-            x = d3.scaleLinear()
-                .domain([d3.min(entities, d => getBeginYear(d)), d3.max(entities, d => getEndYear(d))])
-                .range([margin.left, width - margin.left - margin.right])
-            y = d3.scaleBand()
-                .domain(d3.range(entities.length))
-                .range([margin.top, height - margin.bottom - margin.top])
-                .padding(0.2)
-
-            // TODO: check date format
-            let axisBottom = d3.axisBottom(x)
-                // let axisBottom = d3.axisBottom(x.nice())
-                .ticks(5)
-            //     .tickValues([2022])
-            //     .tickPadding(2)
-            // .tickFormat(d3.timeFormat("%y"))
-
-            svg = d3.select("#timeline")
-                .append("g")
-
-            svg
-                .append("g")
-                // .attr("transform", (d,i)=>`translate(${margin.left} ${margin.top-10})`)
-                .call(axisBottom)
-
-            // personsSel = g
-            //     .selectAll('.person')
-            //     .persons(persons)
-            //     .join((enter) => {
-            //         let g = enter.append("g")
-            //             .classed("person", true)
-            //
-            //         g.append("rect")
-            //             .attr("x", d => x(d["Date of birth"]))
-            //             .attr("y", (d, i) => y(i))
-            //             .attr("width", d => x(d["Date of death"]) - x(d["Date of birth"]))
-            //             .attr("height", d => y.bandwidth())
-            //             .attr("fill", "rgb(150,150,150,0.2)")
-            //
-            //         g.append("text")
-            //             .attr("x", d => x(d["Date of birth"]) + 5)
-            //             .attr("y", (d, i) => y(i) + y.bandwidth() / 1.2)
-            //             .text(d => d.Name)
-            //
-            //         return g
-            //     })
-            //
-            // g
-            //     .selectAll('.event')
-            //     .persons(events)
-            //     .join(enter => {
-            //         let g = enter.append("g")
-            //             .classed("event", true)
-            //
-            //         // g.append("line")
-            //         //     .attr("x1", d => x(d.Date))
-            //         //     .attr("x2", d => x(d.Date))
-            //         //     .attr("y1", d => 0)
-            //         //     .attr("y2", d => height)
-            //         //     .attr("stroke", "red")
-            //         //
-            //         // g.append("text")
-            //         //     .attr("x", d => x(d.Date) + 2)
-            //         //     .attr("y", (d, i) => height - i * 100)
-            //         //     .text(d => d.Name)
-            //         //     .style("fill", "red")
-            //
-            //         return g
-            //     })
-
-            render()
+            processAndrender();
         })
 }, 100)
+
+function processAndrender() {
+    [width, height] = computeSvgParentDims("timeline");
+    entities = persons.concat(institutions).concat(publications);
+
+    // Filter and sort
+    entities = entities.filter(d => getBeginYear(d))
+    entities.sort((a, b) => getBeginYear(a) - getBeginYear(b))
+
+    // Remove nodes without any links
+    entities = entities.filter(d => completeNetwork.nodes.map(n => n.id).includes(d.Name))
+
+    x = d3.scaleLinear()
+        .domain([d3.min(entities, d => getBeginYear(d)), d3.max(entities, d => getEndYear(d))])
+        .range([margin.left, width - margin.left - margin.right])
+    y = d3.scaleBand()
+        .domain(d3.range(entities.length))
+        .range([margin.top, height - margin.bottom - margin.top])
+        .padding(0.2)
+
+    // TODO: check date format
+    let axisBottom = d3.axisBottom(x)
+        // let axisBottom = d3.axisBottom(x.nice())
+        .ticks(5)
+    //     .tickValues([2022])
+    //     .tickPadding(2)
+    // .tickFormat(d3.timeFormat("%y"))
+
+    // svg = d3.select("#timeline")
+    //     .append("g")
+
+    // svg
+        // .append("g")
+        gAxis
+        .call(axisBottom)
+
+    render()
+    renderMap()
+}
 
 function getBeginYear(d) {
     if (d["Date of birth"]) {
@@ -225,7 +190,6 @@ function render() {
                     return 0.8
                 })
                 .on("click", (e, d) => {
-                    console.log(999, d.Name)
                     updateNodelinkSelection(d.Name)
                 })
 

@@ -28,7 +28,7 @@ const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", zoomed);
 let projection = d3.geoNaturalEarth1()
     .center([33.937761, -0.976635]) // GPS of location to zoom on
     // .scale(760) // When merged with timeline
-    .scale(933) // When merged with timeline
+    .scale(860) // When merged with timeline
     // .translate([width / 2, height / 2]) // CENTER
     .translate([width / 9, height / 1.4])
 
@@ -91,7 +91,7 @@ function setForce() {
 }
 
 
-async function render() {
+export async function render() {
     const nations = g
         .append("g")
         .attr("cursor", "pointer")
