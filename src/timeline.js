@@ -129,8 +129,8 @@ function processAndrender() {
         gAxis
         .call(axisBottom)
 
-    render()
-    renderMap()
+    render();
+    renderMap();
 }
 
 function getBeginYear(d) {

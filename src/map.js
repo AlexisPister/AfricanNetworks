@@ -132,27 +132,6 @@ export async function render() {
             updateNodelinkSelection(d.Name)
         })
 
-    // const pubs = g
-    //     .append("g")
-    //     .selectAll(".institution")
-    //     .data(institutions.filter(i => i["Place"] && PLACES_TO_KEEP.includes(i["Place"])))
-    //     .join("rect")
-    //     .attr("x", d => {
-    //         let [lat, long] = getCoordinates(d.Place);
-    //         let coords = projection([long, lat]);
-    //         return coords[0]
-    //     })
-    //     .attr("y", d => {
-    //         let [lat, long] = getCoordinates(d.Place);
-    //         let coords = projection([long, lat]);
-    //         return coords[1]
-    //     })
-    //     .attr("width", 10)
-    //     .attr("height", 10)
-    //     .attr("stroke", "black")
-    //     .attr("fill", "gray")
-    //     .attr("stroke-width", 2)
-
     nations.append("title").text((d) => d.properties.geounit);
     g.call(zoom);
 }

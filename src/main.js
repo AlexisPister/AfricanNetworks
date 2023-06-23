@@ -15,10 +15,8 @@ renderGeneralInfo(peopleData, institutionsData, publicationsData);
 await renderTemplates();
 setEvents();
 setupSearch();
+renderTemplates();
 
-onresize = (event) => {
-    console.log(22)
-};
 
 export async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
@@ -324,7 +322,6 @@ function setOneNeighborPanel(number, neighbor, selectedNodeType, typeToLinks, ti
                 }
             }
 
-            // console.log(nodeToLinks)
             for (let node of Object.keys(nodeToLinks)) {
                 let links = nodeToLinks[node];
                 if (links.length > 1) {
@@ -464,7 +461,7 @@ function setEvents() {
             }
         },
         behaviour: 'tap-drag',
-        tooltips: true,
+        tooltips: true
     });
 
     slider.noUiSlider.on("update", (e) => {
@@ -476,15 +473,10 @@ function setEvents() {
         .on("click", (e) => {
             isTripartite = false;
             // d3.select("#force")
-            // // d3.select("#force-container")
-            //     .style("height", "730px")
-
-
             d3.select("#force-container")
                 .style("height", "730px")
             d3.select("#temporal-container")
                 .style("height", "730px")
-
             renderTemplates()
         })
 
@@ -498,7 +490,6 @@ function setEvents() {
                 .style("height", "1000px")
             renderTemplates()
         })
-
 
     d3.select("#exploration")
         .on("click", (e) => {
