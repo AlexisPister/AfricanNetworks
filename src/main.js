@@ -17,7 +17,6 @@ setEvents();
 setupSearch();
 renderTemplates();
 
-
 export async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
         .then((data) => data.text())
@@ -124,12 +123,6 @@ export async function renderTemplates() {
 
         completeNetwork = forceViewer.state["PI-net"];
     }
-    // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-bipartite-cartesian.json", {}, "bipartite");
-    // NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institProj.json", {}, "person-force-proj");
-    // let t = NetPanoramaTemplateViewer.render("./netpanorama/templates/instit-personProj.json", {}, "inst-force-proj");
-
-    // let links = forceViewer.state["PI-net"].links
-    // return forceViewer
 
     // TODO: handle this callback in different scenarios
     setupZoom();

@@ -17,8 +17,8 @@
         <!--            <div id="title"><strong>Another World?</strong><br>East Africa and the Global 1960s</div>-->
         <!--            <div id="subtitle">Visualising cultural, intellectual and political networks</div>-->
 
-<!--        <svg id="title-icons">-->
-<!--        </svg>-->
+        <!--        <svg id="title-icons">-->
+        <!--        </svg>-->
         <div>
             <div id="title"><strong id="another-world">Another World?</strong><br>East Africa and the Global 1960s</div>
             <div id="subtitle">Visualising cultural, intellectual and political networks</div>
@@ -29,15 +29,15 @@
         <p style="margin-top: 0">The 1960s were a vibrant time in East African history, when <strong>Kenya</strong>,
             <strong>Uganda</strong> and <strong>Tanzania</strong> all gained independence. The hopes for
             decolonisation were tangible in politics, art and society, and the optimism was felt across the region.
-            </p>
+        </p>
 
-            <p>
+        <p>
             East Africa’s global connections were <strong>powerful</strong> and real at independence; however, by
             the early 1970s, these were broken down due to conflict and nationalism. </p>
 
         <p>The visualisation highlights the <strong>vibrancy</strong> of the 1960s: while short-lived and fragile,
             this was a moment when East Africa enjoyed a global moment and a sense of <strong>freedom</strong>.
-            </p>
+        </p>
 
         <p>
             The circles of this <strong>East African cosmopolitan elite</strong> were small. Politicians,
@@ -72,98 +72,103 @@
     </div>
 
     <div id="main-vis" class="row-no-align block">
-    <div id="infos" class="inside-block">
-        <div id="scenario-choice-div" style="display: none">
-            <!--            <div id="scenario-choice-div">-->
-            <div id="story-buttons">
+        <div id="infos" class="inside-block">
+            <div id="scenario-choice-div" style="display: none">
+                <!--            <div id="scenario-choice-div">-->
+                <div id="story-buttons">
+                </div>
+            </div>
+
+            <div id="scenario-div" style="display: none">
+                <div class="other-story">◄ Choose another story</div>
+
+                <h2 id="story-title" class="subtitle">EAISCA</h2>
+                <!--            <div class="arrow-container">-->
+                <!--                <button id="story-arrow-left" class="arrow-button">◄ Back</button>-->
+                <!--                <span id="story-page"></span>-->
+                <!--                <button id="story-arrow-right" class="arrow-button">Next ►</button>-->
+                <!--            </div>-->
+                <!--            <strong>-->
+                <!--                <div id="story-time"></div>-->
+                <!--            </strong>-->
+                <div id="story-content">
+                </div>
+                <div class="other-story">◄ Choose another story</div>
+            </div>
+
+            <div id="exploration-div">
+                <div id="select-info">
+                    <div id="selection">
+                        <label for="entity-select">Selection:</label>
+                        <select name="entities" id="entity-select">
+                            <option value="">--Please choose an option--</option>
+                        </select>
+                    </div>
+
+                    <h2 class="subtitle">
+                        <span id="name"></span>
+                    </h2>
+
+                    <div id="infoAndImage">
+                        <img id="img">
+                        <span id="dob"></span> <span id="date-tilt">-</span> <span id="dod"></span><br>
+                        <span id="activity"></span>
+                        <div id="bio"></div>
+                    </div>
+
+                </div>
+                <div id="connected-to">
+                    <div id="connected-to-1">
+                        <h3 id="connected-to-1-title"></h3>
+                        <div id="connected-to-1-list"></div>
+                    </div>
+                    <div id="connected-to-2">
+                        <h3 id="connected-to-2-title"></h3>
+                        <div id="connected-to-2-list"></div>
+                    </div>
+                    <div id="connected-to-3">
+                        <h3 id="connected-to-3-title"></h3>
+                        <div id="connected-to-3-list"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="scenario-div" style="display: none">
-            <div class="other-story">◄ Choose another story</div>
-
-            <h2 id="story-title" class="subtitle">EAISCA</h2>
-<!--            <div class="arrow-container">-->
-<!--                <button id="story-arrow-left" class="arrow-button">◄ Back</button>-->
-<!--                <span id="story-page"></span>-->
-<!--                <button id="story-arrow-right" class="arrow-button">Next ►</button>-->
-<!--            </div>-->
-<!--            <strong>-->
-<!--                <div id="story-time"></div>-->
-<!--            </strong>-->
-            <div id="story-content">
+        <div id="force-container" class="netpan-vis inside-block">
+            <div id="force-options">
+                <h2 class="subtitle">Node-Link</h2>
+                <div class="radio-button">
+                    <input type="radio" id="force-radio" name="options" value="option1" checked>
+                    <label class="button layout-option" for="force-radio">Force</label>
+                    <input type="radio" id="tripartite-radio" name="options" value="option2">
+                    <label class="button layout-option" for="tripartite-radio">Tripartite</label>
+                </div>
+                <div id="time-slider"></div>
             </div>
-            <div class="other-story">◄ Choose another story</div>
-        </div>
 
-        <div id="exploration-div">
-            <div id="select-info">
-                <div id="selection">
-                    <label for="entity-select">Selection:</label>
-                    <select name="entities" id="entity-select">
-                        <option value="">--Please choose an option--</option>
-                    </select>
-                </div>
-
-                <h2 class="subtitle">
-                    <span id="name"></span>
-                </h2>
-
-                <div id="infoAndImage">
-                    <img id="img">
-                    <span id="dob"></span> <span id="date-tilt">-</span> <span id="dod"></span><br>
-                    <span id="activity"></span>
-                    <div id="bio"></div>
-                </div>
-
-            </div>
-            <div id="connected-to">
-                <div id="connected-to-1">
-                    <h3 id="connected-to-1-title"></h3>
-                    <div id="connected-to-1-list"></div>
-                </div>
-                <div id="connected-to-2">
-                    <h3 id="connected-to-2-title"></h3>
-                    <div id="connected-to-2-list"></div>
-                </div>
-                <div id="connected-to-3">
-                    <h3 id="connected-to-3-title"></h3>
-                    <div id="connected-to-3-list"></div>
-                </div>
+            <div id="force">
             </div>
         </div>
+
+        <div class="netpan-vis inside-block" id="temporal-container">
+            <h2 id="timeline-title" class="subtitle">Timeline and Map
+                <span class="tooltiptext">
+                    The <strong>timeline</strong> shows when people were born and when they died (people still alive are represented until the end of the chart, without an ending vertical black line) and when institutions and publications were created and closed.<br>
+                    The <strong>map</strong> shows the spatial position of the different institutions and publications.
+                 </span>
+            </h2>
+            <div id="timeline-container">
+                <svg id="timeline"></svg>
+            </div>
+            <!--            <svg id="timeline" width="1000" height="1000"></svg>-->
+        </div>
+        <!--        <div class="netpan-vis" id="map-container">-->
+        <!--            <svg id="map"></svg>-->
+        <!--        </div>-->
+
+        <!--        <div class="netpan-vis" id="bipartite"></div>-->
+        <!--        <div class="netpan-vis" id="tripartite"></div>-->
     </div>
-
-    <div id="force-container" class="netpan-vis inside-block">
-        <div id="force-options">
-            <h2 class="subtitle">Node-Link</h2>
-            <div class="radio-button">
-                <input type="radio" id="force-radio" name="options" value="option1" checked>
-                <label class="button layout-option" for="force-radio">Force</label>
-                <input type="radio" id="tripartite-radio" name="options" value="option2">
-                <label class="button layout-option" for="tripartite-radio">Tripartite</label>
-            </div>
-            <div id="time-slider"></div>
-        </div>
-
-        <div id="force">
-        </div>
-    </div>
-
-    <div class="netpan-vis inside-block" id="temporal-container">
-        <h2 class="subtitle">Timeline and Map</h2>
-        <div id="timeline-container">
-            <svg id="timeline"></svg>
-        </div>
-        <!--            <svg id="timeline" width="1000" height="1000"></svg>-->
-    </div>
-    <!--        <div class="netpan-vis" id="map-container">-->
-    <!--            <svg id="map"></svg>-->
-    <!--        </div>-->
-
-    <!--        <div class="netpan-vis" id="bipartite"></div>-->
-    <!--        <div class="netpan-vis" id="tripartite"></div>-->
-</div>
 </div>
 
 <!--    <div id="legend-row" class="row">-->
@@ -184,7 +189,6 @@
 <!--    </div>-->
 
 <!--    </div>-->
-
 
 
 <div class="row" id="row-footer">

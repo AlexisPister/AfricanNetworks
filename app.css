@@ -156,13 +156,13 @@ body {
     opacity: 80%;
 }
 
-*, *:after, *:before  {
-outline: none;
--webkit-box-sizing: border-box;
--moz-box-sizing: border-box;
-box-sizing: border-box;
-padding:0;
-margin:0;
+*, *:after, *:before {
+    outline: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 
@@ -181,8 +181,18 @@ margin:0;
     flex-direction: column;
     /*columns: 3;*/
     /*margin-right: 30%;*/
-    padding-right: 33%;
-    padding-left: 33%;
+    /*padding-right: 33%;*/
+    /*padding-left: 33%;*/
+    /*padding-right: clamp(20%, 600px, 30%);*/
+    /*padding-left: clamp(20%, 600px, 30%);*/
+    /*padding-right: min(13%, 400px);*/
+    /*padding-left: min(13%, 400px);*/
+}
+
+p {
+    text-align: center;
+    width: 35%;
+    min-width: 300px;
 }
 
 #story-title {
@@ -413,6 +423,44 @@ input[type="radio"]:checked + label {
     height: 100%;
 }
 
+#timeline-title {
+  /*  position: relative;*/
+  /*display: inline-block;*/
+  /*  padding-bottom: 0;*/
+  /*border-bottom: 1px dotted white;*/
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  /*width: 1px;*/
+  background-color: rgba(216, 196, 93, 0.7);
+    /*opacity: 90%;*/
+    /*background-color: rgba(182, 182, 182, 0.5);*/
+
+  text-align: justify;
+  padding: 1.5%;
+  border-radius: 6px;
+    font-size: 15px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+
+    font-weight: normal;
+}
+
+strong {
+    font-weight: bold;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+#timeline-title:hover .tooltiptext {
+  visibility: visible;
+}
+
+
 #timeline {
     width: 100%;
     /*width: 50%;*/
@@ -506,3 +554,5 @@ input[type="radio"]:checked + label {
     background-color: #D8C45D !important;
     opacity: 75%;
 }
+
+
