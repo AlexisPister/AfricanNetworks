@@ -56,6 +56,13 @@ body {
     flex-direction: column;
 }
 
+/*div[style*="box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 4px;"] {*/
+/*    !*display: inline-block !important;*!*/
+/*    !*position: absolute !important;*!*/
+/*    !*display:*!*/
+/*    background: #1EB53A !important;*/
+/*}*/
+
 #head {
     align-items: normal;
 }
@@ -424,29 +431,29 @@ input[type="radio"]:checked + label {
 }
 
 #timeline-title {
-  /*  position: relative;*/
-  /*display: inline-block;*/
-  /*  padding-bottom: 0;*/
-  /*border-bottom: 1px dotted white;*/
+    /*  position: relative;*/
+    /*display: inline-block;*/
+    /*  padding-bottom: 0;*/
+    /*border-bottom: 1px dotted white;*/
     text-decoration: underline;
     text-decoration-style: dotted;
 }
 
 .tooltiptext {
-  visibility: hidden;
-  /*width: 1px;*/
-  background-color: rgba(216, 196, 93, 0.7);
+    visibility: hidden;
+    /*width: 1px;*/
+    background-color: rgba(216, 196, 93, 0.7);
     /*opacity: 90%;*/
     /*background-color: rgba(182, 182, 182, 0.5);*/
 
-  text-align: justify;
-  padding: 1.5%;
-  border-radius: 6px;
+    text-align: justify;
+    padding: 1.5%;
+    border-radius: 6px;
     font-size: 15px;
 
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
 
     font-weight: normal;
 }
@@ -457,7 +464,7 @@ strong {
 
 /* Show the tooltip text when you mouse over the tooltip container */
 #timeline-title:hover .tooltiptext {
-  visibility: visible;
+    visibility: visible;
 }
 
 
@@ -555,4 +562,10 @@ strong {
     opacity: 75%;
 }
 
+svg text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 

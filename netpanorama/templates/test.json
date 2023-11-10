@@ -1,0 +1,136 @@
+{
+    "pan": {"modifierKeyRequired": ["shift"]},
+    "zoom": true,
+    "height": 900,
+    "width": 1200,
+
+    "data": [
+        {
+            "name": "nodes",
+            "values": [
+                {"name": "aaaaaaaaaaaaaaaaaaaaa"},
+                {"name": "baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+                {"name": "caaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+                {"name": "daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+                {"name": "eaaaaaaaaaaaaaaaaaaaaa"},
+                {"name": "faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+                {"name": "faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafeaaaaa"},
+                {"name": "faaaaaaaaaaaaaadaaaaaaaaaaaaaaaafeaaaaaa"},
+                {"name": "faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafeaaaaa"},
+                {"name": "faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafeaaaa"},
+                {"name": "faaaaaaaaaaaaaaaaaaaaaaaqwdaaaaafeaaaaa"},
+                {"name": "faaaaaaaaddaaaaaaaaaaaaaaaaaaaaafeaaaa"},
+                {"name": "faaaaaaaaaaadddaaaaaaaaaaaaaaaaafeaaaaa"},
+                {"name": "faaaaaaaaaaaaaaaqwdqwdaaaaaaaaaafeaaaaaaaa"},
+                {"name": "faaaaaaaaaaaaaaaaaaaaaddddaaaaaafeaaaaaa"},
+                {"name": "faaaaaaaaaaaaaaaaaaaaaaaqwdaaaaafeaaaaaaaaaaa"}
+            ],
+            "transform": [
+                {"type": "addIndex", "as": "id"}
+            ]
+        },
+        {
+            "name": "links",
+            "values": [
+                {"source": 0, "target": 1},
+                {"source": 0, "target": 2},
+                {"source": 1, "target": 3},
+                {"source": 2, "target": 4},
+                {"source": 2, "target": 5},
+                {"source": 2, "target": 6},
+                {"source": 6, "target": 5},
+                {"source": 6, "target": 9},
+                {"source": 8, "target": 9},
+                {"source": 8, "target": 2}
+            ]
+        }
+    ],
+
+    "parameters": [
+        {
+            "name": "node_selection",
+            "network": "le-mis-network",
+            "type": "selection",
+            "action": "replace",
+            "clearOnBackgroundClick": true
+        }
+    ],
+
+    "networks": [
+        {
+            "name": "le-mis-network",
+            "nodes": "nodes",
+            "links": "links",
+            "directed": true,
+            "source_node": ["id", "source"],
+            "target_node": ["id", "target"],
+            "metrics": [
+                {"metric": "degree"}
+            ]
+        }
+    ],
+
+    "layouts": [
+        {
+            "name": "le-mis-layout",
+            "network": "le-mis-network",
+            "type": "d3-force"
+        }
+    ],
+
+    "scales": [
+        {
+            "name": "radius",
+            "type": "linear",
+            "range": [1, 500],
+            "domain": {"data": "le-mis-network.nodes", "field": "degree"}
+        },
+        {
+            "name": "color",
+            "type": "linear",
+            "scheme": "reds",
+            "domain": {"data": "le-mis-network.nodes", "field": "degree"}
+        }
+    ],
+
+    "vis": [
+        {
+            "entries": "le-mis-network.links",
+            "layout": "le-mis-layout",
+            "mark": {
+                "type": "linkpath",
+                "start": "source",
+                "end": "target"
+            }
+        },
+        {
+            "entries": "le-mis-network.nodes",
+            "layout": "le-mis-layout",
+            "mark": {
+                "type": "circle",
+                "area": {"field": "degree", "scale": "radius"},
+                "fill": {"field": "degree", "scale": "color"},
+                "tooltip": "test"
+            },
+            "actions": [
+                {
+                    "interaction": "select",
+                    "using": "cursor",
+                    "event": "mouseover",
+                    "action": "replace",
+                    "selection": "node_selection"
+                }
+            ]
+        },
+        {
+            "entries": "le-mis-network.nodes",
+            "layout": "le-mis-layout",
+            "occlusion": {"field": "degree"},
+            "mark": {
+                "type": "text",
+                "text": {"field": "name"},
+                "fontSize": 13
+            }
+        }
+    ]
+}

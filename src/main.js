@@ -15,7 +15,7 @@ renderGeneralInfo(peopleData, institutionsData, publicationsData);
 await renderTemplates();
 setEvents();
 setupSearch();
-renderTemplates();
+// renderTemplates();
 
 export async function fetchData() {
     let persons = await fetch(`./data/${FOLDER}/People.csv`)
@@ -91,7 +91,7 @@ export async function renderTemplates() {
         .html("")
 
     if (isTripartite) {
-        tripartiteViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
+        forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-tripartite.json", {
             width: width - 293,
             // height: height * 1.3,
             height: height * 0.9,
@@ -105,9 +105,10 @@ export async function renderTemplates() {
             publicationColor: `\"${PUBLICATION_COLOR}\"`,
             eventColor: `\"${EVENT_COLOR}\"`
         }, "force", {paramCallbacks: {nodeSelection: selectNodeCb}});
-        forceViewer = tripartiteViewer;
+        // forceViewer = tripartiteViewer;
     } else {
         forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/person-institutions-publications-force.json", {
+        // forceViewer = await NetPanoramaTemplateViewer.render("./netpanorama/templates/test.json", {
                 width: width - 100,
                 height: height - 100,
                 yearMin: yearMinSel,
@@ -522,12 +523,23 @@ function goToExploration() {
 }
 
 function setupZoom() {
+    // return;
+
+    update()
     let svg = d3.select("#force")
         .select("svg")
+
+    svg
+        .on("click", () => {
+            goToExploration();
+        })
 
     let g = svg
         .select("g")
         .select("g")
+
+    return;
+
 
     svg
         .call(d3.zoom()
@@ -541,12 +553,11 @@ function setupZoom() {
 
     // let tooltip = svg.select("div[style='absolute']")
     // .attr("transform", "translate")
-    // console.log("tt ", tooltip)
 
-    svg
-        .on("click", () => {
-            goToExploration();
-        })
+    // svg
+    //     .on("click", () => {
+    //         goToExploration();
+    //     })
 
     function zoomed({transform}) {
         g.attr("transform", transform);
