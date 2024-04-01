@@ -39,7 +39,8 @@ body {
     /*background-image: url('./paper-623167.jpg');*/
     /*background-image: url('./darken-background.jpg');*/
     /*background-image: url('./darken.jpg');*/
-    background-image: url('./backgroundNew.webp');
+    /*background-image: url('./backgroundNew.webp');*/
+    background-image: url('./public/backgroundNew.webp');
     /*background-image: url('./journalBackground.png');*/
     /*background-repeat: no-repeat;*/
     /*background-repeat: repeat-y;*/
@@ -213,9 +214,6 @@ p {
     font-size: 160%;
 }
 
-/*.header-item-flex {*/
-/*    padding-right: 2%;*/
-/*}*/
 
 #title {
     font-size: 3em;
@@ -236,28 +234,13 @@ h2 {
 }
 
 #main-vis {
-    /*display: grid;*/
-    /*grid-gap: 1%;*/
-    /*grid-template-columns: 2fr 3fr 3fr;*/
-    /*contain: content;*/
-    /*position: relative;*/
-
-    /*height: 5000px;*/
-
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
 
 #infos {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*flex-grow: 0;*/
-    /*flex-shrink: 0;*/
-    /*flex-basis: 100%;*/
-
     display: inline-block;
-    /*width: 250px;*/
     width: 23%;
 }
 
@@ -282,18 +265,11 @@ h2 {
 #time-slider {
     width: 25%;
     margin-right: 8%;
-    /*margin: 60px;*/
-    /*margin-right: 60px;*/
-    /*margin-left: 60px;*/
 }
 
 
 .netpan-vis {
-    /*display: flex;*/
-    /*min-height: 60vh;*/
     min-height: 80vh;
-    /*height: 60vh;*/
-    /*border: 1px solid black;*/
 
     display: inline-block;
     position: -webkit-sticky;
@@ -301,27 +277,20 @@ h2 {
     top: 10%;
 
     width: 38%;
-    /*width: max-content;*/
-    /*width: 28%;*/
-    /*background-color: #ddd;*/
     padding: 0;
 }
 
 
 #force-container {
     height: 80vh;
-    /*height: 730px;*/
 }
 
 #temporal-container {
-    /*float: right;*/
-    /*height: 60vh;*/
     height: 80vh;
 }
 
 
 #bio {
-    /*text-justify: inter-word;*/
     text-align: justify;
     /*text-align: justify-all;*/
     /*padding-right: 20px;*/
@@ -329,9 +298,7 @@ h2 {
 
 #connected-to {
     display: flex;
-    /*flex-direction: row;*/
     flex-direction: column;
-    /*justify-content: space-evenly;*/
 }
 
 .neighbor-element {
@@ -352,8 +319,6 @@ h2 {
 .radio-button {
     display: flex;
     flex-direction: row;
-    /*align-items: center;*/
-    /*justify-content: center;*/
 }
 
 input[type="radio"] {
@@ -365,9 +330,7 @@ label.button {
     padding: 0 10px;
     margin: 5px;
     cursor: pointer;
-    /*border: 2px solid #ccc;*/
     border-radius: 5px;
-    /*background-color: #ccc;*/
     font-family: IM Fell English;
     font-size: 200%;
 }
@@ -382,13 +345,10 @@ input[type="radio"]:checked + label {
 }
 
 .storyButton {
-    /*display: table;*/
     display: inline-block;
     padding: 8px;
     margin: 5px;
     cursor: pointer;
-    /*border: 2px solid #ccc;*/
-    /*border-radius: 5px;*/
 
     font-family: IM Fell English;
     font-size: 120%;
@@ -401,7 +361,6 @@ input[type="radio"]:checked + label {
 .other-story {
     display: table;
     padding: 1px 8px;
-    /*margin: 5px;*/
     margin-left: -2%;
     margin-top: -2%;
     cursor: pointer;
@@ -414,7 +373,6 @@ input[type="radio"]:checked + label {
     /*padding: 10px;*/
     margin: 5px;
     cursor: pointer;
-    /*border: 2px solid #ccc;*/
     border-radius: 3px;
 }
 
@@ -424,30 +382,22 @@ input[type="radio"]:checked + label {
 }
 
 #timeline-title {
-  /*  position: relative;*/
-  /*display: inline-block;*/
-  /*  padding-bottom: 0;*/
-  /*border-bottom: 1px dotted white;*/
     text-decoration: underline;
     text-decoration-style: dotted;
 }
 
 .tooltiptext {
-  visibility: hidden;
-  /*width: 1px;*/
-  background-color: rgba(216, 196, 93, 0.7);
-    /*opacity: 90%;*/
-    /*background-color: rgba(182, 182, 182, 0.5);*/
+    visibility: hidden;
+    background-color: rgba(216, 196, 93, 0.7);
 
-  text-align: justify;
-  padding: 1.5%;
-  border-radius: 6px;
+    text-align: justify;
+    padding: 1.5%;
+    border-radius: 6px;
     font-size: 15px;
 
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
     font-weight: normal;
 }
 
@@ -457,13 +407,12 @@ strong {
 
 /* Show the tooltip text when you mouse over the tooltip container */
 #timeline-title:hover .tooltiptext {
-  visibility: visible;
+    visibility: visible;
 }
 
 
 #timeline {
     width: 100%;
-    /*width: 50%;*/
     height: 100%;
     z-index: 2000;
 }
@@ -539,7 +488,6 @@ strong {
     padding-bottom: 2px;
     display: flex;
     flex-direction: row;
-    /*justify-content: space-around;*/
 }
 
 #footer > a {

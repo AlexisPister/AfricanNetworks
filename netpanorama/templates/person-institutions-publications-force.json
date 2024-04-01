@@ -1,5 +1,5 @@
 {
-  "zoom2": true,
+  "zoom": true,
   "width": "[width]",
   "height": "[height]",
   "width2": 300,
@@ -350,6 +350,7 @@
     {
       "entries": "PI-net.links",
       "layout": "PI-layout",
+      "parallelLinksType": "curve",
       "mark": {
         "type": "linkpath",
         "start": "source",
@@ -375,12 +376,12 @@
     {
       "entries": "PI-net.nodes",
       "layout": "PI-layout",
+      "occlusion": true,
       "mark": {
         "type": "text",
         "text": {
           "field": "id"
         },
-        "fontSize": "13",
         "align": "",
         "fontWeight": "normal",
         "fill": {
