@@ -2,9 +2,7 @@
   "zoom": true,
   "width": "[width]",
   "height": "[height]",
-  "width2": 300,
-  "height2": 700,
-  "style": {
+  "styled": {
     "noDisplay": {
       "display": "none"
     }
@@ -376,7 +374,9 @@
     {
       "entries": "PI-net.nodes",
       "layout": "PI-layout",
-      "occlusion": true,
+      "occlusion": {
+        "field": "degree"
+      },
       "mark": {
         "type": "text",
         "text": {
@@ -384,32 +384,8 @@
         },
         "align": "",
         "fontWeight": "normal",
-        "fill": {
-          "conditions": [
-            {
-              "test": "datum.degree > 4",
-              "value": "white"
-            },
-            {
-              "inSelection": "outnodes.nodes",
-              "value": "white"
-            }
-          ],
-          "value": "none"
-        },
-        "dx": {
-          "conditions": [
-            {
-              "test": "datum.degree > 4",
-              "value": 10
-            },
-            {
-              "inSelection": "outnodes.nodes",
-              "value": 5
-            }
-          ],
-          "value": 2000
-        },
+        "fill": "white",
+        "dx": 5,
         "dy": -6
       }
     },
@@ -449,9 +425,6 @@
           "field": "_type",
           "scale": "color"
         },
-        "tooltip": {
-          "expression": "datum.id + ' (degree ' + datum.degree + ')' "
-        },
         "stroke": {
           "conditions": [
             {
@@ -464,6 +437,9 @@
             }
           ],
           "value": "black"
+        },
+        "tooltip": {
+          "expression": "datum.id + ' (degree ' + datum.degree + ')' "
         }
       },
       "actions": [

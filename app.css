@@ -57,6 +57,13 @@ body {
     flex-direction: column;
 }
 
+/*div[style*="box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 4px;"] {*/
+/*    !*display: inline-block !important;*!*/
+/*    !*position: absolute !important;*!*/
+/*    !*display:*!*/
+/*    background: #1EB53A !important;*/
+/*}*/
+
 #head {
     align-items: normal;
 }
@@ -503,4 +510,10 @@ strong {
     opacity: 75%;
 }
 
+svg text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
