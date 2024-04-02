@@ -12,8 +12,6 @@ function computeSvgDims(id) {
     return [containerWidth, containerHeight];
 }
 
-
-
 function linkCheck(url) {
     try {
         let http = new XMLHttpRequest();

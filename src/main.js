@@ -144,9 +144,9 @@ async function selectNodeCb(e) {
     }
 
     // Small hack: Wait for visualization to end rendering
-    setTimeout(
-        setupZoom, 500
-    )
+    // setTimeout(
+    //     setupZoom, 500
+    // )
 }
 
 function getPersonInfo(personName) {
@@ -162,16 +162,6 @@ async function displayNodeSelection(node, nodeData, type) {
     await new Promise(resolve => setTimeout(resolve, 1));
     let neighbors = forceViewer.state.outnodes.nodes;
     let links = forceViewer.state.outnodes.links;
-    // console.log(neighbors, links)
-    // let neighborsWithData = neighbors.map(neighbor => {
-    //     let data = getPersonInfo(neighbor.id)
-    //     if (data) {
-    //         return data
-    //     } else {
-    //         return neighbor
-    //     }
-    // })
-    // console.log("DATA ", nodeData, type, neighbors);
 
     d3.select("#date-tilt")
         .html("-")
@@ -401,13 +391,12 @@ function renderGeneralInfo(peopleData, institutionData, pubData) {
 
 
 function update() {
-    forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
-    // if (forceViewer) {
-    //     forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
-    // }
-    // if (tripartiteViewer) {
-    //     tripartiteViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
-    // }
+    // forceViewer.setParam("selectedYears", [yearMinSel, yearMaxSel])
+    // forceViewer.setParam("selectedYear1", `${yearMinSel}`);
+    // forceViewer.setParam("selectedYear2", `${yearMaxSel}`);
+
+    // forceViewer.setParam("selectedYear1", yearMinSel);
+    // forceViewer.setParam("selectedYear2", yearMaxSel);
 }
 
 // TODO: some nodes of the timeline are not in the node-links (not in any link?)

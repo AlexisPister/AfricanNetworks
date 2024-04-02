@@ -1,5 +1,6 @@
 {
   "zoom": true,
+  "pan": true,
   "width": "[width]",
   "height": "[height]",
   "styled": {
@@ -93,6 +94,14 @@
         1000,
         2020
       ]
+    },
+    {
+      "name": "selectedYear1",
+      "value": 1000
+    },
+    {
+      "name": "selectedYear2",
+      "value": 2000
     }
   ],
   "networks": [
@@ -361,6 +370,7 @@
             },
             {
               "test": "datum.data.Year > params.selectedYears[0] && datum.data.Year < params.selectedYears[1]",
+              "//test": "datum.data.Year > params.selectedYear1 && datum.data.Year < params.selectedYear2",
               "value": "#F7F7F7"
             }
           ],
@@ -377,6 +387,7 @@
       "occlusion": {
         "field": "degree"
       },
+      "occlusionDensity": 4,
       "mark": {
         "type": "text",
         "text": {

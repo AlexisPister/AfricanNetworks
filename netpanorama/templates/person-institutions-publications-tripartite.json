@@ -247,8 +247,8 @@
     },
     {
       "name": "optimal",
-      "method": "barycentre",
-      "network": "PI-net"
+      "orderBy": "barycentre",
+      "data": "PI-net.nodes"
     }
   ],
   "layouts": [

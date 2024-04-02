@@ -113,19 +113,9 @@ function processAndrender() {
         .range([margin.top, height - margin.bottom - margin.top])
         .padding(0.2)
 
-    // TODO: check date format
     let axisBottom = d3.axisBottom(x)
-        // let axisBottom = d3.axisBottom(x.nice())
         .ticks(5)
-    //     .tickValues([2022])
-    //     .tickPadding(2)
-    // .tickFormat(d3.timeFormat("%y"))
 
-    // svg = d3.select("#timeline")
-    //     .append("g")
-
-    // svg
-        // .append("g")
         gAxis
         .call(axisBottom)
 
@@ -215,7 +205,8 @@ function render() {
                 .attr("x", d => x(getBeginYear(d)) + 5)
                 .attr("y", (d, i) => y(i) + y.bandwidth() / 1.1)
                 .text(d => d.Name)
-                .attr("font-size", "11pt")
+                // .attr("font-size", "11pt")
+                .attr("font-size", `${y.bandwidth() / 1.1}pt`)
                 .attr("fill", "white")
 
             return g
